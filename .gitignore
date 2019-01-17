@@ -107,3 +107,7 @@ venv.bak/
 # idea
 .idea
 *.iml
+
+
+node_modules/
+server/static/bundle.js
