@@ -1,0 +1,73 @@
+#!/usr/local/bin/python
+
+import os
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+
+webpack_needed = False
+files_to_upload = set()
+
+BUNDLE_PATH = "static/app-bundle.js"
+SERVER_DIR = "server/"
+CLIENT_DIR = "client/"
+RASPBERRY = "192.168.1.6"
+REMOTE_PATH = "/home/pi/blinky/"
+SERVICE_NAME = "blinky"
+
+
+class FileEventHandler(FileSystemEventHandler):
+
+    def handle_file_event(self, event):
+        print(event)
+
+    def on_created(self, event):
+        if not event.is_directory:
+            self.handle_file_event(event)
+
+    def on_modified(self, event):
+        if not event.is_directory:
+            self.handle_file_event(event)
+
+
+class WebpackNeededHandler(FileEventHandler):
+    def handle_file_event(self, event):
+        global webpack_needed
+        webpack_needed = True
+
+
+class UploadNeededHandler(FileEventHandler):
+    def handle_file_event(self, event):
+        global files_to_upload
+        files_to_upload.add(event.src_path[len(SERVER_DIR):])
+
+
+def run_upload():
+    global webpack_needed, files_to_upload
+    files_to_upload.discard(BUNDLE_PATH)
+    batch_of_files = set(files_to_upload)
+    files_to_upload = set()
+    if webpack_needed:
+        webpack_needed = False
+        os.system("webpack")
+        batch_of_files.add(BUNDLE_PATH)
+    for f in batch_of_files:
+        os.system("scp {local_path} pi@{raspberry}:{remote_path}".format(raspberry=RASPBERRY, local_path=(SERVER_DIR + f), remote_path=(REMOTE_PATH + f)))
+    if len(batch_of_files) > 0:
+        os.system("ssh pi@{raspberry} sudo service {service_name} restart".format(raspberry=RASPBERRY, service_name=SERVICE_NAME))
+        print("service {service_name} @ {raspberry} restarted".format(raspberry=RASPBERRY, service_name=SERVICE_NAME))
+
+
+if __name__ == "__main__":
+    observer = Observer()
+    observer.schedule(WebpackNeededHandler(), CLIENT_DIR, recursive=True)
+    observer.schedule(UploadNeededHandler(), SERVER_DIR, recursive=True)
+    observer.start()
+    try:
+        while True:
+            time.sleep(1)
+            run_upload()
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
