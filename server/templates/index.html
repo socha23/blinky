@@ -4,31 +4,36 @@
 </head>
 <body>
 
-
+<h1>Blinky</h1>
+<hr/>
 {% for led in leds %}
     <h1>
     LED {{led}}
     <br/>
-    <a href="/{{led}}/on">ON</a>
-    <a href="/{{led}}/off">OFF</a>
-    <a href="/{{led}}/blink">BLINK</a>
-    <a href="/{{led}}/pulse">PULSE</a>
+    <a href="/led/{{led}}/on">ON</a>
+    <a href="/led/{{led}}/off">OFF</a>
+    <a href="/led/{{led}}/blink">BLINK</a>
+    <a href="/led/{{led}}/pulse">PULSE</a>
     <br>
-    <a href="/{{led}}/pwm/0.0">0</a>
-    <a href="/{{led}}/pwm/0.1">1</a>
-    <a href="/{{led}}/pwm/0.2">2</a>
-    <a href="/{{led}}/pwm/0.3">3</a>
-    <a href="/{{led}}/pwm/0.4">4</a>
-    <a href="/{{led}}/pwm/0.5">5</a>
-    <a href="/{{led}}/pwm/0.6">6</a>
-    <a href="/{{led}}/pwm/0.7">7</a>
-    <a href="/{{led}}/pwm/0.8">8</a>
-    <a href="/{{led}}/pwm/0.9">9</a>
-    <a href="/{{led}}/pwm/1.0">10</a>
+    <a href="/led/{{led}}/pwm/0.0">0</a>
+    <a href="/led/{{led}}/pwm/0.1">1</a>
+    <a href="/led/{{led}}/pwm/0.2">2</a>
+    <a href="/led/{{led}}/pwm/0.3">3</a>
+    <a href="/led/{{led}}/pwm/0.4">4</a>
+    <a href="/led/{{led}}/pwm/0.5">5</a>
+    <a href="/led/{{led}}/pwm/0.6">6</a>
+    <a href="/led/{{led}}/pwm/0.7">7</a>
+    <a href="/led/{{led}}/pwm/0.8">8</a>
+    <a href="/led/{{led}}/pwm/0.9">9</a>
+    <a href="/led/{{led}}/pwm/1.0">10</a>
     </h1>
     <hr>
 {% endfor %}
-
+<div id="app"/>
 
 <script type="application/javascript" src="{{ url_for('static', filename='app-bundle.js') }}?cachebuster={{cachebuster}}"></script>
+<script type="application/javascript">
+
+</script>
+
 </body></html>

@@ -2,22 +2,24 @@
 
 from flask import Flask
 from flask import render_template
-from gpiozero import PWMLED
 from time import time
+
+from machine import Machine
 
 app = Flask(__name__)
 
-PINS_WITH_LEDS = [24, 25]
+machine = Machine()
 
-leds = {pin: PWMLED(pin) for pin in PINS_WITH_LEDS}
+machine \
+    .add_led(24, "Czerwony") \
+    .add_led(25, "Bialy")
 
 
-def led(pin):
-    return leds[int(pin)]
+API_METHODS = ['GET', 'PUT']
 
 
 def standard_template():
-    return render_template('index.html', leds=PINS_WITH_LEDS, cachebuster=time())
+    return render_template('index.html', leds=[24, 25], cachebuster=time())
 
 
 @app.route('/')
@@ -25,36 +27,36 @@ def index():
     return standard_template()
 
 
-@app.route('/<pin>/on')
+@app.route('/led/<pin>/on', methods=API_METHODS)
 def on(pin):
-    led(pin).on()
+    machine.led(pin).on()
     return standard_template()
 
 
-@app.route('/<pin>/off')
+@app.route('/led/<pin>/off', methods=API_METHODS)
 def off(pin):
-    led(pin).off()
+    machine.led(pin).off()
     return standard_template()
 
 
-@app.route('/<pin>/blink')
+@app.route('/led/<pin>/blink', methods=API_METHODS)
 def blink(pin):
-    led(pin).blink()
+    machine.led(pin).blink()
     return standard_template()
 
 
-@app.route('/<pin>/pulse')
+@app.route('/led/<pin>/pulse', methods=API_METHODS)
 def pulse(pin):
-    led(pin).pulse()
+    machine.led(pin).pulse()
     return standard_template()
 
 
-@app.route('/<pin>/pwm/<val>')
+@app.route('/led/<pin>/pwm/<val>', methods=API_METHODS)
 def pwm(pin, val):
-    led(pin).value = float(val)
+    machine.led(pin).pwm(val)
     return standard_template()
 
 
 if __name__ == "__main__":
-    led(24).on()
+    machine.led(24).on()
     app.run(host='0.0.0.0', port=80)

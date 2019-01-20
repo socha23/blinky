@@ -12,7 +12,7 @@ module.exports = {
         loaders: [
             {
                 test: /\.js$/,
-                include: path.join(__dirname, 'src/main'),
+                include: path.join(__dirname, 'client/main'),
                 loader: 'babel-loader',
                 query: {
                     presets: ['es2015', 'react', 'stage-2']
