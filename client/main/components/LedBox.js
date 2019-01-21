@@ -6,13 +6,10 @@ const SettingButton = ({className, children, onClick, active}) => <button
     className={"btn " + className + (active ? " active" : "")}
 >
     {children}
-</button>
+</button>;
 
 
 const LedBox = ({led}) => {
-
-
-
     return <div className={"col-sm-4"}>
 
         <div className="card">
