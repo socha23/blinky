@@ -16,6 +16,10 @@ export function pulse(pin) {
     putJson(ledAddr(pin) + "/pulse")
 }
 
+export function pwm(pin, val) {
+    putJson(ledAddr(pin) + "/pwm/" + val)
+}
+
 function putJson(addr) {
     return fetch(addr, {
         method: 'PUT',

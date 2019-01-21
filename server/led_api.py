@@ -38,5 +38,5 @@ def pulse(pin):
 
 @led_api.route('/led/<pin>/pwm/<val>', methods=API_METHODS)
 def pwm(pin, val):
-    Machine.led(pin).pwm(val)
+    Machine.led(pin).pwm(float(val))
     return render_state()

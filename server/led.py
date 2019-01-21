@@ -6,11 +6,12 @@ class LED:
         self.pin = pin
         self.name = name
         self.led = PWMLED(pin)
+        self.value = 1
         self.setting = 'off'
         self.off()
 
     def on(self):
-        self.led.on()
+        self.led.value = self.value
         self.setting = 'on'
 
     def off(self):
@@ -26,13 +27,13 @@ class LED:
         self.setting = 'pulse'
 
     def pwm(self, val):
+        self.value = val
         self.led.value = val
-        self.setting = 'pwm'
 
     def state(self):
         return {
             'pin': self.pin,
             'name': self.name,
             'setting': self.setting,
-            'value': self.led.value,
+            'value': self.value,
         }

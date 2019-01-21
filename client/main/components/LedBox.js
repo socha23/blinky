@@ -18,12 +18,15 @@ const LedBox = ({led}) => {
                 <h3 className="panel-title">{led.name()}</h3>
             </div>
             <div className="panel-body">
-                <ReactBootstrapSlider
-                    value={50}
-                    step={1}
-                    max={100}
-                    min={0}
-                />
+                <div style={{marginBottom: 5}}>
+                    <ReactBootstrapSlider
+                        value={led.value()}
+                        change={e => {led.setValue(e.target.value)}}
+                        step={0.01}
+                        max={1}
+                        min={0}
+                    />
+                </div>
                 <div>
                     <SettingButton active={led.setting() === "on"} className={"btn-primary"} onClick={led.on}>On</SettingButton>
                     <SettingButton active={led.setting() === "blink"} className={"btn-info"} onClick={led.blink}>Blink</SettingButton>
