@@ -28,3 +28,11 @@ class LED:
     def pwm(self, val):
         self.led.value = val
         self.setting = 'pwm'
+
+    def state(self):
+        return {
+            'pin': self.pin,
+            'name': self.name,
+            'setting': self.setting,
+            'value': self.led.value,
+        }

@@ -1,22 +1,19 @@
 import fetch from 'isomorphic-fetch'
 
-function ledAddr(pin) {
-    return "/led/" + pin
-}
-
-function turnOn(pin) {
+export function on(pin) {
     putJson(ledAddr(pin) + "/on")
 }
 
-function turnOff(pin) {
+export function off(pin) {
     putJson(ledAddr(pin) + "/off")
 }
 
-export default function led(pin) {
-    return {
-        on: () => turnOn(pin),
-        off: () => turnOff(pin),
-    }
+export function blink(pin) {
+    putJson(ledAddr(pin) + "/blink")
+}
+
+export function pulse(pin) {
+    putJson(ledAddr(pin) + "/pulse")
 }
 
 function putJson(addr) {
@@ -33,3 +30,8 @@ function putJson(addr) {
             return response.json();
         })
 }
+
+function ledAddr(pin) {
+    return "/led/" + pin
+}
+

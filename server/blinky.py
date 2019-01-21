@@ -1,61 +1,62 @@
 #!/usr/bin/python
 
-from flask import Flask
-from flask import render_template
+from flask import Flask, render_template, jsonify
 from time import time
 
-from machine import Machine
+from my_machine import MyMachine
 
 app = Flask(__name__)
 
-machine = Machine()
-
-machine \
-    .add_led(24, "Czerwony") \
-    .add_led(25, "Bialy")
+machine = MyMachine()
 
 
 API_METHODS = ['GET', 'PUT']
 
 
-def standard_template():
-    return render_template('index.html', leds=[24, 25], cachebuster=time())
+def render_state():
+    resp = jsonify(machine.state())
+    resp.status_code = 200
+    return resp
 
 
 @app.route('/')
 def index():
-    return standard_template()
+    return render_template('index.html', leds=[24, 25], cachebuster=time())
+
+
+@app.route('/state')
+def state():
+    return render_state()
 
 
 @app.route('/led/<pin>/on', methods=API_METHODS)
 def on(pin):
     machine.led(pin).on()
-    return standard_template()
+    return render_state()
 
 
 @app.route('/led/<pin>/off', methods=API_METHODS)
 def off(pin):
     machine.led(pin).off()
-    return standard_template()
+    return render_state()
 
 
 @app.route('/led/<pin>/blink', methods=API_METHODS)
 def blink(pin):
     machine.led(pin).blink()
-    return standard_template()
+    return render_state()
 
 
 @app.route('/led/<pin>/pulse', methods=API_METHODS)
 def pulse(pin):
     machine.led(pin).pulse()
-    return standard_template()
+    return render_state()
 
 
 @app.route('/led/<pin>/pwm/<val>', methods=API_METHODS)
 def pwm(pin, val):
     machine.led(pin).pwm(val)
-    return standard_template()
-
+    return render_state()
 
 if __name__ == "__main__":
     machine.led(24).on()
