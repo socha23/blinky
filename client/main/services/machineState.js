@@ -1,19 +1,23 @@
 import fetch from 'isomorphic-fetch'
 
-let state = {};
 let subscribers = {};
 let subscribersCount = 0;
+let state = {leds: []};
 let intervalHandler = null;
 
-const REFRESH_RATE_MS = 10000;
 
-function subscribe(id, onChange) {
-    subscribers[id] = onChange;
-    if (subscribersCount == 0) {
+const REFRESH_RATE_MS = 10000;
+let subNo = 0;
+
+function subscribe(onChange) {
+    subNo++;
+    subscribers[subNo] = onChange;
+    if (subscribersCount === 0) {
         intervalHandler = setInterval(loadServerData, REFRESH_RATE_MS);
         loadServerData();
     }
-    subscribersCount++
+    subscribersCount++;
+    return subNo
 }
 
 function unsubscribe(id) {
@@ -22,11 +26,6 @@ function unsubscribe(id) {
     if (subscribersCount === 0) {
         clearInterval(intervalHandler)
     }
-}
-
-function setState(aState) {
-    state = aState;
-    notifySubscribers()
 }
 
 function notifySubscribers() {
@@ -43,13 +42,27 @@ function loadServerData() {
             }
             return response.json();
         }).then(json => {
-            setState(json);
+            state = json;
+            notifySubscribers();
     })
+}
+
+
+function getLedState(idx) {
+    return state.leds[idx]
+}
+
+function setLedState(idx, ledState) {
+    state.leds[idx] = ledState;
+    notifySubscribers()
 }
 
 module.exports = {
     subscribe: subscribe,
     unsubscribe: unsubscribe,
-    setState: setState
-}
+    getState: () => state,
+    setLedState: setLedState,
+    getLedState: getLedState,
+};
+
 

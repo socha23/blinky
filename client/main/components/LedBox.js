@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactBootstrapSlider from 'react-bootstrap-slider';
+import {useLed} from "../elements/ledHooks";
 
 const SettingButton = ({className, children, onClick, active}) => <button
     style={{marginRight: 6}}
@@ -10,7 +11,9 @@ const SettingButton = ({className, children, onClick, active}) => <button
 </button>;
 
 
-const LedBox = ({led}) => {
+const LedBox = ({idx}) => {
+    const led = useLed(idx);
+
     return <div className={"col-sm-4"}>
 
         <div className="panel panel-default">
