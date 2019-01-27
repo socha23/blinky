@@ -40095,20 +40095,20 @@ var FireBox = function FireBox(_ref2) {
             ),
             _react2.default.createElement(
                 "div",
-                { style: { marginBottom: 5 } },
-                _react2.default.createElement(_reactBootstrapSlider2.default, {
-                    value: fire.intensity(),
-                    change: function change(e) {
-                        fire.setIntensity(e.target.value);
-                    },
-                    step: 0.01,
-                    max: 1,
-                    min: 0
-                })
-            ),
-            _react2.default.createElement(
-                "div",
                 { className: "panel-body" },
+                _react2.default.createElement(
+                    "div",
+                    { style: { marginBottom: 5 } },
+                    _react2.default.createElement(_reactBootstrapSlider2.default, {
+                        value: fire.intensity(),
+                        change: function change(e) {
+                            fire.setIntensity(e.target.value);
+                        },
+                        step: 0.01,
+                        max: 1,
+                        min: 0
+                    })
+                ),
                 _react2.default.createElement(
                     "div",
                     null,

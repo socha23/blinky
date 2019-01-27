@@ -22,6 +22,12 @@ def squared(values):
     for v in values:
         yield v * v
 
+
+def constant(value):
+    while True:
+        yield value
+
+
 def from_callback(method):
     while True:
         yield method()

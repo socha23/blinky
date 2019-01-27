@@ -20,17 +20,16 @@ const FireBox = ({idx}) => {
                 <h3 className="panel-title">{fire.name()}</h3>
             </div>
 
-            <div style={{marginBottom: 5}}>
-                <ReactBootstrapSlider
-                    value={fire.intensity()}
-                    change={e => {fire.setIntensity(e.target.value)}}
-                    step={0.01}
-                    max={1}
-                    min={0}
-                />
-            </div>
-
             <div className="panel-body">
+                <div style={{marginBottom: 5}}>
+                    <ReactBootstrapSlider
+                        value={fire.intensity()}
+                        change={e => {fire.setIntensity(e.target.value)}}
+                        step={0.01}
+                        max={1}
+                        min={0}
+                    />
+                </div>
                 <div>
                     <SettingButton active={fire.setting() === "on"} className={"btn-primary"} onClick={fire.on}>On</SettingButton>
                     <SettingButton active={fire.setting() === "off"} className={"btn-danger"} onClick={fire.off}>Off</SettingButton>
