@@ -12,11 +12,18 @@ function fire(state, setState) {
         setState({...state, setting: "off"})
     }
 
+    function setIntensity(intensity) {
+        api.intensity(state.id, intensity);
+        setState({...state, intensity: intensity})
+    }
+
     return {
         name: () => state.name,
         setting: () => state.setting,
-        on: on,
-        off: off,
+        intensity: () => state.intensity,
+        setIntensity,
+        on,
+        off,
     }
 }
 

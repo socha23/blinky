@@ -7,6 +7,12 @@ export function on(id) {
 export function off(id) {
     putJson(fireAddr(id) + "/off")
 }
+
+export function intensity(id, intensity) {
+    putJson(fireAddr(id) + "/intensity/" + intensity)
+}
+
+
 function putJson(addr) {
     return fetch(addr, {
         method: 'PUT',

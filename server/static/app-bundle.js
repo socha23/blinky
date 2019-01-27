@@ -39965,6 +39965,11 @@ function fire(state, setState) {
         setState(_extends({}, state, { setting: "off" }));
     }
 
+    function setIntensity(intensity) {
+        api.intensity(state.id, intensity);
+        setState(_extends({}, state, { intensity: intensity }));
+    }
+
     return {
         name: function name() {
             return state.name;
@@ -39972,6 +39977,10 @@ function fire(state, setState) {
         setting: function setting() {
             return state.setting;
         },
+        intensity: function intensity() {
+            return state.intensity;
+        },
+        setIntensity: setIntensity,
         on: on,
         off: off
     };
@@ -39991,6 +40000,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.on = on;
 exports.off = off;
+exports.intensity = intensity;
 
 var _isomorphicFetch = __webpack_require__(49);
 
@@ -40005,6 +40015,11 @@ function on(id) {
 function off(id) {
     putJson(fireAddr(id) + "/off");
 }
+
+function intensity(id, intensity) {
+    putJson(fireAddr(id) + "/intensity/" + intensity);
+}
+
 function putJson(addr) {
     return (0, _isomorphicFetch2.default)(addr, {
         method: 'PUT'
@@ -40036,6 +40051,10 @@ var _react = __webpack_require__(1);
 var _react2 = _interopRequireDefault(_react);
 
 var _fireHooks = __webpack_require__(121);
+
+var _reactBootstrapSlider = __webpack_require__(65);
+
+var _reactBootstrapSlider2 = _interopRequireDefault(_reactBootstrapSlider);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40073,6 +40092,19 @@ var FireBox = function FireBox(_ref2) {
                     { className: "panel-title" },
                     fire.name()
                 )
+            ),
+            _react2.default.createElement(
+                "div",
+                { style: { marginBottom: 5 } },
+                _react2.default.createElement(_reactBootstrapSlider2.default, {
+                    value: fire.intensity(),
+                    change: function change(e) {
+                        fire.setIntensity(e.target.value);
+                    },
+                    step: 0.01,
+                    max: 1,
+                    min: 0
+                })
             ),
             _react2.default.createElement(
                 "div",

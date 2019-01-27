@@ -12,9 +12,15 @@ def render_success():
     return resp
 
 
-@fire_api.route('/fire/<id>/on', methods=API_METHODS)
-def on(id):
-    Machine.fire(id).on()
+@fire_api.route('/fire/<fire_id>/on', methods=API_METHODS)
+def on(fire_id):
+    Machine.fire(fire_id).on()
+    return render_success()
+
+
+@fire_api.route('/fire/<fire_id>/intensity/<intensity>', methods=API_METHODS)
+def set_intensity(fire_id, intensity):
+    Machine.fire(fire_id).intensity = float(intensity)
     return render_success()
 
 

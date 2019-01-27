@@ -22,6 +22,9 @@ def squared(values):
     for v in values:
         yield v * v
 
+def from_callback(method):
+    while True:
+        yield method()
 
 def triangular(ascent=100, descent=100, height=1, pause=0):
     value = 0
