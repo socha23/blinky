@@ -1,0 +1,13 @@
+#!/usr/local/bin/python
+
+import os
+
+
+SERVER_DIR = "server/"
+RASPBERRY = "192.168.1.6"
+REMOTE_PATH = "/home/pi/blinky/"
+SERVICE_NAME = "blinky"
+
+os.system("scp -r {local_path}* pi@{raspberry}:{remote_path}".format(raspberry=RASPBERRY, local_path=SERVER_DIR, remote_path=REMOTE_PATH))
+os.system("ssh pi@{raspberry} sudo service {service_name} restart".format(raspberry=RASPBERRY, service_name=SERVICE_NAME))
+print("service {service_name} @ {raspberry} restarted".format(raspberry=RASPBERRY, service_name=SERVICE_NAME))

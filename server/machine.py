@@ -2,7 +2,6 @@ from base_machine import BaseMachine
 
 Machine = BaseMachine()
 
-Machine.add_led(24, "Czerwony")
-Machine.add_led(25, "Bialy")
+Machine.add_fire(24, 25, "Ogien")
 
 print("Machine loaded")

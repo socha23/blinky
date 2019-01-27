@@ -1,6 +1,6 @@
 import * as api from '../services/ledApi'
 
-function Led(state, setState) {
+function led(state, setState) {
 
     function on() {
         api.on(state.pin);
@@ -40,4 +40,4 @@ function Led(state, setState) {
     }
 }
 
-export default Led
+export default led

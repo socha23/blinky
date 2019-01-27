@@ -1,0 +1,24 @@
+from flask import Blueprint, jsonify
+from machine import Machine
+
+fire_api = Blueprint('fire api', __name__)
+
+API_METHODS = ['GET', 'PUT']
+
+
+def render_success():
+    resp = jsonify({'success': True})
+    resp.status_code = 200
+    return resp
+
+
+@fire_api.route('/fire/<id>/on', methods=API_METHODS)
+def on(id):
+    Machine.fire(id).on()
+    return render_success()
+
+
+@fire_api.route('/fire/<id>/off', methods=API_METHODS)
+def off(id):
+    Machine.fire(id).off()
+    return render_success()

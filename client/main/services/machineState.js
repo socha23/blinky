@@ -2,14 +2,14 @@ import fetch from 'isomorphic-fetch'
 
 let subscribers = {};
 let subscribersCount = 0;
-let state = {leds: []};
+let state = {leds: [], fires: []};
 let intervalHandler = null;
 
 
 const REFRESH_RATE_MS = 10000;
 let subNo = 0;
 
-function subscribe(onChange) {
+export function subscribe(onChange) {
     subNo++;
     subscribers[subNo] = onChange;
     if (subscribersCount === 0) {
@@ -20,7 +20,7 @@ function subscribe(onChange) {
     return subNo
 }
 
-function unsubscribe(id) {
+export function unsubscribe(id) {
     delete subscribers[id];
     subscribersCount--;
     if (subscribersCount === 0) {
@@ -48,21 +48,27 @@ function loadServerData() {
 }
 
 
-function getLedState(idx) {
+export function getLedState(idx) {
     return state.leds[idx]
 }
 
-function setLedState(idx, ledState) {
+export function setLedState(idx, ledState) {
     state.leds[idx] = ledState;
     notifySubscribers()
 }
 
-module.exports = {
-    subscribe: subscribe,
-    unsubscribe: unsubscribe,
-    getState: () => state,
-    setLedState: setLedState,
-    getLedState: getLedState,
-};
+export function getFireState(idx) {
+    return state.fires[idx]
+}
+
+export function setFireState(idx, fireState) {
+    state.fires[idx] = fireState;
+    notifySubscribers()
+}
+
+export function getState() {
+    return state;
+}
+
 
 

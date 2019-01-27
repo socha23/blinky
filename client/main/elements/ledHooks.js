@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import Led from "./Led";
+import Led from "./led";
 import * as MachineState from "../services/machineState";
 
 export const useLeds = () => {
