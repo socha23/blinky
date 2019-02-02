@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch'
+import {putJson} from "./apiUtils";
 
 export function on(id) {
     putJson(fireAddr(id) + "/on")
@@ -10,19 +10,6 @@ export function off(id) {
 
 export function intensity(id, intensity) {
     putJson(fireAddr(id) + "/intensity/" + intensity)
-}
-
-
-function putJson(addr) {
-    return fetch(addr, {
-        method: 'PUT',
-    })
-        .then(function (response) {
-            if (response.status >= 400) {
-                throw new Error("Bad response from server");
-            }
-            return response.json();
-        })
 }
 
 function fireAddr(id) {

@@ -28,7 +28,7 @@ def fire_sources(intensity_generator):
     fast_y = scale_and_clamp(fast_y, intensity_y_f, 0, 0.0001)
 
     source_r = maxed(slow_r, fast_r)
-    source_y = maxed(slow_y)
+    source_y = maxed(slow_y, fast_y)
     return source_r, source_y
 
 

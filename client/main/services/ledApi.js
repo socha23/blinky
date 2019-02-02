@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch'
+import {putJson} from "./apiUtils";
 
 export function on(pin) {
     putJson(ledAddr(pin) + "/on")
@@ -18,21 +18,6 @@ export function pulse(pin) {
 
 export function pwm(pin, val) {
     putJson(ledAddr(pin) + "/pwm/" + val)
-}
-
-function putJson(addr) {
-    return fetch(addr, {
-        method: 'PUT',
-        //headers: {
-        //    'Content-Type': 'application/json'
-        //},
-    })
-        .then(function (response) {
-            if (response.status >= 400) {
-                throw new Error("Bad response from server");
-            }
-            return response.json();
-        })
 }
 
 function ledAddr(pin) {

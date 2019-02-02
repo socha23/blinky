@@ -4,7 +4,7 @@ import os
 
 
 SERVER_DIR = "server/"
-RASPBERRY = "192.168.1.6"
+RASPBERRY = "192.168.8.8"
 REMOTE_PATH = "/home/pi/blinky/"
 SERVICE_NAME = "blinky"
 

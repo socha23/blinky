@@ -9,7 +9,7 @@ export const useFires = () => {
         return () => {
             MachineState.unsubscribe(sub)
         }
-    });
+    }, []);
     return state;
 };
 
@@ -21,7 +21,7 @@ export const useFire = (idx) => {
         return () => {
             MachineState.unsubscribe(sub)
         }
-    });
+    }, []);
 
     const newSetState = (state) => {MachineState.setFireState(idx, state)};
     return fire(state, newSetState);

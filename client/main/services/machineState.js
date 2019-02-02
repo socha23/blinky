@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch'
 
 let subscribers = {};
 let subscribersCount = 0;
-let state = {leds: [], fires: []};
+let state = {leds: [], fires: [], neopixels: []};
 let intervalHandler = null;
 
 
@@ -63,6 +63,15 @@ export function getFireState(idx) {
 
 export function setFireState(idx, fireState) {
     state.fires[idx] = fireState;
+    notifySubscribers()
+}
+
+export function getNeopixelsState(idx) {
+    return state.neopixels[idx]
+}
+
+export function setNeopixelsState(idx, neopixelsState) {
+    state.neopixels[idx] = neopixelsState;
     notifySubscribers()
 }
 

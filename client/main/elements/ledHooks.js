@@ -9,7 +9,7 @@ export const useLeds = () => {
         return () => {
             MachineState.unsubscribe(sub)
         }
-    });
+    }, []);
     return state;
 };
 
@@ -21,7 +21,7 @@ export const useLed = (idx) => {
         return () => {
             MachineState.unsubscribe(sub)
         }
-    });
+    }, []);
 
     const newSetState = (state) => {MachineState.setLedState(idx, state)};
     return Led(state, newSetState);
