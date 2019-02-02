@@ -66,12 +66,12 @@ export function setFireState(idx, fireState) {
     notifySubscribers()
 }
 
-export function getNeopixelsState(idx) {
+export function getNeopixelState(idx) {
     return state.neopixels[idx]
 }
 
-export function setNeopixelsState(idx, neopixelsState) {
-    state.neopixels[idx] = neopixelsState;
+export function setNeopixelState(idx, neopixelState) {
+    state.neopixels[idx] = neopixelState;
     notifySubscribers()
 }
 

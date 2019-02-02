@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from machine import Machine
 
-neopixels_api = Blueprint('neopixels api', __name__)
+neopixels_api = Blueprint('neopixel api', __name__)
 
 API_METHODS = ['GET', 'PUT']
 
@@ -12,12 +12,12 @@ def render_state():
     return resp
 
 
-@neopixels_api.route('/neopixels/<id>/on', methods=API_METHODS)
+@neopixels_api.route('/neopixel/<id>/on', methods=API_METHODS)
 def on(id):
-    Machine.neopixels(id).on()
+    Machine.neopixel(id).on()
     return render_state()
 
-@neopixels_api.route('/neopixels/<id>/off', methods=API_METHODS)
+@neopixels_api.route('/neopixel/<id>/off', methods=API_METHODS)
 def off(id):
-    Machine.neopixels(id).off()
+    Machine.neopixel(id).off()
     return render_state()

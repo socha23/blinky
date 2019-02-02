@@ -1,5 +1,5 @@
 import React from 'react'
-import {useNeopixels} from "../elements/neopixelsHooks";
+import {useNeopixel} from "../elements/neopixelsHooks";
 
 const SettingButton = ({className, children, onClick, active}) => <button
     style={{marginRight: 6}}
@@ -9,24 +9,24 @@ const SettingButton = ({className, children, onClick, active}) => <button
 </button>;
 
 
-const NeopixelsBox = ({idx}) => {
-    const neopixels = useNeopixels(idx);
+const NeopixelBox = ({idx}) => {
+    const neopixel = useNeopixel(idx);
 
     return <div className={"col-sm-4"}>
 
         <div className="panel panel-default">
             <div className="panel-heading">
-                <h3 className="panel-title">{neopixels.name()}</h3>
+                <h3 className="panel-title">{neopixel.name()}</h3>
             </div>
 
             <div className="panel-body">
                 <div>
-                    <SettingButton active={neopixels.setting() === "on"} className={"btn-primary"} onClick={neopixels.on}>On</SettingButton>
-                    <SettingButton active={neopixels.setting() === "off"} className={"btn-danger"} onClick={neopixels.off}>Off</SettingButton>
+                    <SettingButton active={neopixel.setting() === "on"} className={"btn-primary"} onClick={neopixel.on}>On</SettingButton>
+                    <SettingButton active={neopixel.setting() === "off"} className={"btn-danger"} onClick={neopixel.off}>Off</SettingButton>
                 </div>
             </div>
         </div>
     </div>
 };
 
-export default NeopixelsBox
+export default NeopixelBox

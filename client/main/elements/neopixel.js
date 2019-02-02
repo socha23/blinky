@@ -1,6 +1,6 @@
-import * as api from '../services/neopixelsApi'
+import * as api from '../services/neopixelApi'
 
-function neopixels(state, setState) {
+function neopixel(state, setState) {
 
     function on() {
         api.on(state.id);
@@ -20,4 +20,4 @@ function neopixels(state, setState) {
     }
 }
 
-export default neopixels
+export default neopixel

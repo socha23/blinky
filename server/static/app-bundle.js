@@ -1478,8 +1478,8 @@ exports.getLedState = getLedState;
 exports.setLedState = setLedState;
 exports.getFireState = getFireState;
 exports.setFireState = setFireState;
-exports.getNeopixelsState = getNeopixelsState;
-exports.setNeopixelsState = setNeopixelsState;
+exports.getNeopixelState = getNeopixelState;
+exports.setNeopixelState = setNeopixelState;
 exports.getState = getState;
 
 var _isomorphicFetch = __webpack_require__(34);
@@ -1551,12 +1551,12 @@ function setFireState(idx, fireState) {
     notifySubscribers();
 }
 
-function getNeopixelsState(idx) {
+function getNeopixelState(idx) {
     return state.neopixels[idx];
 }
 
-function setNeopixelsState(idx, neopixelsState) {
-    state.neopixels[idx] = neopixelsState;
+function setNeopixelState(idx, neopixelState) {
+    state.neopixels[idx] = neopixelState;
     notifySubscribers();
 }
 
@@ -25231,16 +25231,16 @@ var _FireBox2 = _interopRequireDefault(_FireBox);
 
 var _neopixelsHooks = __webpack_require__(125);
 
-var _NeopixelsBox = __webpack_require__(128);
+var _NeopixelBox = __webpack_require__(131);
 
-var _NeopixelsBox2 = _interopRequireDefault(_NeopixelsBox);
+var _NeopixelBox2 = _interopRequireDefault(_NeopixelBox);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Main = function Main() {
     var leds = (0, _ledHooks.useLeds)();
     var fires = (0, _fireHooks.useFires)();
-    var neopixels = (0, _neopixelsHooks.useAllNeopixels)();
+    var neopixels = (0, _neopixelsHooks.useNeopixels)();
     return _react2.default.createElement(
         "div",
         { className: "container", style: { marginTop: 30 } },
@@ -25254,7 +25254,7 @@ var Main = function Main() {
                 return _react2.default.createElement(_FireBox2.default, { key: idx, idx: idx });
             }),
             neopixels.map(function (_, idx) {
-                return _react2.default.createElement(_NeopixelsBox2.default, { key: idx, idx: idx });
+                return _react2.default.createElement(_NeopixelBox2.default, { key: idx, idx: idx });
             })
         )
     );
@@ -40156,7 +40156,7 @@ function putJson(addr) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.useNeopixels = exports.useAllNeopixels = undefined;
+exports.useNeopixel = exports.useNeopixels = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -40168,15 +40168,15 @@ var _machineState = __webpack_require__(51);
 
 var MachineState = _interopRequireWildcard(_machineState);
 
-var _neopixels = __webpack_require__(126);
+var _neopixel = __webpack_require__(129);
 
-var _neopixels2 = _interopRequireDefault(_neopixels);
+var _neopixel2 = _interopRequireDefault(_neopixel);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var useAllNeopixels = exports.useAllNeopixels = function useAllNeopixels() {
+var useNeopixels = exports.useNeopixels = function useNeopixels() {
     var _useState = (0, _react.useState)([]),
         _useState2 = _slicedToArray(_useState, 2),
         state = _useState2[0],
@@ -40193,15 +40193,15 @@ var useAllNeopixels = exports.useAllNeopixels = function useAllNeopixels() {
     return state;
 };
 
-var useNeopixels = exports.useNeopixels = function useNeopixels(idx) {
-    var _useState3 = (0, _react.useState)(MachineState.getNeopixelsState(idx)),
+var useNeopixel = exports.useNeopixel = function useNeopixel(idx) {
+    var _useState3 = (0, _react.useState)(MachineState.getNeopixelState(idx)),
         _useState4 = _slicedToArray(_useState3, 2),
         state = _useState4[0],
         setState = _useState4[1];
 
     (0, _react.useEffect)(function () {
         var sub = MachineState.subscribe(function () {
-            setState(MachineState.getNeopixelsState(idx));
+            setState(MachineState.getNeopixelState(idx));
         });
 
         return function () {
@@ -40210,13 +40210,16 @@ var useNeopixels = exports.useNeopixels = function useNeopixels(idx) {
     }, []);
 
     var newSetState = function newSetState(state) {
-        MachineState.setNeopixelsState(idx, state);
+        MachineState.setNeopixelState(idx, state);
     };
-    return (0, _neopixels2.default)(state, newSetState);
+    return (0, _neopixel2.default)(state, newSetState);
 };
 
 /***/ }),
-/* 126 */
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40228,13 +40231,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _neopixelsApi = __webpack_require__(127);
+var _neopixelApi = __webpack_require__(130);
 
-var api = _interopRequireWildcard(_neopixelsApi);
+var api = _interopRequireWildcard(_neopixelApi);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-function neopixels(state, setState) {
+function neopixel(state, setState) {
 
     function on() {
         api.on(state.id);
@@ -40258,10 +40261,10 @@ function neopixels(state, setState) {
     };
 }
 
-exports.default = neopixels;
+exports.default = neopixel;
 
 /***/ }),
-/* 127 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40276,19 +40279,19 @@ exports.off = off;
 var _apiUtils = __webpack_require__(124);
 
 function on(id) {
-    (0, _apiUtils.putJson)(neopixelsAddr(id) + "/on");
+    (0, _apiUtils.putJson)(neopixelAddr(id) + "/on");
 }
 
 function off(id) {
-    (0, _apiUtils.putJson)(neopixelsAddr(id) + "/off");
+    (0, _apiUtils.putJson)(neopixelAddr(id) + "/off");
 }
 
-function neopixelsAddr(id) {
-    return "/neopixels/" + id;
+function neopixelAddr(id) {
+    return "/neopixel/" + id;
 }
 
 /***/ }),
-/* 128 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40321,10 +40324,10 @@ var SettingButton = function SettingButton(_ref) {
     );
 };
 
-var NeopixelsBox = function NeopixelsBox(_ref2) {
+var NeopixelBox = function NeopixelBox(_ref2) {
     var idx = _ref2.idx;
 
-    var neopixels = (0, _neopixelsHooks.useNeopixels)(idx);
+    var neopixel = (0, _neopixelsHooks.useNeopixel)(idx);
 
     return _react2.default.createElement(
         "div",
@@ -40338,7 +40341,7 @@ var NeopixelsBox = function NeopixelsBox(_ref2) {
                 _react2.default.createElement(
                     "h3",
                     { className: "panel-title" },
-                    neopixels.name()
+                    neopixel.name()
                 )
             ),
             _react2.default.createElement(
@@ -40349,12 +40352,12 @@ var NeopixelsBox = function NeopixelsBox(_ref2) {
                     null,
                     _react2.default.createElement(
                         SettingButton,
-                        { active: neopixels.setting() === "on", className: "btn-primary", onClick: neopixels.on },
+                        { active: neopixel.setting() === "on", className: "btn-primary", onClick: neopixel.on },
                         "On"
                     ),
                     _react2.default.createElement(
                         SettingButton,
-                        { active: neopixels.setting() === "off", className: "btn-danger", onClick: neopixels.off },
+                        { active: neopixel.setting() === "off", className: "btn-danger", onClick: neopixel.off },
                         "Off"
                     )
                 )
@@ -40363,7 +40366,7 @@ var NeopixelsBox = function NeopixelsBox(_ref2) {
     );
 };
 
-exports.default = NeopixelsBox;
+exports.default = NeopixelBox;
 
 /***/ })
 /******/ ]);
