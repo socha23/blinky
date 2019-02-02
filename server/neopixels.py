@@ -8,6 +8,7 @@ class Neopixel:
         self.name = name
         self.num_pixels = num_pixels
         self._pixel = neopixel.NeoPixel(board.D18, num_pixels, brightness=0.2, auto_write=False, pixel_order=neopixel.GRB)
+        self._value = (0, 0, 0)
         self.setting = 'off'
         self.off()
 
@@ -20,15 +21,26 @@ class Neopixel:
         self._pixel.brightness = brightness
         self._pixel.show()
 
-    def on(self):
-        self._pixel.fill((255, 255, 255))
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, val):
+        self._pixel.fill(val)
         self._pixel.show()
+
+    def on(self):
+        self.value = (255, 255, 255)
         self.setting = 'on'
 
     def off(self):
-        self._pixel.fill((0, 0, 0))
-        self._pixel.show()
-        self.setting = 'on'
+        self.value = (0, 0, 0)
+        self.setting = 'off'
+
+    def fire(self):
+        self.value = (255, 128, 0)
+        self.setting = 'fire'
 
     def state(self):
         return {

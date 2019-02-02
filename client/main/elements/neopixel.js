@@ -12,6 +12,11 @@ function neopixel(state, setState) {
         setState({...state, setting: "off"})
     }
 
+    function fire() {
+        api.fire(state.id);
+        setState({...state, setting: "fire"})
+    }
+
     function setBrightness(val) {
         api.brightness(state.id, val);
         setState({...state, brightness: val})
@@ -25,6 +30,7 @@ function neopixel(state, setState) {
         on,
         off,
         setBrightness,
+        fire,
     }
 }
 

@@ -8,6 +8,10 @@ export function off(id) {
     putJson(neopixelAddr(id) + "/off")
 }
 
+export function fire(id) {
+    putJson(neopixelAddr(id) + "/fire")
+}
+
 function neopixelAddr(id) {
     return "/neopixel/" + id
 }

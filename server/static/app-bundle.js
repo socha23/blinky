@@ -40249,6 +40249,11 @@ function neopixel(state, setState) {
         setState(_extends({}, state, { setting: "off" }));
     }
 
+    function fire() {
+        api.fire(state.id);
+        setState(_extends({}, state, { setting: "fire" }));
+    }
+
     function setBrightness(val) {
         api.brightness(state.id, val);
         setState(_extends({}, state, { brightness: val }));
@@ -40266,7 +40271,8 @@ function neopixel(state, setState) {
         },
         on: on,
         off: off,
-        setBrightness: setBrightness
+        setBrightness: setBrightness,
+        fire: fire
     };
 }
 
@@ -40284,6 +40290,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.on = on;
 exports.off = off;
+exports.fire = fire;
 exports.brightness = brightness;
 
 var _apiUtils = __webpack_require__(124);
@@ -40294,6 +40301,10 @@ function on(id) {
 
 function off(id) {
     (0, _apiUtils.putJson)(neopixelAddr(id) + "/off");
+}
+
+function fire(id) {
+    (0, _apiUtils.putJson)(neopixelAddr(id) + "/fire");
 }
 
 function neopixelAddr(id) {
@@ -40385,6 +40396,11 @@ var NeopixelBox = function NeopixelBox(_ref2) {
                         SettingButton,
                         { active: neopixel.setting() === "on", className: "btn-primary", onClick: neopixel.on },
                         "On"
+                    ),
+                    _react2.default.createElement(
+                        SettingButton,
+                        { active: neopixel.setting() === "fire", className: "btn-info", onClick: neopixel.fire },
+                        "Fire"
                     ),
                     _react2.default.createElement(
                         SettingButton,

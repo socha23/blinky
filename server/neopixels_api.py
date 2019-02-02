@@ -22,6 +22,11 @@ def off(id):
     Machine.neopixel(id).off()
     return render_state()
 
+@neopixels_api.route('/neopixel/<id>/fire', methods=API_METHODS)
+def fire(id):
+    Machine.neopixel(id).fire()
+    return render_state()
+
 @neopixels_api.route('/neopixel/<id>/brightness/<brightness>', methods=API_METHODS)
 def brightness(id, brightness):
     Machine.neopixel(id).brightness = float(brightness)

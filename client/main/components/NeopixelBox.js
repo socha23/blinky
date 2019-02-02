@@ -33,6 +33,7 @@ const NeopixelBox = ({idx}) => {
 
                 <div>
                     <SettingButton active={neopixel.setting() === "on"} className={"btn-primary"} onClick={neopixel.on}>On</SettingButton>
+                    <SettingButton active={neopixel.setting() === "fire"} className={"btn-info"} onClick={neopixel.fire}>Fire</SettingButton>
                     <SettingButton active={neopixel.setting() === "off"} className={"btn-danger"} onClick={neopixel.off}>Off</SettingButton>
                 </div>
             </div>
