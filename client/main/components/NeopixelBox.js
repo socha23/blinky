@@ -1,5 +1,6 @@
 import React from 'react'
 import {useNeopixel} from "../elements/neopixelsHooks";
+import ReactBootstrapSlider from "react-bootstrap-slider";
 
 const SettingButton = ({className, children, onClick, active}) => <button
     style={{marginRight: 6}}
@@ -20,6 +21,16 @@ const NeopixelBox = ({idx}) => {
             </div>
 
             <div className="panel-body">
+                <div style={{marginBottom: 5}}>
+                    <ReactBootstrapSlider
+                        value={neopixel.brightness()}
+                        change={e => {neopixel.setBrightness(e.target.value)}}
+                        step={0.01}
+                        max={1}
+                        min={0}
+                    />
+                </div>
+
                 <div>
                     <SettingButton active={neopixel.setting() === "on"} className={"btn-primary"} onClick={neopixel.on}>On</SettingButton>
                     <SettingButton active={neopixel.setting() === "off"} className={"btn-danger"} onClick={neopixel.off}>Off</SettingButton>

@@ -40249,6 +40249,11 @@ function neopixel(state, setState) {
         setState(_extends({}, state, { setting: "off" }));
     }
 
+    function setBrightness(val) {
+        api.brightness(state.id, val);
+        setState(_extends({}, state, { brightness: val }));
+    }
+
     return {
         name: function name() {
             return state.name;
@@ -40256,8 +40261,12 @@ function neopixel(state, setState) {
         setting: function setting() {
             return state.setting;
         },
+        brightness: function brightness() {
+            return state.brightness;
+        },
         on: on,
-        off: off
+        off: off,
+        setBrightness: setBrightness
     };
 }
 
@@ -40275,6 +40284,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.on = on;
 exports.off = off;
+exports.brightness = brightness;
 
 var _apiUtils = __webpack_require__(124);
 
@@ -40288,6 +40298,10 @@ function off(id) {
 
 function neopixelAddr(id) {
     return "/neopixel/" + id;
+}
+
+function brightness(id, val) {
+    (0, _apiUtils.putJson)(neopixelAddr(id) + "/brightness/" + val);
 }
 
 /***/ }),
@@ -40306,6 +40320,10 @@ var _react = __webpack_require__(1);
 var _react2 = _interopRequireDefault(_react);
 
 var _neopixelsHooks = __webpack_require__(125);
+
+var _reactBootstrapSlider = __webpack_require__(37);
+
+var _reactBootstrapSlider2 = _interopRequireDefault(_reactBootstrapSlider);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40347,6 +40365,19 @@ var NeopixelBox = function NeopixelBox(_ref2) {
             _react2.default.createElement(
                 "div",
                 { className: "panel-body" },
+                _react2.default.createElement(
+                    "div",
+                    { style: { marginBottom: 5 } },
+                    _react2.default.createElement(_reactBootstrapSlider2.default, {
+                        value: neopixel.brightness(),
+                        change: function change(e) {
+                            neopixel.setBrightness(e.target.value);
+                        },
+                        step: 0.01,
+                        max: 1,
+                        min: 0
+                    })
+                ),
                 _react2.default.createElement(
                     "div",
                     null,

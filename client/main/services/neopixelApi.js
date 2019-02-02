@@ -12,3 +12,7 @@ function neopixelAddr(id) {
     return "/neopixel/" + id
 }
 
+export function brightness(id, val) {
+    putJson(neopixelAddr(id) + "/brightness/" + val)
+}
+
