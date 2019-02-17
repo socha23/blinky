@@ -31,12 +31,22 @@ class Neopixel {
         this.setState({...this.state, setting: "rgb", params});
     };
 
+    rainbow = (params = {speed: 0.5}) => {
+        api.rainbow(this.state.id, params);
+        this.setState({...this.state, setting: "rainbow", params});
+    };
+
     setParam(name, value) {
         const newParams = {...this.state.params};
         newParams[name] = value;
         switch(this.state.setting) {
             case "rgb":
-                this.rgb(newParams)
+                this.rgb(newParams);
+                break;
+            case "rainbow":
+                this.rainbow(newParams);
+                break;
+
         }
     }
 

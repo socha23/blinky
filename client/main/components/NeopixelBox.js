@@ -16,22 +16,21 @@ const NeopixelBox = ({idx}) => {
                 <BrightnessSlider neopixel={neopixel}/>
                 <SettingParams neopixel={neopixel}/>
                 <div>
-                    <SettingButton active={neopixel.setting === "on"} className={"btn-primary"} onClick={neopixel.on}>On</SettingButton>
-                    <SettingButton active={neopixel.setting === "rgb"} className={"btn-info"} onClick={() => {
-                        neopixel.rgb()
-                    }}>RGB</SettingButton>
-                    <SettingButton active={neopixel.setting === "fire"} className={"btn-info"} onClick={neopixel.fire}>Fire</SettingButton>
-                    <SettingButton active={neopixel.setting === "off"} className={"btn-danger"} onClick={neopixel.off}>Off</SettingButton>
+                    <SettingButton neopixel={neopixel} setting='on' className={"btn-primary"}>On</SettingButton>
+                    <SettingButton neopixel={neopixel} setting='rgb' className={"btn-info"}>RGB</SettingButton>
+                    <SettingButton neopixel={neopixel} setting='rainbow' className={"btn-info"}>Rainbow</SettingButton>
+                    <SettingButton neopixel={neopixel} setting='fire' className={"btn-info"}>Fire</SettingButton>
+                    <SettingButton neopixel={neopixel} setting='off' className={"btn-danger"}>Off</SettingButton>
                 </div>
             </div>
         </div>
     </div>
 };
 
-const SettingButton = ({className, children, onClick, active}) => <button
+const SettingButton = ({className, children, neopixel, setting}) => <button
     style={{marginRight: 6}}
-    onClick={onClick}
-    className={"btn " + className + (active ? " active" : "")}>
+    onClick={() => {neopixel[setting]()}}
+    className={"btn " + className + (neopixel.setting === setting ? " active" : "")}>
     {children}
 </button>;
 
@@ -43,36 +42,46 @@ const BrightnessSlider = ({neopixel}) => <div style={{marginBottom: 5}}>
             neopixel.brightness = v
         }}
     />
+    <hr/>
 </div>;
 
 
 const SettingParams = ({neopixel}) => {
     switch (neopixel.setting) {
         case "rgb":
-            return <RGBSettings neopixel={neopixel}/>
+            return <RGBParams neopixel={neopixel}/>
+        case "rainbow":
+            return <RainbowParams neopixel={neopixel}/>
         default:
             return <div/>
     }
 };
 
 
-const RGBSettings = ({neopixel}) => <div>
+const RGBParams = ({neopixel}) => <div>
     <table>
         <tbody>
         <tr>
             <td>R</td>
-            <td><ParamSlider neopixel={neopixel} paramName={'r'}/></td>
+            <td style={{paddingBottom: 5}}><ParamSlider neopixel={neopixel} paramName={'r'}/></td>
         </tr>
         <tr>
             <td>G</td>
-            <td><ParamSlider neopixel={neopixel} paramName={'g'}/></td>
+            <td style={{paddingBottom: 5}}><ParamSlider neopixel={neopixel} paramName={'g'}/></td>
         </tr>
         <tr>
             <td>B</td>
-            <td><ParamSlider neopixel={neopixel} paramName={'b'}/></td>
+            <td style={{paddingBottom: 5}}><ParamSlider neopixel={neopixel} paramName={'b'}/></td>
         </tr>
         </tbody>
     </table>
+    <hr/>
+</div>;
+
+const RainbowParams = ({neopixel}) => <div style={{marginBottom: 5}}>
+    <h5>Speed:</h5>
+    <ParamSlider neopixel={neopixel} paramName={'speed'}/>
+    <hr/>
 </div>;
 
 

@@ -16,6 +16,10 @@ export function rgb(id, params) {
     setting(id, "rgb", params);
 }
 
+export function rainbow(id, params) {
+    setting(id, "rainbow", params);
+}
+
 function neopixelAddr(id) {
     return "/neopixel/" + id
 }

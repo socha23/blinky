@@ -2,6 +2,7 @@ import board
 import neopixel
 from gpiozero.mixins import SourceMixin
 from fire import fire_source
+from rainbow import rainbow_source
 
 class Neopixel(SourceMixin):
     def __init__(self, id, num_pixels, name, *args, **kwargs):
@@ -56,19 +57,24 @@ class Neopixel(SourceMixin):
         self.setting = 'off'
 
     def fire(self):
-        def generator():
-            sources = [fire_source() for _ in range(self.num_pixels)]
-            while True:
-                yield [next(source) for source in sources]
-        self.source = generator()
         self.setting = 'fire'
+        self._set_sources([fire_source() for _ in range(self.num_pixels)])
         self._setting_params = {}
 
     def rgb(self, r=1, g=1, b=1):
-        self.value = (r, g, b)
+        self.setting = 'rgb'
         self._setting_params = {'r': r, 'g': g, 'b': b}
         self.source = None
-        self.setting = 'rgb'
+        self.value = (r, g, b)
+
+    def rainbow(self, speed=0.5):
+        self._setting_params = {'speed': speed}
+        if self.setting != 'rainbow':
+            self.setting = 'rainbow'
+            self._set_sources([rainbow_source(
+                speed_generator=self._param_generator('speed'),
+                offset=float(i) * 256 / self.num_pixels
+            ) for i in range(self.num_pixels)])
 
     def state(self):
         return {
@@ -79,3 +85,13 @@ class Neopixel(SourceMixin):
             'brightness': self.brightness,
             'num_pixels': self.num_pixels,
         }
+
+    def _set_sources(self, sources):
+        def generator():
+            while True:
+                yield [next(source) for source in sources]
+        self.source = generator()
+
+    def _param_generator(self, name):
+        while True:
+            yield self._setting_params[name]
