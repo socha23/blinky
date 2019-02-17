@@ -29,7 +29,9 @@ const NeopixelBox = ({idx}) => {
 
 const SettingButton = ({className, children, neopixel, setting}) => <button
     style={{marginRight: 6}}
-    onClick={() => {neopixel[setting]()}}
+    onClick={() => {
+        neopixel[setting]()
+    }}
     className={"btn " + className + (neopixel.setting === setting ? " active" : "")}>
     {children}
 </button>;
@@ -59,50 +61,49 @@ const SettingParams = ({neopixel}) => {
 
 
 const RGBParams = ({neopixel}) => <div>
-    <table>
-        <tbody>
-        <tr>
-            <td>R</td>
-            <td style={{paddingBottom: 5}}><ParamSlider neopixel={neopixel} paramName={'r'}/></td>
-        </tr>
-        <tr>
-            <td>G</td>
-            <td style={{paddingBottom: 5}}><ParamSlider neopixel={neopixel} paramName={'g'}/></td>
-        </tr>
-        <tr>
-            <td>B</td>
-            <td style={{paddingBottom: 5}}><ParamSlider neopixel={neopixel} paramName={'b'}/></td>
-        </tr>
-        </tbody>
-    </table>
+    <RGBSlider neopixel={neopixel} caption='R' param='r'/>
+    <RGBSlider neopixel={neopixel} caption='G' param='g'/>
+    <RGBSlider neopixel={neopixel} caption='B' param='b'/>
     <hr/>
 </div>;
+
+
+const RGBSlider = ({neopixel, caption, param}) => <div>
+    <div style={{display: "flex", marginBottom: 15}}>
+        <span>{caption}</span>
+        <div style={{flexGrow: 1}}>
+            <ParamSlider neopixel={neopixel} paramName={param}/>
+        </div>
+    </div>
+</div>;
+
 
 const RainbowParams = ({neopixel}) => <div style={{marginBottom: 5}}>
     <h5>Speed:</h5>
-    <ParamSlider neopixel={neopixel} paramName={'speed'}/>
+    <ParamSlider neopixel={neopixel} paramName={'speed'} min={-1}/>
     <hr/>
 </div>;
 
 
-const ParamSlider = ({neopixel, paramName}) => {
+const ParamSlider = ({neopixel, paramName, min=0}) => {
     return <Slider
         value={neopixel.params[paramName]}
         onChange={v => {
             neopixel.setParam(paramName, v)
         }}
+        min={min}
     />
 };
 
 
-const Slider = ({value, onChange}) => {
+const Slider = ({value, onChange, min=0}) => {
     return <ReactBootstrapSlider
         value={value}
         change={e => {
             onChange(e.target.value)
         }}
         step={0.01}
-        min={0}
+        min={min}
         max={1}
     />
 };
