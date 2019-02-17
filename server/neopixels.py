@@ -11,7 +11,8 @@ class Neopixel(SourceMixin):
         self.num_pixels = num_pixels
         self._pixel = neopixel.NeoPixel(board.D18, num_pixels, brightness=0.2, auto_write=False, pixel_order=neopixel.GRB)
         self._value = (0, 0, 0)
-        self.setting = 'off'
+        self._setting = 'off'
+        self._setting_params = {}
         self.off()
 
     @property
@@ -29,7 +30,6 @@ class Neopixel(SourceMixin):
 
     @value.setter
     def value(self, val):
-        print(val)
         if isinstance(val, list):
             for i in range(min(len(val), self.num_pixels)):
                 (r, g, b) = val[i]
@@ -39,14 +39,20 @@ class Neopixel(SourceMixin):
             self._pixel.fill((int(r * 255), int(g * 255), int(b * 255)))
         self._pixel.show()
 
+    @property
+    def setting(self):
+        return self._setting
+
+    @setting.setter
+    def setting(self, val):
+        self._setting = val
+
     def on(self):
-        self.value = (1, 1, 1)
-        self.source = None
+        self.rgb(1, 1, 1)
         self.setting = 'on'
 
     def off(self):
-        self.value = (0, 0, 0)
-        self.source = None
+        self.rgb(0, 0, 0)
         self.setting = 'off'
 
     def fire(self):
@@ -56,12 +62,20 @@ class Neopixel(SourceMixin):
                 yield [next(source) for source in sources]
         self.source = generator()
         self.setting = 'fire'
+        self._setting_params = {}
+
+    def rgb(self, r=1, g=1, b=1):
+        self.value = (r, g, b)
+        self._setting_params = {'r': r, 'g': g, 'b': b}
+        self.source = None
+        self.setting = 'rgb'
 
     def state(self):
         return {
             'id': self.id,
             'name': self.name,
             'setting': self.setting,
+            'params': self._setting_params,
             'brightness': self.brightness,
             'num_pixels': self.num_pixels,
         }

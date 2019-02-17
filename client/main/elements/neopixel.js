@@ -1,37 +1,65 @@
 import * as api from '../services/neopixelApi'
 
-function neopixel(state, setState) {
+class Neopixel {
 
-    function on() {
-        api.on(state.id);
-        setState({...state, setting: "on"})
+    constructor(state, setState) {
+        this.state = {...state};
+        this.setState = setState;
     }
 
-    function off() {
-        api.off(state.id);
-        setState({...state, setting: "off"})
+    setStateFromOutside(newState) {
+        this.state = newState
     }
 
-    function fire() {
-        api.fire(state.id);
-        setState({...state, setting: "fire"})
+    on = () => {
+        api.on(this.state.id);
+        this.setState({...this.state, setting: "on"})
+    };
+
+    off = () => {
+        api.off(this.state.id);
+        this.setState({...this.state, setting: "off"})
+    };
+
+    fire = () => {
+        api.fire(this.state.id);
+        this.setState({...this.state, setting: "fire"})
+    };
+
+    rgb = (params = {r: 0.5, g: 0.5, b: 0.5}) => {
+        api.rgb(this.state.id, params);
+        this.setState({...this.state, setting: "rgb", params});
+    };
+
+    setParam(name, value) {
+        const newParams = {...this.state.params};
+        newParams[name] = value;
+        switch(this.state.setting) {
+            case "rgb":
+                this.rgb(newParams)
+        }
     }
 
-    function setBrightness(val) {
-        api.brightness(state.id, val);
-        setState({...state, brightness: val})
+    get name() {
+        return this.state.name
     }
 
+    get setting() {
+        return this.state.setting
+    }
 
-    return {
-        name: () => state.name,
-        setting: () => state.setting,
-        brightness: () => state.brightness,
-        on,
-        off,
-        setBrightness,
-        fire,
+    get brightness() {
+        return this.state.brightness
+    }
+
+    set brightness(val) {
+        api.brightness(this.state.id, val);
+        this.setState({...this.state, brightness: val})
+    }
+
+    get params() {
+        return this.state.params
     }
 }
 
-export default neopixel
+export default Neopixel
