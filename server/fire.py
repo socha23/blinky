@@ -1,6 +1,6 @@
-from gpiozero import PWMLED
+from stub_aware import PWMLED
 from gpiozero_ps.generators import triangular, gaussian, maxed, squared, constant
-from gpiozero.tools import clamped, scaled, multiplied
+from gpiozero_ps.gpiozero_generators import clamped, scaled, multiplied
 from itertools import tee
 
 

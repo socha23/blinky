@@ -1,6 +1,8 @@
-from gpiozero.mixins import SourceMixin
+from stub_aware import SourceMixin
 from fire import fire_source
 from rainbow import rainbow_source
+
+#don't delete this, it's used by evaluated code
 from gpiozero_ps.generators import *
 
 class Neopixel(SourceMixin):
@@ -79,7 +81,7 @@ class Neopixel(SourceMixin):
         self.setting = "effect"
         self._setting_params = {'body': body}
         self._effect_evaluator.body = body
-        self._set_sources(self._effect_evaluator.get_sources())
+        self._set_sources([self._effect_evaluator.get_source() for _ in range(self.num_pixels)])
 
     def state(self):
         return {
@@ -100,6 +102,8 @@ class Neopixel(SourceMixin):
             while True:
                 yield [next(source) for source in sources]
         self.source = generator()
+        self.value = next(self.source)
+        self._apply()
 
     def _param_generator(self, name):
         while True:
@@ -111,14 +115,12 @@ class Evaluator:
         self._body = "(1, 1, 1)"
         self._num_pixels = num_pixels
 
-    def get_sources(self):
-        value = self._eval_body()
-        if isinstance(value, list):
-            if len(value) != self._num_pixels:
-                raise Exception("Custom effect returned list with wrong number of arguments")
-            return [self._wrap_in_generator(val) for val in value]
-        else:
-            return [self._wrap_in_generator(self._eval_body()) for _ in range(self._num_pixels)]
+    def get_source(self):
+        r, g, b = self._eval_body()
+        def generator():
+            while True:
+                yield (next(r), next(g), next(b))
+        return generator()
 
     @property
     def body(self):
@@ -131,11 +133,5 @@ class Evaluator:
 
     def _eval_body(self):
         return eval(self._body)
-
-    def _wrap_in_generator(self, value):
-        if hasattr(value,'__iter__') and not isinstance(value, tuple):
-            return value
-        else:
-            return constant(value)
 
 

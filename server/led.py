@@ -1,5 +1,4 @@
-from gpiozero import PWMLED
-
+from stub_aware import PWMLED
 
 class LED:
     def __init__(self, pin, name):

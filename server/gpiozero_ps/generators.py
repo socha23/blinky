@@ -48,3 +48,5 @@ def triangular(ascent=100, descent=100, height=1, pause=0):
         value = 0
         for _ in range(0, pause_val):
             yield 0
+
+
