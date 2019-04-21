@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch'
 
-export function putJson(addr, obj = {}) {
+export function putJson(addr, obj = {}, onSuccess=()=>{}, onFailure=()=>{}) {
     return fetch(addr, {
         method: 'PUT',
         headers: {
@@ -8,11 +8,13 @@ export function putJson(addr, obj = {}) {
         },
         body: JSON.stringify(obj)
     })
-        .then(function (response) {
-            if (response.status >= 400) {
-                throw new Error("Bad response from server");
+        .then(r => {
+            if (r.ok) {
+                r.json().then(json => onSuccess(json), error => onFailure(error))
+            } else {
+                console.log("Bad response from server");
+                r.json().then(json => onFailure(json), error => onFailure(error))
             }
-            return response.json();
         })
 }
 

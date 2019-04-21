@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {useNeopixel} from "../elements/neopixelsHooks";
 import ReactBootstrapSlider from "react-bootstrap-slider";
 
@@ -20,6 +20,7 @@ const NeopixelBox = ({idx}) => {
                     <SettingButton neopixel={neopixel} setting='rgb' className={"btn-info"}>RGB</SettingButton>
                     <SettingButton neopixel={neopixel} setting='rainbow' className={"btn-info"}>Rainbow</SettingButton>
                     <SettingButton neopixel={neopixel} setting='fire' className={"btn-info"}>Fire</SettingButton>
+                    <SettingButton neopixel={neopixel} setting='effect' className={"btn-success"}>Effect</SettingButton>
                     <SettingButton neopixel={neopixel} setting='off' className={"btn-danger"}>Off</SettingButton>
                 </div>
             </div>
@@ -50,15 +51,37 @@ const BrightnessSlider = ({neopixel}) => <div style={{marginBottom: 5}}>
 
 const SettingParams = ({neopixel}) => {
     switch (neopixel.setting) {
+        case "effect":
+            return <EffectParams neopixel={neopixel}/>;
         case "rgb":
-            return <RGBParams neopixel={neopixel}/>
+            return <RGBParams neopixel={neopixel}/>;
         case "rainbow":
-            return <RainbowParams neopixel={neopixel}/>
+            return <RainbowParams neopixel={neopixel}/>;
         default:
             return <div/>
     }
 };
 
+
+const EffectParams = ({neopixel}) => {
+    const [body, setBody] = useState("(0,0,0)");
+    const [error, setError] = useState(null);
+
+    const onSuccess = () => {
+        setError(null);
+    };
+
+    const onFailure = (msg) => {
+        setError(msg);
+        console.error(msg);
+    };
+
+    return <div>
+        {error ? <div className={"text-danger"}>{error}</div>  : <div/> }
+        <textarea className={"form-control"} value={body} onChange={e => setBody(e.target.value)}/>
+        <button className={"btn btn-success"} onClick={e => neopixel.setParam("body", body, onSuccess, onFailure)}>Submit</button>
+    </div>
+};
 
 const RGBParams = ({neopixel}) => <div>
     <RGBSlider neopixel={neopixel} caption='R' param='r'/>
@@ -69,7 +92,7 @@ const RGBParams = ({neopixel}) => <div>
 
 
 const RGBSlider = ({neopixel, caption, param}) => <div>
-    <div style={{display: "flex", marginBottom: 15}}>
+    <div style={{display: "flex", marginBottom: 15, marginTop: 30}}>
         <span>{caption}</span>
         <div style={{flexGrow: 1}}>
             <ParamSlider neopixel={neopixel} paramName={param}/>

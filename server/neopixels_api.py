@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, make_response
 from machine import Machine
 
 neopixels_api = Blueprint('neopixel api', __name__)
@@ -40,6 +40,16 @@ def fire(id):
 def rgb(id):
     params = request.get_json()
     Machine.neopixel(id).rgb(r=params['r'], g=params['g'], b=params['b'])
+    return render_state()
+
+
+@neopixels_api.route('/neopixel/<id>/effect', methods=API_METHODS)
+def effect(id):
+    params = request.get_json()
+    try:
+        Machine.neopixel(id).effect(body=params['body'])
+    except BaseException as e:
+        return make_response(jsonify(str(e)), 401)
     return render_state()
 
 

@@ -16,6 +16,10 @@ export function rgb(id, params) {
     setting(id, "rgb", params);
 }
 
+export function effect(id, params, onSuccess, onFailure) {
+    setting(id, "effect", params, onSuccess, onFailure);
+}
+
 export function rainbow(id, params) {
     setting(id, "rainbow", params);
 }
@@ -24,8 +28,8 @@ function neopixelAddr(id) {
     return "/neopixel/" + id
 }
 
-function setting(id, setting, params={}) {
-    putJson(neopixelAddr(id) + "/" + setting, params)
+function setting(id, setting, params={}, onSuccess, onFailure) {
+    putJson(neopixelAddr(id) + "/" + setting, params, onSuccess, onFailure)
 }
 
 export function brightness(id, val) {

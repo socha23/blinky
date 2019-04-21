@@ -1,6 +1,7 @@
 from gpiozero.mixins import SourceMixin
 from fire import fire_source
 from rainbow import rainbow_source
+from gpiozero_ps.generators import *
 
 class Neopixel(SourceMixin):
     def __init__(self, id, pix_from, num_pixels, name, neopixel_strip, *args, **kwargs):
@@ -14,6 +15,7 @@ class Neopixel(SourceMixin):
         self._brightness = 1
         self._setting = 'off'
         self._setting_params = {}
+        self._effect_evaluator = Evaluator(num_pixels)
         self.off()
 
     @property
@@ -73,6 +75,12 @@ class Neopixel(SourceMixin):
                 offset=float(i) * 256 / self.num_pixels
             ) for i in range(self.num_pixels)])
 
+    def effect(self, body):
+        self.setting = "effect"
+        self._setting_params = {'body': body}
+        self._effect_evaluator.body = body
+        self._set_sources(self._effect_evaluator.get_sources())
+
     def state(self):
         return {
             'id': self.id,
@@ -96,3 +104,38 @@ class Neopixel(SourceMixin):
     def _param_generator(self, name):
         while True:
             yield self._setting_params[name]
+
+
+class Evaluator:
+    def __init__(self, num_pixels):
+        self._body = "(1, 1, 1)"
+        self._num_pixels = num_pixels
+
+    def get_sources(self):
+        value = self._eval_body()
+        if isinstance(value, list):
+            if len(value) != self._num_pixels:
+                raise Exception("Custom effect returned list with wrong number of arguments")
+            return [self._wrap_in_generator(val) for val in value]
+        else:
+            return [self._wrap_in_generator(self._eval_body()) for _ in range(self._num_pixels)]
+
+    @property
+    def body(self):
+        return self._body
+
+    @body.setter
+    def body(self, val):
+        self._body = val
+        self._eval_body()
+
+    def _eval_body(self):
+        return eval(self._body)
+
+    def _wrap_in_generator(self, value):
+        if hasattr(value,'__iter__') and not isinstance(value, tuple):
+            return value
+        else:
+            return constant(value)
+
+

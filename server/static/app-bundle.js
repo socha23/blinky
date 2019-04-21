@@ -1109,6 +1109,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function putJson(addr) {
     var obj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var onSuccess = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function () {};
+    var onFailure = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
 
     return (0, _isomorphicFetch2.default)(addr, {
         method: 'PUT',
@@ -1116,11 +1118,21 @@ function putJson(addr) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(obj)
-    }).then(function (response) {
-        if (response.status >= 400) {
-            throw new Error("Bad response from server");
+    }).then(function (r) {
+        if (r.ok) {
+            r.json().then(function (json) {
+                return onSuccess(json);
+            }, function (error) {
+                return onFailure(error);
+            });
+        } else {
+            console.log("Bad response from server");
+            r.json().then(function (json) {
+                return onFailure(json);
+            }, function (error) {
+                return onFailure(error);
+            });
         }
-        return response.json();
     });
 }
 
@@ -40275,6 +40287,15 @@ var Neopixel = function () {
             _this.setState(_extends({}, _this.state, { setting: "rgb", params: params }));
         };
 
+        this.effect = function () {
+            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { body: '(0,0,0)' };
+            var onSuccess = arguments[1];
+            var onFailure = arguments[2];
+
+            api.effect(_this.state.id, params, onSuccess, onFailure);
+            _this.setState(_extends({}, _this.state, { setting: "effect", params: params }));
+        };
+
         this.rainbow = function () {
             var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { speed: 0.5 };
 
@@ -40293,7 +40314,7 @@ var Neopixel = function () {
         }
     }, {
         key: "setParam",
-        value: function setParam(name, value) {
+        value: function setParam(name, value, onSuccess, onFailure) {
             var newParams = _extends({}, this.state.params);
             newParams[name] = value;
             switch (this.state.setting) {
@@ -40302,6 +40323,9 @@ var Neopixel = function () {
                     break;
                 case "rainbow":
                     this.rainbow(newParams);
+                    break;
+                case "effect":
+                    this.effect(newParams, onSuccess, onFailure);
                     break;
 
             }
@@ -40351,6 +40375,7 @@ exports.on = on;
 exports.off = off;
 exports.fire = fire;
 exports.rgb = rgb;
+exports.effect = effect;
 exports.rainbow = rainbow;
 exports.brightness = brightness;
 
@@ -40372,6 +40397,10 @@ function rgb(id, params) {
     setting(id, "rgb", params);
 }
 
+function effect(id, params, onSuccess, onFailure) {
+    setting(id, "effect", params, onSuccess, onFailure);
+}
+
 function rainbow(id, params) {
     setting(id, "rainbow", params);
 }
@@ -40382,8 +40411,10 @@ function neopixelAddr(id) {
 
 function setting(id, setting) {
     var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var onSuccess = arguments[3];
+    var onFailure = arguments[4];
 
-    (0, _apiUtils.putJson)(neopixelAddr(id) + "/" + setting, params);
+    (0, _apiUtils.putJson)(neopixelAddr(id) + "/" + setting, params, onSuccess, onFailure);
 }
 
 function brightness(id, val) {
@@ -40400,6 +40431,8 @@ function brightness(id, val) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _react = __webpack_require__(0);
 
@@ -40463,6 +40496,11 @@ var NeopixelBox = function NeopixelBox(_ref) {
                     ),
                     _react2.default.createElement(
                         SettingButton,
+                        { neopixel: neopixel, setting: "effect", className: "btn-success" },
+                        "Effect"
+                    ),
+                    _react2.default.createElement(
+                        SettingButton,
                         { neopixel: neopixel, setting: "off", className: "btn-danger" },
                         "Off"
                     )
@@ -40508,6 +40546,8 @@ var SettingParams = function SettingParams(_ref4) {
     var neopixel = _ref4.neopixel;
 
     switch (neopixel.setting) {
+        case "effect":
+            return _react2.default.createElement(EffectParams, { neopixel: neopixel });
         case "rgb":
             return _react2.default.createElement(RGBParams, { neopixel: neopixel });
         case "rainbow":
@@ -40517,8 +40557,51 @@ var SettingParams = function SettingParams(_ref4) {
     }
 };
 
-var RGBParams = function RGBParams(_ref5) {
+var EffectParams = function EffectParams(_ref5) {
     var neopixel = _ref5.neopixel;
+
+    var _useState = (0, _react.useState)("(0,0,0)"),
+        _useState2 = _slicedToArray(_useState, 2),
+        body = _useState2[0],
+        setBody = _useState2[1];
+
+    var _useState3 = (0, _react.useState)(null),
+        _useState4 = _slicedToArray(_useState3, 2),
+        error = _useState4[0],
+        setError = _useState4[1];
+
+    var onSuccess = function onSuccess() {
+        setError(null);
+    };
+
+    var onFailure = function onFailure(msg) {
+        setError(msg);
+        console.error(msg);
+    };
+
+    return _react2.default.createElement(
+        "div",
+        null,
+        error ? _react2.default.createElement(
+            "div",
+            { className: "text-danger" },
+            error
+        ) : _react2.default.createElement("div", null),
+        _react2.default.createElement("textarea", { className: "form-control", value: body, onChange: function onChange(e) {
+                return setBody(e.target.value);
+            } }),
+        _react2.default.createElement(
+            "button",
+            { className: "btn btn-success", onClick: function onClick(e) {
+                    return neopixel.setParam("body", body, onSuccess, onFailure);
+                } },
+            "Submit"
+        )
+    );
+};
+
+var RGBParams = function RGBParams(_ref6) {
+    var neopixel = _ref6.neopixel;
     return _react2.default.createElement(
         "div",
         null,
@@ -40529,16 +40612,16 @@ var RGBParams = function RGBParams(_ref5) {
     );
 };
 
-var RGBSlider = function RGBSlider(_ref6) {
-    var neopixel = _ref6.neopixel,
-        caption = _ref6.caption,
-        param = _ref6.param;
+var RGBSlider = function RGBSlider(_ref7) {
+    var neopixel = _ref7.neopixel,
+        caption = _ref7.caption,
+        param = _ref7.param;
     return _react2.default.createElement(
         "div",
         null,
         _react2.default.createElement(
             "div",
-            { style: { display: "flex", marginBottom: 15 } },
+            { style: { display: "flex", marginBottom: 15, marginTop: 30 } },
             _react2.default.createElement(
                 "span",
                 null,
@@ -40553,8 +40636,8 @@ var RGBSlider = function RGBSlider(_ref6) {
     );
 };
 
-var RainbowParams = function RainbowParams(_ref7) {
-    var neopixel = _ref7.neopixel;
+var RainbowParams = function RainbowParams(_ref8) {
+    var neopixel = _ref8.neopixel;
     return _react2.default.createElement(
         "div",
         { style: { marginBottom: 5 } },
@@ -40568,11 +40651,11 @@ var RainbowParams = function RainbowParams(_ref7) {
     );
 };
 
-var ParamSlider = function ParamSlider(_ref8) {
-    var neopixel = _ref8.neopixel,
-        paramName = _ref8.paramName,
-        _ref8$min = _ref8.min,
-        min = _ref8$min === undefined ? 0 : _ref8$min;
+var ParamSlider = function ParamSlider(_ref9) {
+    var neopixel = _ref9.neopixel,
+        paramName = _ref9.paramName,
+        _ref9$min = _ref9.min,
+        min = _ref9$min === undefined ? 0 : _ref9$min;
 
     return _react2.default.createElement(Slider, {
         value: neopixel.params[paramName],
@@ -40583,11 +40666,11 @@ var ParamSlider = function ParamSlider(_ref8) {
     });
 };
 
-var Slider = function Slider(_ref9) {
-    var value = _ref9.value,
-        onChange = _ref9.onChange,
-        _ref9$min = _ref9.min,
-        min = _ref9$min === undefined ? 0 : _ref9$min;
+var Slider = function Slider(_ref10) {
+    var value = _ref10.value,
+        onChange = _ref10.onChange,
+        _ref10$min = _ref10.min,
+        min = _ref10$min === undefined ? 0 : _ref10$min;
 
     return _react2.default.createElement(_reactBootstrapSlider2.default, {
         value: value,

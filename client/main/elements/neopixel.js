@@ -31,12 +31,17 @@ class Neopixel {
         this.setState({...this.state, setting: "rgb", params});
     };
 
+    effect = (params = {body: '(0,0,0)'}, onSuccess, onFailure) => {
+        api.effect(this.state.id, params, onSuccess, onFailure);
+        this.setState({...this.state, setting: "effect", params});
+    };
+
     rainbow = (params = {speed: 0.5}) => {
         api.rainbow(this.state.id, params);
         this.setState({...this.state, setting: "rainbow", params});
     };
 
-    setParam(name, value) {
+    setParam(name, value, onSuccess, onFailure) {
         const newParams = {...this.state.params};
         newParams[name] = value;
         switch(this.state.setting) {
@@ -45,6 +50,9 @@ class Neopixel {
                 break;
             case "rainbow":
                 this.rainbow(newParams);
+                break;
+            case "effect":
+                this.effect(newParams, onSuccess, onFailure);
                 break;
 
         }
