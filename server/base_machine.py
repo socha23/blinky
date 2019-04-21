@@ -1,12 +1,14 @@
 from led import LED
 from fire import Fire
 from neopixels import Neopixel
+from neopixel_strip import NeopixelStrip
 
 class BaseMachine:
     def __init__(self):
         self._leds = []
         self._fires = []
         self._neopixels = []
+        self._neopixel_strip = None
 
     def add_led(self, pin, name):
         led = LED(pin, name)
@@ -24,8 +26,11 @@ class BaseMachine:
     def fire(self, id):
         return next(x for x in self._fires if x.id == id)
 
-    def add_neopixel(self, name, num_pixels):
-        pixels = Neopixel("neopixel" + str(len(self._neopixels)), num_pixels, name)
+    def set_neopixel_strip(self, num_pixels):
+        self._neopixel_strip = NeopixelStrip(num_pixels)
+
+    def add_neopixel(self, name, pix_from, num_pixels):
+        pixels = Neopixel("neopixel" + str(len(self._neopixels)), pix_from, num_pixels, name, self._neopixel_strip)
         self._neopixels.append(pixels)
         return self
 

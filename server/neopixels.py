@@ -1,29 +1,29 @@
-import board
-import neopixel
 from gpiozero.mixins import SourceMixin
 from fire import fire_source
 from rainbow import rainbow_source
 
 class Neopixel(SourceMixin):
-    def __init__(self, id, num_pixels, name, *args, **kwargs):
+    def __init__(self, id, pix_from, num_pixels, name, neopixel_strip, *args, **kwargs):
         SourceMixin.__init__(self, *args, **kwargs)
         self.id = id
         self.name = name
+        self.pix_from = pix_from
         self.num_pixels = num_pixels
-        self._pixel = neopixel.NeoPixel(board.D18, num_pixels, brightness=0.2, auto_write=False, pixel_order=neopixel.GRB)
-        self._value = (0, 0, 0)
+        self._strip = neopixel_strip
+        self._value = [(0, 0, 0) for i in range(num_pixels)]
+        self._brightness = 1
         self._setting = 'off'
         self._setting_params = {}
         self.off()
 
     @property
     def brightness(self):
-        return self._pixel.brightness
+        return self._brightness
 
     @brightness.setter
     def brightness(self, brightness):
-        self._pixel.brightness = brightness
-        self._pixel.show()
+        self._brightness = brightness
+        self._apply()
 
     @property
     def value(self):
@@ -32,13 +32,10 @@ class Neopixel(SourceMixin):
     @value.setter
     def value(self, val):
         if isinstance(val, list):
-            for i in range(min(len(val), self.num_pixels)):
-                (r, g, b) = val[i]
-                self._pixel[i] = (int(r * 255), int(g * 255), int(b * 255))
+            self._value = val
         else:
-            (r, g, b) = val
-            self._pixel.fill((int(r * 255), int(g * 255), int(b * 255)))
-        self._pixel.show()
+            self._value = [val for i in range(self.num_pixels)]
+        self._apply()
 
     @property
     def setting(self):
@@ -82,9 +79,13 @@ class Neopixel(SourceMixin):
             'name': self.name,
             'setting': self.setting,
             'params': self._setting_params,
-            'brightness': self.brightness,
-            'num_pixels': self.num_pixels,
+            'brightness': self.brightness
         }
+
+    def _apply(self):
+        for i in range(self.num_pixels):
+            (r, g, b) = self._value[i]
+            self._strip.set_pixel(self.pix_from + i, (r * self.brightness, g * self.brightness, b * self.brightness))
 
     def _set_sources(self, sources):
         def generator():
