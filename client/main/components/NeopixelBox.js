@@ -5,40 +5,113 @@ import ReactBootstrapSlider from "react-bootstrap-slider";
 
 const NeopixelBox = ({idx}) => {
     const neopixel = useNeopixel(idx);
+    const [settingsDisplayed, toggleSettingsDisplayed] = useState(false);
 
-    return <div className={"col-sm-4"}>
-        <div className="panel panel-default">
-            <div className="panel-heading">
-                <h3 className="panel-title">{neopixel.name}</h3>
-            </div>
-
-            <div className="panel-body">
-                <BrightnessSlider neopixel={neopixel}/>
-                <SettingParams neopixel={neopixel}/>
-                <div>
-                    <SettingButton neopixel={neopixel} setting='on' className={"btn-primary"}>On</SettingButton>
-                    <SettingButton neopixel={neopixel} setting='rgb' className={"btn-info"}>RGB</SettingButton>
-                    <SettingButton neopixel={neopixel} setting='rainbow' className={"btn-info"}>Rainbow</SettingButton>
-                    <SettingButton neopixel={neopixel} setting='fire' className={"btn-info"}>Fire</SettingButton>
-                    <SettingButton neopixel={neopixel} setting='effect' className={"btn-success"}>Effect</SettingButton>
-                    <SettingButton neopixel={neopixel} setting='off' className={"btn-danger"}>Off</SettingButton>
-                </div>
-            </div>
+    return <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderBottom: "1px solid #888",
+    }}>
+        <h2 style={{margin: 10, marginTop: 20, color: "#ccc"}}>{neopixel.name}</h2>
+        <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
+            <OnOffToggle neopixel={neopixel}/>
+            <SettingsToggle neopixel={neopixel} settingsDisplayed={settingsDisplayed} toggleSettingsDisplayed={toggleSettingsDisplayed}/>
         </div>
+        {settingsDisplayed ? <SettingsBox neopixel={neopixel}/> : <div/>}
     </div>
 };
 
-const SettingButton = ({className, children, neopixel, setting}) => <button
-    style={{marginRight: 6}}
-    onClick={() => {
-        neopixel[setting]()
-    }}
-    className={"btn " + className + (neopixel.setting === setting ? " active" : "")}>
-    {children}
-</button>;
+
+const toggleButtonStyle = {
+    fontSize: 40,
+    padding: 15,
+    flexGrow: 1,
+    border: "none",
+    backgroundColor: "black",
+    cursor: "pointer",
+    textAlign: "center"
+};
+
+const OnOffToggle = ({neopixel}) => {
+    function toggle() {
+        if (neopixel.on) {
+            neopixel.turnOff()
+        } else {
+            neopixel.turnOn()
+        }
+    }
+
+    return <div style={{...toggleButtonStyle, color: neopixel.on ? "yellow" : "#888"}} onClick={toggle}>
+        <i className={"glyphicon glyphicon-certificate"}/>
+    </div>
+};
+
+const SettingsToggle = ({settingsDisplayed, toggleSettingsDisplayed}) => {
+
+    return <div style={{...toggleButtonStyle, color: settingsDisplayed ? "white" : "#888"}} onClick={e => toggleSettingsDisplayed(!settingsDisplayed)}>
+        <i className={"glyphicon glyphicon-cog"}/>
+    </div>
+};
+
+const SettingsBox = ({neopixel}) => <div style={{width: "100%", padding: 10, marginBottom: 10}}>
+    <BrightnessSlider neopixel={neopixel}/>
+    <div style={{marginTop: 30, marginBottom: 10, display: "flex", justifyContent: "space-between"}}>
+        <SettingButton neopixel={neopixel} setting='rgb' icon={"glyphicon glyphicon-menu-hamburger"}/>
+        <SettingButton neopixel={neopixel} setting='rainbow' icon={"glyphicon glyphicon-heart"}/>
+        <SettingButton neopixel={neopixel} setting='fire' icon={"glyphicon glyphicon-fire"}/>
+        <SettingButton neopixel={neopixel} setting='effect' icon={"glyphicon glyphicon-wrench"}/>
+    </div>
+    <SettingParams neopixel={neopixel}/>
+</div>;
+
+const SettingButton = ({icon, neopixel, setting}) => {
+    const style = {
+        fontSize: 40,
+        flexGrow: 1,
+        color: "#888",
+        backgroundColor: "black",
+        cursor: "pointer",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    };
+
+    const iconStyle = {
+        padding: 10,
+        border: "3px solid black",
+        borderColor: "black",
+        borderRadius: 5,
+    };
+
+    if (neopixel.setting === setting) {
+        iconStyle.borderColor = "white";
+        iconStyle.color = "white";
+    }
+
+    return <div
+        style={style}
+        onClick={() => {
+            neopixel[setting]()
+        }}>
+        <i style={iconStyle} className={icon}/>
+    </div>
+};
 
 
-const BrightnessSlider = ({neopixel}) => <div style={{marginBottom: 5}}>
+const sliderContainerStyle = {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 5,
+};
+
+const sliderCaptionStyle = {
+    marginRight: 10,
+    fontSize: 30
+};
+
+const BrightnessSlider = ({neopixel}) => <div style={sliderContainerStyle}>
+    <i className={"glyphicon glyphicon-asterisk"} style={sliderCaptionStyle}/>
     <Slider
         value={neopixel.brightness}
         onChange={v => {
@@ -77,49 +150,50 @@ const EffectParams = ({neopixel}) => {
     };
 
     return <div>
-        {error ? <div className={"text-danger"}>{error}</div>  : <div/> }
+        {error ? <div className={"text-danger"}>{error}</div> : <div/>}
         <textarea className={"form-control"} value={body} onChange={e => setBody(e.target.value)}/>
-        <button className={"btn btn-success"} onClick={e => neopixel.setParam("body", body, onSuccess, onFailure)}>Submit</button>
+        <button
+            className={"btn btn-block btn-lg btn-success"}
+            style={{marginTop: 10}}
+            onClick={e => neopixel.setParam("body", body, onSuccess, onFailure)}>Submit</button>
     </div>
 };
 
 const RGBParams = ({neopixel}) => <div>
-    <RGBSlider neopixel={neopixel} caption='R' param='r'/>
-    <RGBSlider neopixel={neopixel} caption='G' param='g'/>
-    <RGBSlider neopixel={neopixel} caption='B' param='b'/>
-    <hr/>
+    <RGBSlider neopixel={neopixel} color='red' param='r'/>
+    <RGBSlider neopixel={neopixel} color='green' param='g'/>
+    <RGBSlider neopixel={neopixel} color='blue' param='b'/>
 </div>;
 
 
-const RGBSlider = ({neopixel, caption, param}) => <div>
-    <div style={{display: "flex", marginBottom: 15, marginTop: 30}}>
-        <span>{caption}</span>
+const RGBSlider = ({neopixel, color, param}) => <ParamSlider neopixel={neopixel} param={param}>
+    <div style={{width: 30, height: 30, borderRadius: 18, backgroundColor: color, marginRight: 10}}/>
+</ParamSlider>;
+
+
+const RainbowParams = ({neopixel}) => <div>
+    <ParamSlider neopixel={neopixel} param={'speed'} min={-1}>
+        <i className={"glyphicon glyphicon-flash"} style={sliderCaptionStyle}/>
+    </ParamSlider>
+</div>;
+
+
+const ParamSlider = ({neopixel, param, children, min = 0}) =>
+    <div style={{...sliderContainerStyle, marginBottom: 15, marginTop: 30}}>
+        {children}
         <div style={{flexGrow: 1}}>
-            <ParamSlider neopixel={neopixel} paramName={param}/>
+            <Slider
+                value={neopixel.params[param]}
+                onChange={v => {
+                    neopixel.setParam(param, v)
+                }}
+                min={min}
+            />
         </div>
-    </div>
-</div>;
+    </div>;
 
 
-const RainbowParams = ({neopixel}) => <div style={{marginBottom: 5}}>
-    <h5>Speed:</h5>
-    <ParamSlider neopixel={neopixel} paramName={'speed'} min={-1}/>
-    <hr/>
-</div>;
-
-
-const ParamSlider = ({neopixel, paramName, min=0}) => {
-    return <Slider
-        value={neopixel.params[paramName]}
-        onChange={v => {
-            neopixel.setParam(paramName, v)
-        }}
-        min={min}
-    />
-};
-
-
-const Slider = ({value, onChange, min=0}) => {
+const Slider = ({value, onChange, min = 0}) => {
     return <ReactBootstrapSlider
         value={value}
         change={e => {

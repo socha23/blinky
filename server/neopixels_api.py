@@ -38,16 +38,14 @@ def fire(id):
 
 @neopixels_api.route('/neopixel/<id>/rgb', methods=API_METHODS)
 def rgb(id):
-    params = request.get_json()
-    Machine.neopixel(id).rgb(r=params['r'], g=params['g'], b=params['b'])
+    Machine.neopixel(id).rgb(request.get_json())
     return render_state()
 
 
 @neopixels_api.route('/neopixel/<id>/effect', methods=API_METHODS)
 def effect(id):
-    params = request.get_json()
     try:
-        Machine.neopixel(id).effect(body=params['body'])
+        Machine.neopixel(id).effect(request.get_json())
     except BaseException as e:
         return make_response(jsonify(str(e)), 401)
     return render_state()
@@ -55,6 +53,5 @@ def effect(id):
 
 @neopixels_api.route('/neopixel/<id>/rainbow', methods=API_METHODS)
 def rainbow(id):
-    params = request.get_json()
-    Machine.neopixel(id).rainbow(speed=params['speed'])
+    Machine.neopixel(id).rainbow(request.get_json())
     return render_state()

@@ -25362,20 +25362,16 @@ var Main = function Main() {
     var neopixels = (0, _neopixelsHooks.useNeopixels)();
     return _react2.default.createElement(
         "div",
-        { className: "container", style: { marginTop: 30 } },
-        _react2.default.createElement(
-            "div",
-            { className: "row" },
-            leds.map(function (_, idx) {
-                return _react2.default.createElement(_LedBox2.default, { key: idx, idx: idx });
-            }),
-            fires.map(function (_, idx) {
-                return _react2.default.createElement(_FireBox2.default, { key: idx, idx: idx });
-            }),
-            neopixels.map(function (_, idx) {
-                return _react2.default.createElement(_NeopixelBox2.default, { key: idx, idx: idx });
-            })
-        )
+        null,
+        leds.map(function (_, idx) {
+            return _react2.default.createElement(_LedBox2.default, { key: idx, idx: idx });
+        }),
+        fires.map(function (_, idx) {
+            return _react2.default.createElement(_FireBox2.default, { key: idx, idx: idx });
+        }),
+        neopixels.map(function (_, idx) {
+            return _react2.default.createElement(_NeopixelBox2.default, { key: idx, idx: idx });
+        })
     );
 };
 
@@ -40265,42 +40261,42 @@ var Neopixel = function () {
 
         _classCallCheck(this, Neopixel);
 
-        this.on = function () {
+        this.turnOn = function () {
             api.on(_this.state.id);
-            _this.setState(_extends({}, _this.state, { setting: "on" }));
+            _this.setState(_extends({}, _this.state, { on: true }));
         };
 
-        this.off = function () {
+        this.turnOff = function () {
             api.off(_this.state.id);
-            _this.setState(_extends({}, _this.state, { setting: "off" }));
+            _this.setState(_extends({}, _this.state, { on: false }));
         };
 
         this.fire = function () {
             api.fire(_this.state.id);
-            _this.setState(_extends({}, _this.state, { setting: "fire" }));
+            _this.setState(_extends({}, _this.state, { setting: "fire", on: true }));
         };
 
         this.rgb = function () {
             var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { r: 0.5, g: 0.5, b: 0.5 };
 
             api.rgb(_this.state.id, params);
-            _this.setState(_extends({}, _this.state, { setting: "rgb", params: params }));
+            _this.setState(_extends({}, _this.state, { setting: "rgb", params: params, on: true }));
         };
 
         this.effect = function () {
-            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { body: '(0,0,0)' };
+            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { body: 'constant(1),constant(1),constant(1)' };
             var onSuccess = arguments[1];
             var onFailure = arguments[2];
 
             api.effect(_this.state.id, params, onSuccess, onFailure);
-            _this.setState(_extends({}, _this.state, { setting: "effect", params: params }));
+            _this.setState(_extends({}, _this.state, { setting: "effect", params: params, on: true }));
         };
 
         this.rainbow = function () {
             var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { speed: 0.5 };
 
             api.rainbow(_this.state.id, params);
-            _this.setState(_extends({}, _this.state, { setting: "rainbow", params: params }));
+            _this.setState(_extends({}, _this.state, { setting: "rainbow", params: params, on: true }));
         };
 
         this.state = _extends({}, state);
@@ -40353,6 +40349,11 @@ var Neopixel = function () {
         key: "params",
         get: function get() {
             return this.state.params;
+        }
+    }, {
+        key: "on",
+        get: function get() {
+            return this.state.on;
         }
     }]);
 
@@ -40432,6 +40433,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _react = __webpack_require__(0);
@@ -40451,87 +40454,150 @@ var NeopixelBox = function NeopixelBox(_ref) {
 
     var neopixel = (0, _neopixelsHooks.useNeopixel)(idx);
 
+    var _useState = (0, _react.useState)(false),
+        _useState2 = _slicedToArray(_useState, 2),
+        settingsDisplayed = _useState2[0],
+        toggleSettingsDisplayed = _useState2[1];
+
     return _react2.default.createElement(
         "div",
-        { className: "col-sm-4" },
+        { style: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                borderBottom: "1px solid #888"
+            } },
+        _react2.default.createElement(
+            "h2",
+            { style: { margin: 10, marginTop: 20, color: "#ccc" } },
+            neopixel.name
+        ),
         _react2.default.createElement(
             "div",
-            { className: "panel panel-default" },
-            _react2.default.createElement(
-                "div",
-                { className: "panel-heading" },
-                _react2.default.createElement(
-                    "h3",
-                    { className: "panel-title" },
-                    neopixel.name
-                )
-            ),
-            _react2.default.createElement(
-                "div",
-                { className: "panel-body" },
-                _react2.default.createElement(BrightnessSlider, { neopixel: neopixel }),
-                _react2.default.createElement(SettingParams, { neopixel: neopixel }),
-                _react2.default.createElement(
-                    "div",
-                    null,
-                    _react2.default.createElement(
-                        SettingButton,
-                        { neopixel: neopixel, setting: "on", className: "btn-primary" },
-                        "On"
-                    ),
-                    _react2.default.createElement(
-                        SettingButton,
-                        { neopixel: neopixel, setting: "rgb", className: "btn-info" },
-                        "RGB"
-                    ),
-                    _react2.default.createElement(
-                        SettingButton,
-                        { neopixel: neopixel, setting: "rainbow", className: "btn-info" },
-                        "Rainbow"
-                    ),
-                    _react2.default.createElement(
-                        SettingButton,
-                        { neopixel: neopixel, setting: "fire", className: "btn-info" },
-                        "Fire"
-                    ),
-                    _react2.default.createElement(
-                        SettingButton,
-                        { neopixel: neopixel, setting: "effect", className: "btn-success" },
-                        "Effect"
-                    ),
-                    _react2.default.createElement(
-                        SettingButton,
-                        { neopixel: neopixel, setting: "off", className: "btn-danger" },
-                        "Off"
-                    )
-                )
-            )
-        )
+            { style: { display: "flex", justifyContent: "space-around", width: "100%" } },
+            _react2.default.createElement(OnOffToggle, { neopixel: neopixel }),
+            _react2.default.createElement(SettingsToggle, { neopixel: neopixel, settingsDisplayed: settingsDisplayed, toggleSettingsDisplayed: toggleSettingsDisplayed })
+        ),
+        settingsDisplayed ? _react2.default.createElement(SettingsBox, { neopixel: neopixel }) : _react2.default.createElement("div", null)
     );
 };
 
-var SettingButton = function SettingButton(_ref2) {
-    var className = _ref2.className,
-        children = _ref2.children,
-        neopixel = _ref2.neopixel,
-        setting = _ref2.setting;
-    return _react2.default.createElement(
-        "button",
-        {
-            style: { marginRight: 6 },
-            onClick: function onClick() {
-                neopixel[setting]();
-            },
-            className: "btn " + className + (neopixel.setting === setting ? " active" : "") },
-        children
-    );
+var toggleButtonStyle = {
+    fontSize: 40,
+    padding: 15,
+    flexGrow: 1,
+    border: "none",
+    backgroundColor: "black",
+    cursor: "pointer",
+    textAlign: "center"
 };
 
-var BrightnessSlider = function BrightnessSlider(_ref3) {
-    var neopixel = _ref3.neopixel;
+var OnOffToggle = function OnOffToggle(_ref2) {
+    var neopixel = _ref2.neopixel;
+
+    function toggle() {
+        if (neopixel.on) {
+            neopixel.turnOff();
+        } else {
+            neopixel.turnOn();
+        }
+    }
+
     return _react2.default.createElement(
         "div",
-        { style: { marginBottom: 5 } },
+        { style: _extends({}, toggleButtonStyle, { color: neopixel.on ? "yellow" : "#888" }), onClick: toggle },
+        _react2.default.createElement("i", { className: "glyphicon glyphicon-certificate" })
+    );
+};
+
+var SettingsToggle = function SettingsToggle(_ref3) {
+    var settingsDisplayed = _ref3.settingsDisplayed,
+        toggleSettingsDisplayed = _ref3.toggleSettingsDisplayed;
+
+
+    return _react2.default.createElement(
+        "div",
+        { style: _extends({}, toggleButtonStyle, { color: settingsDisplayed ? "white" : "#888" }), onClick: function onClick(e) {
+                return toggleSettingsDisplayed(!settingsDisplayed);
+            } },
+        _react2.default.createElement("i", { className: "glyphicon glyphicon-cog" })
+    );
+};
+
+var SettingsBox = function SettingsBox(_ref4) {
+    var neopixel = _ref4.neopixel;
+    return _react2.default.createElement(
+        "div",
+        { style: { width: "100%", padding: 10, marginBottom: 10 } },
+        _react2.default.createElement(BrightnessSlider, { neopixel: neopixel }),
+        _react2.default.createElement(
+            "div",
+            { style: { marginTop: 30, marginBottom: 10, display: "flex", justifyContent: "space-between" } },
+            _react2.default.createElement(SettingButton, { neopixel: neopixel, setting: "rgb", icon: "glyphicon glyphicon-menu-hamburger" }),
+            _react2.default.createElement(SettingButton, { neopixel: neopixel, setting: "rainbow", icon: "glyphicon glyphicon-heart" }),
+            _react2.default.createElement(SettingButton, { neopixel: neopixel, setting: "fire", icon: "glyphicon glyphicon-fire" }),
+            _react2.default.createElement(SettingButton, { neopixel: neopixel, setting: "effect", icon: "glyphicon glyphicon-wrench" })
+        ),
+        _react2.default.createElement(SettingParams, { neopixel: neopixel })
+    );
+};
+
+var SettingButton = function SettingButton(_ref5) {
+    var icon = _ref5.icon,
+        neopixel = _ref5.neopixel,
+        setting = _ref5.setting;
+
+    var style = {
+        fontSize: 40,
+        flexGrow: 1,
+        color: "#888",
+        backgroundColor: "black",
+        cursor: "pointer",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+    };
+
+    var iconStyle = {
+        padding: 10,
+        border: "3px solid black",
+        borderColor: "black",
+        borderRadius: 5
+    };
+
+    if (neopixel.setting === setting) {
+        iconStyle.borderColor = "white";
+        iconStyle.color = "white";
+    }
+
+    return _react2.default.createElement(
+        "div",
+        {
+            style: style,
+            onClick: function onClick() {
+                neopixel[setting]();
+            } },
+        _react2.default.createElement("i", { style: iconStyle, className: icon })
+    );
+};
+
+var sliderContainerStyle = {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 5
+};
+
+var sliderCaptionStyle = {
+    marginRight: 10,
+    fontSize: 30
+};
+
+var BrightnessSlider = function BrightnessSlider(_ref6) {
+    var neopixel = _ref6.neopixel;
+    return _react2.default.createElement(
+        "div",
+        { style: sliderContainerStyle },
+        _react2.default.createElement("i", { className: "glyphicon glyphicon-asterisk", style: sliderCaptionStyle }),
         _react2.default.createElement(Slider, {
             value: neopixel.brightness,
             onChange: function onChange(v) {
@@ -40542,8 +40608,8 @@ var BrightnessSlider = function BrightnessSlider(_ref3) {
     );
 };
 
-var SettingParams = function SettingParams(_ref4) {
-    var neopixel = _ref4.neopixel;
+var SettingParams = function SettingParams(_ref7) {
+    var neopixel = _ref7.neopixel;
 
     switch (neopixel.setting) {
         case "effect":
@@ -40557,18 +40623,18 @@ var SettingParams = function SettingParams(_ref4) {
     }
 };
 
-var EffectParams = function EffectParams(_ref5) {
-    var neopixel = _ref5.neopixel;
+var EffectParams = function EffectParams(_ref8) {
+    var neopixel = _ref8.neopixel;
 
-    var _useState = (0, _react.useState)("(0,0,0)"),
-        _useState2 = _slicedToArray(_useState, 2),
-        body = _useState2[0],
-        setBody = _useState2[1];
-
-    var _useState3 = (0, _react.useState)(null),
+    var _useState3 = (0, _react.useState)("(0,0,0)"),
         _useState4 = _slicedToArray(_useState3, 2),
-        error = _useState4[0],
-        setError = _useState4[1];
+        body = _useState4[0],
+        setBody = _useState4[1];
+
+    var _useState5 = (0, _react.useState)(null),
+        _useState6 = _slicedToArray(_useState5, 2),
+        error = _useState6[0],
+        setError = _useState6[1];
 
     var onSuccess = function onSuccess() {
         setError(null);
@@ -40592,7 +40658,10 @@ var EffectParams = function EffectParams(_ref5) {
             } }),
         _react2.default.createElement(
             "button",
-            { className: "btn btn-success", onClick: function onClick(e) {
+            {
+                className: "btn btn-block btn-lg btn-success",
+                style: { marginTop: 10 },
+                onClick: function onClick(e) {
                     return neopixel.setParam("body", body, onSuccess, onFailure);
                 } },
             "Submit"
@@ -40600,77 +40669,70 @@ var EffectParams = function EffectParams(_ref5) {
     );
 };
 
-var RGBParams = function RGBParams(_ref6) {
-    var neopixel = _ref6.neopixel;
+var RGBParams = function RGBParams(_ref9) {
+    var neopixel = _ref9.neopixel;
     return _react2.default.createElement(
         "div",
         null,
-        _react2.default.createElement(RGBSlider, { neopixel: neopixel, caption: "R", param: "r" }),
-        _react2.default.createElement(RGBSlider, { neopixel: neopixel, caption: "G", param: "g" }),
-        _react2.default.createElement(RGBSlider, { neopixel: neopixel, caption: "B", param: "b" }),
-        _react2.default.createElement("hr", null)
+        _react2.default.createElement(RGBSlider, { neopixel: neopixel, color: "red", param: "r" }),
+        _react2.default.createElement(RGBSlider, { neopixel: neopixel, color: "green", param: "g" }),
+        _react2.default.createElement(RGBSlider, { neopixel: neopixel, color: "blue", param: "b" })
     );
 };
 
-var RGBSlider = function RGBSlider(_ref7) {
-    var neopixel = _ref7.neopixel,
-        caption = _ref7.caption,
-        param = _ref7.param;
+var RGBSlider = function RGBSlider(_ref10) {
+    var neopixel = _ref10.neopixel,
+        color = _ref10.color,
+        param = _ref10.param;
+    return _react2.default.createElement(
+        ParamSlider,
+        { neopixel: neopixel, param: param },
+        _react2.default.createElement("div", { style: { width: 30, height: 30, borderRadius: 18, backgroundColor: color, marginRight: 10 } })
+    );
+};
+
+var RainbowParams = function RainbowParams(_ref11) {
+    var neopixel = _ref11.neopixel;
     return _react2.default.createElement(
         "div",
         null,
         _react2.default.createElement(
-            "div",
-            { style: { display: "flex", marginBottom: 15, marginTop: 30 } },
-            _react2.default.createElement(
-                "span",
-                null,
-                caption
-            ),
-            _react2.default.createElement(
-                "div",
-                { style: { flexGrow: 1 } },
-                _react2.default.createElement(ParamSlider, { neopixel: neopixel, paramName: param })
-            )
+            ParamSlider,
+            { neopixel: neopixel, param: 'speed', min: -1 },
+            _react2.default.createElement("i", { className: "glyphicon glyphicon-flash", style: sliderCaptionStyle })
         )
     );
 };
 
-var RainbowParams = function RainbowParams(_ref8) {
-    var neopixel = _ref8.neopixel;
+var ParamSlider = function ParamSlider(_ref12) {
+    var neopixel = _ref12.neopixel,
+        param = _ref12.param,
+        children = _ref12.children,
+        _ref12$min = _ref12.min,
+        min = _ref12$min === undefined ? 0 : _ref12$min;
     return _react2.default.createElement(
         "div",
-        { style: { marginBottom: 5 } },
+        { style: _extends({}, sliderContainerStyle, { marginBottom: 15, marginTop: 30 }) },
+        children,
         _react2.default.createElement(
-            "h5",
-            null,
-            "Speed:"
-        ),
-        _react2.default.createElement(ParamSlider, { neopixel: neopixel, paramName: 'speed', min: -1 }),
-        _react2.default.createElement("hr", null)
+            "div",
+            { style: { flexGrow: 1 } },
+            _react2.default.createElement(Slider, {
+                value: neopixel.params[param],
+                onChange: function onChange(v) {
+                    neopixel.setParam(param, v);
+                },
+                min: min
+            })
+        )
     );
 };
 
-var ParamSlider = function ParamSlider(_ref9) {
-    var neopixel = _ref9.neopixel,
-        paramName = _ref9.paramName,
-        _ref9$min = _ref9.min,
-        min = _ref9$min === undefined ? 0 : _ref9$min;
-
-    return _react2.default.createElement(Slider, {
-        value: neopixel.params[paramName],
-        onChange: function onChange(v) {
-            neopixel.setParam(paramName, v);
-        },
-        min: min
-    });
-};
-
-var Slider = function Slider(_ref10) {
-    var value = _ref10.value,
-        onChange = _ref10.onChange,
-        _ref10$min = _ref10.min,
-        min = _ref10$min === undefined ? 0 : _ref10$min;
+var Slider = function Slider(_ref13) {
+    var value = _ref13.value,
+        onChange = _ref13.onChange,
+        _ref13$min = _ref13.min,
+        min = _ref13$min === undefined ? 0 : _ref13$min;
 
     return _react2.default.createElement(_reactBootstrapSlider2.default, {
         value: value,

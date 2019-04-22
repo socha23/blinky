@@ -11,34 +11,34 @@ class Neopixel {
         this.state = newState
     }
 
-    on = () => {
+    turnOn = () => {
         api.on(this.state.id);
-        this.setState({...this.state, setting: "on"})
+        this.setState({...this.state, on: true})
     };
 
-    off = () => {
+    turnOff = () => {
         api.off(this.state.id);
-        this.setState({...this.state, setting: "off"})
+        this.setState({...this.state, on: false})
     };
 
     fire = () => {
         api.fire(this.state.id);
-        this.setState({...this.state, setting: "fire"})
+        this.setState({...this.state, setting: "fire", on: true})
     };
 
     rgb = (params = {r: 0.5, g: 0.5, b: 0.5}) => {
         api.rgb(this.state.id, params);
-        this.setState({...this.state, setting: "rgb", params});
+        this.setState({...this.state, setting: "rgb", params, on: true});
     };
 
-    effect = (params = {body: '(0,0,0)'}, onSuccess, onFailure) => {
+    effect = (params = {body: 'constant(1),constant(1),constant(1)'}, onSuccess, onFailure) => {
         api.effect(this.state.id, params, onSuccess, onFailure);
-        this.setState({...this.state, setting: "effect", params});
+        this.setState({...this.state, setting: "effect", params, on: true});
     };
 
     rainbow = (params = {speed: 0.5}) => {
         api.rainbow(this.state.id, params);
-        this.setState({...this.state, setting: "rainbow", params});
+        this.setState({...this.state, setting: "rainbow", params, on: true});
     };
 
     setParam(name, value, onSuccess, onFailure) {
@@ -77,6 +77,10 @@ class Neopixel {
 
     get params() {
         return this.state.params
+    }
+
+    get on() {
+        return this.state.on
     }
 }
 
