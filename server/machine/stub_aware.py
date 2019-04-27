@@ -5,7 +5,7 @@ STUBS = "MOCK_BLINKY" in os.environ
 if not STUBS:
     from gpiozero import PWMLED as RealPWMLED
     from gpiozero.mixins import SourceMixin as RealSourceMixin
-    from neopixel_strip import NeopixelStrip as RealNeopixelStrip
+    from my_machine.neopixel_strip import NeopixelStrip as RealNeopixelStrip
 
 
 class PWMLEDMock:

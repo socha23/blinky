@@ -1,4 +1,4 @@
-from stub_aware import PWMLED
+from machine.stub_aware import PWMLED
 
 class LED:
     def __init__(self, pin, name):

@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from machine import Machine
+from my_machine import Machine
 
 led_api = Blueprint('led api', __name__)
 

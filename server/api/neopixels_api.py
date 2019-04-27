@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, make_response
-from machine import Machine
+from my_machine import Machine
 
 neopixels_api = Blueprint('neopixel api', __name__)
 

@@ -1,7 +1,7 @@
-from led import LED
-from fire import Fire
-from neopixels import Neopixel
-from stub_aware import NeopixelStrip
+from machine.led import LED
+from machine.fire import Fire
+from machine.neopixels import Neopixel
+from machine.stub_aware import NeopixelStrip
 
 class BaseMachine:
     def __init__(self):

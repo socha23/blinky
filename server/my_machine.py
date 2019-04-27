@@ -1,4 +1,4 @@
-from base_machine import BaseMachine
+from machine.base_machine import BaseMachine
 
 Machine = BaseMachine()
 

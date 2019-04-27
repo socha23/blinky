@@ -1,6 +1,6 @@
-from stub_aware import SourceMixin
-from fire import fire_source
-from rainbow import rainbow_source
+from machine.stub_aware import SourceMixin
+from machine.fire import fire_source
+from machine.rainbow import rainbow_source
 
 #don't delete this, it's used by evaluated code
 from gpiozero_ps.generators import *

@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from machine import Machine
+from my_machine import Machine
 
 fire_api = Blueprint('fire api', __name__)
 
