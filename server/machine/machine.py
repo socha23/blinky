@@ -1,18 +1,18 @@
-from filestore import Filestore
 from machine.components.led import LED
 from machine.components.neopixel import Neopixel
 from machine.components.stub_aware import NeopixelStrip
 
 
 class _Machine:
-    def __init__(self, store):
-        self._store = store
+    def __init__(self):
+        self._store = None
         self._leds = []
         self._neopixels = []
         self._neopixel_strip = None
         self._componentsById = {}
 
-    def initialize(self):
+    def initialize(self, store):
+        self._store = store
         self._load_settings()
 
     def component(self, component_id):
@@ -65,4 +65,4 @@ class _Machine:
         return self
 
 
-Machine = _Machine(Filestore("/tmp/blinky.json"))
+Machine = _Machine()
