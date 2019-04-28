@@ -10,7 +10,8 @@
     "jquery": "^3.3.1",
     "react": "^16.8.0-alpha.1",
     "react-bootstrap-slider": "^2.1.5",
-    "react-dom": "^16.8.0-alpha.1"
+    "react-dom": "^16.8.0-alpha.1",
+    "react-router-dom": "^5.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -17,6 +17,9 @@ class Neopixel(Component):
     def _turn_off(self):
         self._device.set_sources([constant_source(0, 0, 0) for _ in range(self._device.num_pixels)])
 
+    def _current_value(self):
+        return self._device.value
+
     def _turn_on_current_setting(self):
         if self.setting == "fire":
             self._fire()

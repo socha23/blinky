@@ -15,6 +15,7 @@ class Component:
         self._setting = val
 
     def on(self):
+        self._on = True
         self._turn_on_current_setting()
 
     def off(self):
@@ -38,12 +39,22 @@ class Component:
             'name': self.name,
             'on': self._on,
             'setting': self.setting,
-            'params': self._setting_params
+            'params': self._setting_params,
+            'value': self._current_value(),
         }
 
     def _param_generator(self, name):
         while True:
             yield self._setting_params[name] if name in self._setting_params else 0
+
+    def load(self, obj):
+        self.set_setting_and_params(obj['setting'], obj['params'])
+
+    def save(self):
+        return {'setting': self.setting, 'params': self._setting_params}
+
+    def _current_value(self):
+        raise Exception("_current_value not implemented")
 
     def _turn_off(self):
         raise Exception("_turn_off not implemented")
@@ -51,8 +62,3 @@ class Component:
     def _turn_on_current_setting(self):
         raise Exception("_turn_on_current_setting not implemented")
 
-    def load(self, obj):
-        self.set_setting_and_params(obj['setting'], obj['params'])
-
-    def save(self):
-        return {'setting': self.setting, 'params': self._setting_params}

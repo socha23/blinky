@@ -12,6 +12,9 @@ class LED(Component):
     def _turn_off(self):
         self._device.off()
 
+    def _current_value(self):
+        return self._device.value
+
     def _turn_on_current_setting(self):
         if self.setting == "const":
             self._const()

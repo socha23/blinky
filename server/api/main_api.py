@@ -24,6 +24,11 @@ def index():
     return render_template('index.html', cachebuster=time())
 
 
+@main_api.route('/debug')
+def debug():
+    return render_template('index.html', cachebuster=time())
+
+
 @main_api.route('/state')
 def state():
     return render_state()
