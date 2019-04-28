@@ -51,3 +51,8 @@ class Component:
     def _turn_on_current_setting(self):
         raise Exception("_turn_on_current_setting not implemented")
 
+    def load(self, obj):
+        self.set_setting_and_params(obj['setting'], obj['params'])
+
+    def save(self):
+        return {'setting': self.setting, 'params': self._setting_params}

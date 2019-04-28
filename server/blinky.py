@@ -11,6 +11,8 @@ from my_machine import setup
 
 setup(Machine)
 
+Machine.initialize()
+
 app = Flask(__name__)
 app.register_blueprint(main_api)
 app.register_blueprint(component_api)
