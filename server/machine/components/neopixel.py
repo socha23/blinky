@@ -10,7 +10,7 @@ class Neopixel(Component):
     def __init__(self, id, pix_from, num_pixels, name, neopixel_strip):
         Component.__init__(self, id, name)
         self._setting = 'rgb'
-        self._setting_params = {"r": 0.5, "g": 0.5, "b": 0.5, "brightness": 5, "speed": 0.5, "intensity": 0.5, "body": ""}
+        self._setting_params = {"r": 0.5, "g": 0.5, "b": 0.5, "brightness": 0.5, "speed": 0.5, "intensity": 0.5, "body": ""}
         self._device = _NeopixelDevice(neopixel_strip, pix_from, num_pixels, self._param_generator("brightness"))
         self._effect_evaluator = Evaluator(num_pixels)
 
