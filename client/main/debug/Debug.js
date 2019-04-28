@@ -1,11 +1,10 @@
 import React from 'react'
 import {useDebug} from "./debugHooks";
-import {rgbToHex, valuesToHex} from "../services/colorUtils";
+import {valuesToHex} from "../services/colorUtils";
 
 const Debug = () => {
     const state = useDebug();
     return <div>
-        <h1>Debug</h1>
         {state.leds.map((s, idx) =>
             <Led key={idx} {...s}/>)}
         {state.neopixels.map((s, idx) =>
@@ -23,9 +22,13 @@ const Led = ({name, value}) => <div style={{display: "flex", alignItems: 'center
     <DeviceName>{name}</DeviceName>
 </div>;
 
-const Neopixel = ({name}) => <div>
+const Neopixel = ({name, value}) => <div style={{display: "flex", alignItems: 'center'}}>
+    {
+        value.map((v, idx) => <RGBBulb key={"bulb" + idx} r={v[0]} g={v[1]} b={v[2]}/>)
+    }
     <DeviceName>{name}</DeviceName>
 </div>;
+
 
 const RGBBulb = ({r, g, b}) => {
     const color = valuesToHex(r, g, b);

@@ -5,13 +5,14 @@ from gpiozero_ps.generators import constant, square, triangular
 
 STUBS = "MOCK_BLINKY" in os.environ
 
-MOCKED_LEDS = []
+TICKING_MOCKS = []
+
 
 
 def tick():
     while True:
-        for led in MOCKED_LEDS:
-            led.tick()
+        for mock in TICKING_MOCKS:
+            mock.tick()
         time.sleep(0.01)
 
 if not STUBS:
@@ -27,7 +28,7 @@ class PWMLEDMock:
     def __init__(self, pin):
         self._value = 0
         self._source = constant(0)
-        MOCKED_LEDS.append(self)
+        TICKING_MOCKS.append(self)
 
     @property
     def value(self):
@@ -50,7 +51,20 @@ PWMLED = PWMLEDMock if STUBS else RealPWMLED
 
 class SourceMixinMock:
     def __init__(self):
-        pass
+        self._source = None
+        TICKING_MOCKS.append(self)
+
+    @property
+    def source(self):
+        return self._source
+
+    @source.setter
+    def source(self, val):
+        self._source = val
+
+    def tick(self):
+        if self._source is not None:
+            self.value = next(self._source)
 
 
 SourceMixin = SourceMixinMock if STUBS else RealSourceMixin

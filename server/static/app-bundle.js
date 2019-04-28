@@ -43699,11 +43699,6 @@ var Debug = function Debug() {
     return _react2.default.createElement(
         "div",
         null,
-        _react2.default.createElement(
-            "h1",
-            null,
-            "Debug"
-        ),
         state.leds.map(function (s, idx) {
             return _react2.default.createElement(Led, _extends({ key: idx }, s));
         }),
@@ -43713,48 +43708,64 @@ var Debug = function Debug() {
     );
 };
 
-var Led = function Led(_ref) {
-    var name = _ref.name,
-        value = _ref.value;
+var DeviceName = function DeviceName(_ref) {
+    var children = _ref.children;
+    return _react2.default.createElement(
+        "span",
+        { style: {
+                fontSize: 30
+            } },
+        children
+    );
+};
+
+var Led = function Led(_ref2) {
+    var name = _ref2.name,
+        value = _ref2.value;
     return _react2.default.createElement(
         "div",
         { style: { display: "flex", alignItems: 'center' } },
         _react2.default.createElement(RGBBulb, { r: value, g: value, b: value }),
         _react2.default.createElement(
-            "h2",
+            DeviceName,
             null,
-            "LED ",
             name
         )
     );
 };
 
-var Neopixel = function Neopixel(_ref2) {
-    var name = _ref2.name;
+var Neopixel = function Neopixel(_ref3) {
+    var name = _ref3.name,
+        value = _ref3.value;
     return _react2.default.createElement(
         "div",
-        null,
+        { style: { display: "flex", alignItems: 'center' } },
+        value.map(function (v, idx) {
+            return _react2.default.createElement(RGBBulb, { key: "bulb" + idx, r: v[0], g: v[1], b: v[2] });
+        }),
         _react2.default.createElement(
-            "h2",
+            DeviceName,
             null,
-            "Neopixel ",
             name
         )
     );
 };
 
-var RGBBulb = function RGBBulb(_ref3) {
-    var r = _ref3.r,
-        g = _ref3.g,
-        b = _ref3.b;
+var RGBBulb = function RGBBulb(_ref4) {
+    var r = _ref4.r,
+        g = _ref4.g,
+        b = _ref4.b;
 
-    console.log(r, g, b);
     var color = (0, _colorUtils.valuesToHex)(r, g, b);
+    var shadow = (0, _colorUtils.valuesToHex)(r * 0.5, g * 0.5, b * 0.5);
+
     console.log(color);
     return _react2.default.createElement("div", { style: {
+            margin: 10,
             width: 40,
             height: 40,
             backgroundColor: color,
+            background: "radial-gradient(circle at 10px 10px, " + color + ", " + shadow + ")",
             borderRadius: 20
         } });
 };
@@ -43798,7 +43809,7 @@ var useDebug = exports.useDebug = function useDebug() {
             }).then(function (state) {
                 setState(state);
             });
-        }, 200);
+        }, 50);
         return function () {
             clearInterval(handler);
         };

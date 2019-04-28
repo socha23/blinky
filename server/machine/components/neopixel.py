@@ -99,7 +99,6 @@ class _NeopixelDevice(SourceMixin):
         self._num_pixels = num_pixels
         self._value = [(0, 0, 0) for _ in range(num_pixels)]
         self._brightness_generator = brightness_generator
-        self.source = None
 
     @property
     def value(self):

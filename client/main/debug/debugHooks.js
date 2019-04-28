@@ -8,7 +8,7 @@ export const useDebug = () => {
             fetch("/state")
                 .then(r => r.json())
                 .then(state => {setState(state)});
-            }, 40);
+            }, 50);
         return () => {
             clearInterval(handler)
         }
