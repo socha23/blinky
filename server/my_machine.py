@@ -1,4 +1,5 @@
 def setup(machine):
+    machine.add_led("Latarnia", 14)
     machine.set_neopixel_strip(10)
     machine.add_neopixel("Fryzjer", 0, 2)
     machine.add_neopixel("Bar", 2, 2)

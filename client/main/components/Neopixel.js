@@ -1,30 +1,17 @@
 import React, {useState} from 'react'
 import {useNeopixel} from "../elements/neopixelsHooks";
-import {OnOffToggle, ParamSlider, SettingButton, SettingsToggle} from "./elements";
+import {BrightnessSlider, ComponentBox, ParamSlider, SettingButton} from "./elements";
 
 
 const Neopixel = ({idx}) => {
     const neopixel = useNeopixel(idx);
-    const [settingsDisplayed, toggleSettingsDisplayed] = useState(false);
-
-    return <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        borderBottom: "1px solid #888",
-    }}>
-        <h2 style={{margin: 10, marginTop: 20, color: "#ccc"}}>{neopixel.name}</h2>
-        <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
-            <OnOffToggle component={neopixel}/>
-            <SettingsToggle settingsDisplayed={settingsDisplayed} toggleSettingsDisplayed={toggleSettingsDisplayed}/>
-        </div>
-        {settingsDisplayed ? <SettingsBox neopixel={neopixel}/> : <div/>}
-    </div>
+    return <ComponentBox component={neopixel}>
+        <SettingsBox neopixel={neopixel}/>
+    </ComponentBox>
 };
 
-
 const SettingsBox = ({neopixel}) => <div style={{width: "100%", padding: 10, marginBottom: 10}}>
-    <BrightnessSlider neopixel={neopixel}/>
+    <BrightnessSlider component={neopixel}/>
     <div style={{marginTop: 30, marginBottom: 10, display: "flex", justifyContent: "space-between"}}>
         <SettingButton component={neopixel} setting='rgb' icon={"glyphicon glyphicon-menu-hamburger"}/>
         <SettingButton component={neopixel} setting='rainbow' icon={"glyphicon glyphicon-heart"}/>
@@ -33,15 +20,6 @@ const SettingsBox = ({neopixel}) => <div style={{width: "100%", padding: 10, mar
     </div>
     <SettingParams neopixel={neopixel}/>
 </div>;
-
-const sliderCaptionStyle = {
-    marginRight: 10,
-    fontSize: 30
-};
-
-const BrightnessSlider = ({neopixel}) => <ParamSlider component={neopixel} param={"brightness"}>
-    <i className={"glyphicon glyphicon-asterisk"} style={sliderCaptionStyle}/>
-</ParamSlider>;
 
 const SettingParams = ({neopixel}) => {
     switch (neopixel.setting) {
@@ -85,6 +63,12 @@ const RGBParams = ({neopixel}) => <div>
     <RGBSlider neopixel={neopixel} color='green' param='g'/>
     <RGBSlider neopixel={neopixel} color='blue' param='b'/>
 </div>;
+
+
+    const sliderCaptionStyle = {
+    marginRight: 10,
+    fontSize: 30
+};
 
 
 const RGBSlider = ({neopixel, color, param}) => <ParamSlider component={neopixel} param={param} style={{marginBottom: 30}}>

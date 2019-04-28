@@ -14,16 +14,21 @@ export const useLeds = () => {
 };
 
 export const useLed = (idx) => {
-    const [state, setState] = useState(MachineState.getLedState(idx));
+    const npxMachineState = MachineState.getLedState(idx);
+    const setNpxMachineState = (state) => {MachineState.setLedState(idx, state)};
+
+    const [npx, setNpx] = useState(new Component(npxMachineState, setNpxMachineState));
+
     useEffect(() => {
-        const sub = MachineState.subscribe(() => {setState(MachineState.getLedState(idx))});
+        const sub = MachineState.subscribe(() => {
+            const newNpxState = MachineState.getLedState(idx);
+            npx.setStateFromOutside(newNpxState);
+            setNpx(npx)
+        });
 
         return () => {
             MachineState.unsubscribe(sub)
         }
     }, []);
-
-    const newSetState = (state) => {MachineState.setLedState(idx, state)};
-    return Component(state, newSetState);
+    return npx;
 };
-

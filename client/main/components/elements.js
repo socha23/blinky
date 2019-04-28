@@ -1,6 +1,23 @@
-import React from 'react'
+import React, {useState} from 'react'
 import ReactBootstrapSlider from "react-bootstrap-slider";
 
+export const ComponentBox = ({component, children}) => {
+    const [settingsDisplayed, toggleSettingsDisplayed] = useState(false);
+
+    return <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderBottom: "1px solid #888",
+    }}>
+        <h2 style={{margin: 10, marginTop: 20, color: "#ccc"}}>{component.name}</h2>
+        <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
+            <OnOffToggle component={component}/>
+            <SettingsToggle settingsDisplayed={settingsDisplayed} toggleSettingsDisplayed={toggleSettingsDisplayed}/>
+        </div>
+        {settingsDisplayed ? children : <div/>}
+    </div>
+};
 
 const toggleButtonStyle = {
     fontSize: 40,
@@ -72,6 +89,16 @@ const sliderContainerStyle = {
     alignItems: "center",
     marginBottom: 5,
 };
+
+
+const sliderCaptionStyle = {
+    marginRight: 10,
+    fontSize: 30
+};
+
+export const BrightnessSlider = ({component}) => <ParamSlider component={component} param={"brightness"}>
+    <i className={"glyphicon glyphicon-asterisk"} style={sliderCaptionStyle}/>
+</ParamSlider>;
 
 export const ParamSlider = ({component, param, children, min = 0, style = {}}) =>
     <div style={{...sliderContainerStyle, marginBottom: 15, marginTop: 15, ...style}}>

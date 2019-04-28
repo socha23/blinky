@@ -31,10 +31,10 @@ class _Machine:
     def set_component_setting(self, component_id, setting, params):
         self.component(component_id).set_setting_and_params(setting, params)
 
-    def add_led(self, pin, name):
-        led = LED("led" + pin, pin, name)
+    def add_led(self, name, pin):
+        led = LED("led" + str(pin), pin, name)
         self._leds.append(led)
-        self._componentsById[pin] = led
+        self._componentsById[led.id] = led
         return self
 
     def set_neopixel_strip(self, num_pixels):

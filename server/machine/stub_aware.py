@@ -9,9 +9,20 @@ if not STUBS:
 
 
 class PWMLEDMock:
-    def __init__(self):
+    def __init__(self, pin):
         pass
 
+    def on(self):
+        pass
+
+    def off(self):
+        pass
+
+    def blink(self):
+        pass
+
+    def pulse(self):
+        pass
 
 PWMLED = PWMLEDMock if STUBS else RealPWMLED
 
