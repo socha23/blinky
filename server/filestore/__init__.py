@@ -25,6 +25,7 @@ class Filestore:
         try:
             file = open(self._path, 'r')
             self._collections = json.load(file)
+            file.close()
         except FileNotFoundError:
             self._collections = {}
 
