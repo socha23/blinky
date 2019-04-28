@@ -12,7 +12,6 @@ const Debug = () => {
     </div>
 };
 
-
 const DeviceName = ({children}) => <span style={{
     fontSize: 30,
 }}>{children}</span>;
@@ -29,12 +28,9 @@ const Neopixel = ({name, value}) => <div style={{display: "flex", alignItems: 'c
     <DeviceName>{name}</DeviceName>
 </div>;
 
-
 const RGBBulb = ({r, g, b}) => {
     const color = valuesToHex(r, g, b);
     const shadow = valuesToHex(r * 0.5, g * 0.5, b * 0.5);
-
-    console.log(color);
     return <div style={{
         margin: 10,
         width: 40,
@@ -44,7 +40,5 @@ const RGBBulb = ({r, g, b}) => {
         borderRadius: 20
     }}/>
 };
-
-
 
 export default Debug
