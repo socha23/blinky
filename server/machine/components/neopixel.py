@@ -1,10 +1,9 @@
-from machine.stub_aware import SourceMixin
+from machine.components.stub_aware import SourceMixin
 from machine.effects.fire import fire_source
 from machine.effects.rainbow import rainbow_source
-from machine.component import Component
+from machine.components.component import Component
 
 # don't delete this, it's used by evaluated code
-from gpiozero_ps.generators import *
 
 
 class Neopixel(Component):

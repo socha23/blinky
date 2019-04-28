@@ -1,5 +1,5 @@
-from machine.component import Component
-from machine.stub_aware import PWMLED
+from machine.components.component import Component
+from machine.components.stub_aware import PWMLED
 
 
 class LED(Component):
