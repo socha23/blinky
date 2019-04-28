@@ -1150,8 +1150,6 @@ exports.subscribe = subscribe;
 exports.unsubscribe = unsubscribe;
 exports.getLedState = getLedState;
 exports.setLedState = setLedState;
-exports.getFireState = getFireState;
-exports.setFireState = setFireState;
 exports.getNeopixelState = getNeopixelState;
 exports.setNeopixelState = setNeopixelState;
 exports.getState = getState;
@@ -1164,7 +1162,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var subscribers = {};
 var subscribersCount = 0;
-var state = { leds: [], fires: [], neopixels: [] };
+var state = { leds: [], neopixels: [] };
 var intervalHandler = null;
 
 var REFRESH_RATE_MS = 10000;
@@ -1213,15 +1211,6 @@ function getLedState(idx) {
 
 function setLedState(idx, ledState) {
     state.leds[idx] = ledState;
-    notifySubscribers();
-}
-
-function getFireState(idx) {
-    return state.fires[idx];
-}
-
-function setFireState(idx, fireState) {
-    state.fires[idx] = fireState;
     notifySubscribers();
 }
 
@@ -1612,75 +1601,7 @@ module.exports = self.fetch.bind(self);
 
 
 /***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.useFire = exports.useFires = undefined;
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _fire = __webpack_require__(123);
-
-var _fire2 = _interopRequireDefault(_fire);
-
-var _machineState = __webpack_require__(36);
-
-var MachineState = _interopRequireWildcard(_machineState);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var useFires = exports.useFires = function useFires() {
-    var _useState = (0, _react.useState)([]),
-        _useState2 = _slicedToArray(_useState, 2),
-        state = _useState2[0],
-        setState = _useState2[1];
-
-    (0, _react.useEffect)(function () {
-        var sub = MachineState.subscribe(function () {
-            setState(MachineState.getState().fires);
-        });
-        return function () {
-            MachineState.unsubscribe(sub);
-        };
-    }, []);
-    return state;
-};
-
-var useFire = exports.useFire = function useFire(idx) {
-    var _useState3 = (0, _react.useState)(MachineState.getFireState(idx)),
-        _useState4 = _slicedToArray(_useState3, 2),
-        state = _useState4[0],
-        setState = _useState4[1];
-
-    (0, _react.useEffect)(function () {
-        var sub = MachineState.subscribe(function () {
-            setState(MachineState.getFireState(idx));
-        });
-
-        return function () {
-            MachineState.unsubscribe(sub);
-        };
-    }, []);
-
-    var newSetState = function newSetState(state) {
-        MachineState.setFireState(idx, state);
-    };
-    return (0, _fire2.default)(state, newSetState);
-};
-
-/***/ }),
+/* 53 */,
 /* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -25342,12 +25263,6 @@ var _LedBox2 = _interopRequireDefault(_LedBox);
 
 var _ledHooks = __webpack_require__(51);
 
-var _fireHooks = __webpack_require__(53);
-
-var _FireBox = __webpack_require__(125);
-
-var _FireBox2 = _interopRequireDefault(_FireBox);
-
 var _neopixelsHooks = __webpack_require__(54);
 
 var _NeopixelBox = __webpack_require__(128);
@@ -25358,16 +25273,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Main = function Main() {
     var leds = (0, _ledHooks.useLeds)();
-    var fires = (0, _fireHooks.useFires)();
     var neopixels = (0, _neopixelsHooks.useNeopixels)();
     return _react2.default.createElement(
         "div",
         null,
         leds.map(function (_, idx) {
             return _react2.default.createElement(_LedBox2.default, { key: idx, idx: idx });
-        }),
-        fires.map(function (_, idx) {
-            return _react2.default.createElement(_FireBox2.default, { key: idx, idx: idx });
         }),
         neopixels.map(function (_, idx) {
             return _react2.default.createElement(_NeopixelBox2.default, { key: idx, idx: idx });
@@ -40046,181 +39957,9 @@ if (!self.fetch) {
 
 
 /***/ }),
-/* 123 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _fireApi = __webpack_require__(124);
-
-var api = _interopRequireWildcard(_fireApi);
-
-var _componentApi = __webpack_require__(129);
-
-var componentApi = _interopRequireWildcard(_componentApi);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function fire(state, setState) {
-
-    function on() {
-        componentApi.on(state.id);
-        setState(_extends({}, state, { setting: "on" }));
-    }
-
-    function off() {
-        componentApi.off(state.id);
-        setState(_extends({}, state, { setting: "off" }));
-    }
-
-    function setIntensity(intensity) {
-        api.intensity(state.id, intensity);
-        setState(_extends({}, state, { intensity: intensity }));
-    }
-
-    return {
-        name: function name() {
-            return state.name;
-        },
-        setting: function setting() {
-            return state.setting;
-        },
-        intensity: function intensity() {
-            return state.intensity;
-        },
-        setIntensity: setIntensity,
-        on: on,
-        off: off
-    };
-}
-
-exports.default = fire;
-
-/***/ }),
-/* 124 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.intensity = intensity;
-
-var _apiUtils = __webpack_require__(35);
-
-function intensity(id, intensity) {
-    (0, _apiUtils.putJson)(fireAddr(id) + "/intensity/" + intensity);
-}
-
-function fireAddr(id) {
-    return "/fire/" + id;
-}
-
-/***/ }),
-/* 125 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _fireHooks = __webpack_require__(53);
-
-var _reactBootstrapSlider = __webpack_require__(22);
-
-var _reactBootstrapSlider2 = _interopRequireDefault(_reactBootstrapSlider);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SettingButton = function SettingButton(_ref) {
-    var className = _ref.className,
-        children = _ref.children,
-        onClick = _ref.onClick,
-        active = _ref.active;
-    return _react2.default.createElement(
-        "button",
-        {
-            style: { marginRight: 6 },
-            onClick: onClick,
-            className: "btn " + className + (active ? " active" : "") },
-        children
-    );
-};
-
-var FireBox = function FireBox(_ref2) {
-    var idx = _ref2.idx;
-
-    var fire = (0, _fireHooks.useFire)(idx);
-
-    return _react2.default.createElement(
-        "div",
-        { className: "col-sm-4" },
-        _react2.default.createElement(
-            "div",
-            { className: "panel panel-default" },
-            _react2.default.createElement(
-                "div",
-                { className: "panel-heading" },
-                _react2.default.createElement(
-                    "h3",
-                    { className: "panel-title" },
-                    fire.name()
-                )
-            ),
-            _react2.default.createElement(
-                "div",
-                { className: "panel-body" },
-                _react2.default.createElement(
-                    "div",
-                    { style: { marginBottom: 5 } },
-                    _react2.default.createElement(_reactBootstrapSlider2.default, {
-                        value: fire.intensity(),
-                        change: function change(e) {
-                            fire.setIntensity(e.target.value);
-                        },
-                        step: 0.01,
-                        max: 1,
-                        min: 0
-                    })
-                ),
-                _react2.default.createElement(
-                    "div",
-                    null,
-                    _react2.default.createElement(
-                        SettingButton,
-                        { active: fire.setting() === "on", className: "btn-primary", onClick: fire.on },
-                        "On"
-                    ),
-                    _react2.default.createElement(
-                        SettingButton,
-                        { active: fire.setting() === "off", className: "btn-danger", onClick: fire.off },
-                        "Off"
-                    )
-                )
-            )
-        )
-    );
-};
-
-exports.default = FireBox;
-
-/***/ }),
+/* 123 */,
+/* 124 */,
+/* 125 */,
 /* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 

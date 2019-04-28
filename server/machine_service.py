@@ -21,10 +21,6 @@ def set_component_setting(component_id, setting, params):
     Machine.component(component_id).set_setting_and_params(setting, params)
 
 
-def fire_set_intensity(fire_id, intensity):
-    Machine.fire(fire_id).intensity = intensity
-
-
 def led_blink(pin):
     Machine.led(pin).blink()
 
