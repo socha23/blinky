@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify
-from my_machine import Machine
+from machine_service import state as machine_service_state
 from time import time
 
 main_api = Blueprint('main api', __name__)
@@ -14,7 +14,7 @@ def render_success():
 
 
 def render_state():
-    resp = jsonify(Machine.state())
+    resp = jsonify(machine_service_state())
     resp.status_code = 200
     return resp
 

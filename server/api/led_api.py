@@ -1,42 +1,37 @@
-from flask import Blueprint, jsonify
-from my_machine import Machine
+from flask import Blueprint
+from api.main_api import render_state
+from machine_service import led_blink, led_off, led_on, led_pulse, led_pwm
 
 led_api = Blueprint('led api', __name__)
 
 API_METHODS = ['GET', 'PUT']
 
 
-def render_state():
-    resp = jsonify(Machine.state())
-    resp.status_code = 200
-    return resp
-
-
 @led_api.route('/led/<pin>/on', methods=API_METHODS)
 def on(pin):
-    Machine.led(pin).on()
+    led_on(pin)
     return render_state()
 
 
 @led_api.route('/led/<pin>/off', methods=API_METHODS)
 def off(pin):
-    Machine.led(pin).off()
+    led_off(pin)
     return render_state()
 
 
 @led_api.route('/led/<pin>/blink', methods=API_METHODS)
 def blink(pin):
-    Machine.led(pin).blink()
+    led_blink(pin)
     return render_state()
 
 
 @led_api.route('/led/<pin>/pulse', methods=API_METHODS)
 def pulse(pin):
-    Machine.led(pin).pulse()
+    led_pulse(pin)
     return render_state()
 
 
 @led_api.route('/led/<pin>/pwm/<val>', methods=API_METHODS)
 def pwm(pin, val):
-    Machine.led(pin).pwm(float(val))
+    led_pwm(pin, float(val))
     return render_state()
