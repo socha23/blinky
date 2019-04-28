@@ -5,12 +5,20 @@ def state():
     return Machine.state()
 
 
-def component_on(id):
-    Machine.component(id).on()
+def component_on(component_id):
+    Machine.component(component_id).on()
 
 
-def component_off(id):
-    Machine.component(id).off()
+def component_off(component_id):
+    Machine.component(component_id).off()
+
+
+def update_component_params(component_id, params):
+    Machine.component(component_id).update_params(params)
+
+
+def set_component_setting(component_id, setting, params):
+    Machine.component(component_id).set_setting_and_params(setting, params)
 
 
 def fire_set_intensity(fire_id, intensity):
@@ -27,11 +35,3 @@ def led_pulse(pin):
 
 def led_pwm(pin, val):
     Machine.led(pin).pwm(val)
-
-
-def neopixel_update_params(id, params):
-    Machine.neopixel(id).update_params(params)
-
-
-def neopixel_setting(id, setting, params):
-    Machine.neopixel(id).set_setting_and_params(setting, params)

@@ -40235,13 +40235,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _neopixelApi = __webpack_require__(127);
-
-var api = _interopRequireWildcard(_neopixelApi);
-
 var _componentApi = __webpack_require__(129);
 
-var componentApi = _interopRequireWildcard(_componentApi);
+var api = _interopRequireWildcard(_componentApi);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -40254,12 +40250,12 @@ var Neopixel = function () {
         _classCallCheck(this, Neopixel);
 
         this.turnOn = function () {
-            componentApi.on(_this.state.id);
+            api.on(_this.state.id);
             _this.setState(_extends({}, _this.state, { on: true }));
         };
 
         this.turnOff = function () {
-            componentApi.off(_this.state.id);
+            api.off(_this.state.id);
             _this.setState(_extends({}, _this.state, { on: false }));
         };
 
@@ -40317,37 +40313,7 @@ var Neopixel = function () {
 exports.default = Neopixel;
 
 /***/ }),
-/* 127 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.setSetting = setSetting;
-exports.updateParams = updateParams;
-
-var _apiUtils = __webpack_require__(35);
-
-function setSetting(setting, id) {
-    var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    var onSuccess = arguments[3];
-    var onFailure = arguments[4];
-
-    (0, _apiUtils.putJson)(neopixelAddr(id) + "/setting/" + setting, params, onSuccess, onFailure);
-}
-
-function updateParams(id, params) {
-    (0, _apiUtils.putJson)(neopixelAddr(id) + "/params", params);
-}
-
-function neopixelAddr(id) {
-    return "/neopixel/" + id;
-}
-
-/***/ }),
+/* 127 */,
 /* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -40678,6 +40644,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.on = on;
 exports.off = off;
+exports.setSetting = setSetting;
+exports.updateParams = updateParams;
 
 var _apiUtils = __webpack_require__(35);
 
@@ -40687,6 +40655,18 @@ function on(id) {
 
 function off(id) {
     (0, _apiUtils.putJson)(componentAddr(id) + "/off");
+}
+
+function setSetting(setting, id) {
+    var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var onSuccess = arguments[3];
+    var onFailure = arguments[4];
+
+    (0, _apiUtils.putJson)(componentAddr(id) + "/setting/" + setting, params, onSuccess, onFailure);
+}
+
+function updateParams(id, params) {
+    (0, _apiUtils.putJson)(componentAddr(id) + "/params", params);
 }
 
 function componentAddr(id) {
