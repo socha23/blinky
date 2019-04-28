@@ -1,13 +1,5 @@
 import {putJson} from "./apiUtils";
 
-export function on(id) {
-    setting(id, "on");
-}
-
-export function off(id) {
-    setting(id, "off");
-}
-
 export function fire(id) {
     setting(id, "fire");
 }

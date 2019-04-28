@@ -1,4 +1,5 @@
 import * as api from '../services/neopixelApi'
+import * as componentApi from '../services/componentApi'
 
 class Neopixel {
 
@@ -12,12 +13,12 @@ class Neopixel {
     }
 
     turnOn = () => {
-        api.on(this.state.id);
+        componentApi.on(this.state.id);
         this.setState({...this.state, on: true})
     };
 
     turnOff = () => {
-        api.off(this.state.id);
+        componentApi.off(this.state.id);
         this.setState({...this.state, on: false})
     };
 

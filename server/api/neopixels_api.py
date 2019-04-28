@@ -1,22 +1,10 @@
 from flask import Blueprint, jsonify, request, make_response
 from api.main_api import render_state
-from machine_service import neopixel_brightness, neopixel_effect, neopixel_fire, neopixel_off, neopixel_on, neopixel_rainbow, neopixel_rgb
+from machine_service import neopixel_brightness, neopixel_effect, neopixel_fire, neopixel_rainbow, neopixel_rgb
 
 neopixels_api = Blueprint('neopixel api', __name__)
 
 API_METHODS = ['GET', 'PUT']
-
-
-@neopixels_api.route('/neopixel/<id>/on', methods=API_METHODS)
-def on(id):
-    neopixel_on(id)
-    return render_state()
-
-
-@neopixels_api.route('/neopixel/<id>/off', methods=API_METHODS)
-def off(id):
-    neopixel_off(id)
-    return render_state()
 
 
 @neopixels_api.route('/neopixel/<id>/brightness/<brightness>', methods=API_METHODS)

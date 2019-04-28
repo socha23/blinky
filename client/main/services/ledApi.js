@@ -1,13 +1,5 @@
 import {putJson} from "./apiUtils";
 
-export function on(pin) {
-    putJson(ledAddr(pin) + "/on")
-}
-
-export function off(pin) {
-    putJson(ledAddr(pin) + "/off")
-}
-
 export function blink(pin) {
     putJson(ledAddr(pin) + "/blink")
 }

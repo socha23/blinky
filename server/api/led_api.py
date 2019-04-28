@@ -1,22 +1,10 @@
 from flask import Blueprint
 from api.main_api import render_state
-from machine_service import led_blink, led_off, led_on, led_pulse, led_pwm
+from machine_service import led_blink, led_pulse, led_pwm
 
 led_api = Blueprint('led api', __name__)
 
 API_METHODS = ['GET', 'PUT']
-
-
-@led_api.route('/led/<pin>/on', methods=API_METHODS)
-def on(pin):
-    led_on(pin)
-    return render_state()
-
-
-@led_api.route('/led/<pin>/off', methods=API_METHODS)
-def off(pin):
-    led_off(pin)
-    return render_state()
 
 
 @led_api.route('/led/<pin>/blink', methods=API_METHODS)

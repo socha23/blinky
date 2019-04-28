@@ -1,14 +1,15 @@
 import * as api from '../services/ledApi'
+import * as componentApi from '../services/componentApi'
 
 function led(state, setState) {
 
     function on() {
-        api.on(state.pin);
+        componentApi.on(state.pin);
         setState({...state, setting: "on"})
     }
 
     function off() {
-        api.off(state.pin);
+        componentApi.off(state.pin);
         setState({...state, setting: "off"})
     }
 
