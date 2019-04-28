@@ -1,5 +1,5 @@
 from machine.led import LED
-from machine.neopixels import Neopixel
+from machine.neopixel import Neopixel
 from machine.stub_aware import NeopixelStrip
 
 
@@ -31,17 +31,8 @@ class _Machine:
     def set_component_setting(self, component_id, setting, params):
         self.component(component_id).set_setting_and_params(setting, params)
 
-    def led_blink(self, pin):
-        self.component(pin).blink()
-
-    def led_pulse(self, pin):
-        self.component(pin).pulse()
-
-    def led_pwm(self, pin, val):
-        self.component(pin).pwm(val)
-
     def add_led(self, pin, name):
-        led = LED(pin, name)
+        led = LED("led" + pin, pin, name)
         self._leds.append(led)
         self._componentsById[pin] = led
         return self

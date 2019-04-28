@@ -1,6 +1,6 @@
 import * as api from '../services/componentApi'
 
-class Neopixel {
+class Component {
 
     constructor(state, setState) {
         this.state = {...state};
@@ -59,4 +59,4 @@ class Neopixel {
     }
 }
 
-export default Neopixel
+export default Component

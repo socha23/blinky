@@ -2,7 +2,7 @@ import React from 'react'
 import LedBox from "./LedBox";
 import {useLeds} from "../elements/ledHooks";
 import {useNeopixels} from "../elements/neopixelsHooks";
-import NeopixelBox from "./NeopixelBox";
+import Neopixel from "./Neopixel";
 
 const Main = () => {
     const leds = useLeds();
@@ -11,7 +11,7 @@ const Main = () => {
         {leds.map((_, idx) =>
             <LedBox key={idx} idx={idx}/>)}
         {neopixels.map((_, idx) =>
-            <NeopixelBox key={idx} idx={idx}/>)}
+            <Neopixel key={idx} idx={idx}/>)}
     </div>
 };
 

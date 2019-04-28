@@ -1537,9 +1537,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _led = __webpack_require__(120);
+var _component = __webpack_require__(130);
 
-var _led2 = _interopRequireDefault(_led);
+var _component2 = _interopRequireDefault(_component);
 
 var _machineState = __webpack_require__(36);
 
@@ -1585,7 +1585,7 @@ var useLed = exports.useLed = function useLed(idx) {
     var newSetState = function newSetState(state) {
         MachineState.setLedState(idx, state);
     };
-    return (0, _led2.default)(state, newSetState);
+    return (0, _component2.default)(state, newSetState);
 };
 
 /***/ }),
@@ -1623,9 +1623,9 @@ var _machineState = __webpack_require__(36);
 
 var MachineState = _interopRequireWildcard(_machineState);
 
-var _neopixel = __webpack_require__(126);
+var _component = __webpack_require__(130);
 
-var _neopixel2 = _interopRequireDefault(_neopixel);
+var _component2 = _interopRequireDefault(_component);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -1654,7 +1654,7 @@ var useNeopixel = exports.useNeopixel = function useNeopixel(idx) {
         MachineState.setNeopixelState(idx, state);
     };
 
-    var _useState3 = (0, _react.useState)(new _neopixel2.default(npxMachineState, setNpxMachineState)),
+    var _useState3 = (0, _react.useState)(new _component2.default(npxMachineState, setNpxMachineState)),
         _useState4 = _slicedToArray(_useState3, 2),
         npx = _useState4[0],
         setNpx = _useState4[1];
@@ -25265,9 +25265,9 @@ var _ledHooks = __webpack_require__(51);
 
 var _neopixelsHooks = __webpack_require__(54);
 
-var _NeopixelBox = __webpack_require__(128);
+var _Neopixel = __webpack_require__(131);
 
-var _NeopixelBox2 = _interopRequireDefault(_NeopixelBox);
+var _Neopixel2 = _interopRequireDefault(_Neopixel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25281,7 +25281,7 @@ var Main = function Main() {
             return _react2.default.createElement(_LedBox2.default, { key: idx, idx: idx });
         }),
         neopixels.map(function (_, idx) {
-            return _react2.default.createElement(_NeopixelBox2.default, { key: idx, idx: idx });
+            return _react2.default.createElement(_Neopixel2.default, { key: idx, idx: idx });
         })
     );
 };
@@ -39323,111 +39323,8 @@ return jQuery;
 
 
 /***/ }),
-/* 120 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _ledApi = __webpack_require__(121);
-
-var api = _interopRequireWildcard(_ledApi);
-
-var _componentApi = __webpack_require__(129);
-
-var componentApi = _interopRequireWildcard(_componentApi);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function led(state, setState) {
-
-    function on() {
-        componentApi.on(state.pin);
-        setState(_extends({}, state, { setting: "on" }));
-    }
-
-    function off() {
-        componentApi.off(state.pin);
-        setState(_extends({}, state, { setting: "off" }));
-    }
-
-    function blink() {
-        api.blink(state.pin);
-        setState(_extends({}, state, { setting: "blink" }));
-    }
-
-    function pulse() {
-        api.pulse(state.pin);
-        setState(_extends({}, state, { setting: "pulse" }));
-    }
-
-    function setValue(val) {
-        api.pwm(state.pin, val);
-        setState(_extends({}, state, { value: val }));
-    }
-
-    return {
-        name: function name() {
-            return state.name;
-        },
-        pin: function pin() {
-            return state.pin;
-        },
-        setting: function setting() {
-            return state.setting;
-        },
-        value: function value() {
-            return state.value;
-        },
-        on: on,
-        off: off,
-        blink: blink,
-        pulse: pulse,
-        setValue: setValue
-    };
-}
-
-exports.default = led;
-
-/***/ }),
-/* 121 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.blink = blink;
-exports.pulse = pulse;
-exports.pwm = pwm;
-
-var _apiUtils = __webpack_require__(35);
-
-function blink(pin) {
-    (0, _apiUtils.putJson)(ledAddr(pin) + "/blink");
-}
-
-function pulse(pin) {
-    (0, _apiUtils.putJson)(ledAddr(pin) + "/pulse");
-}
-
-function pwm(pin, val) {
-    (0, _apiUtils.putJson)(ledAddr(pin) + "/pwm/" + val);
-}
-
-function ledAddr(pin) {
-    return "/led/" + pin;
-}
-
-/***/ }),
+/* 120 */,
+/* 121 */,
 /* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -39960,7 +39857,51 @@ if (!self.fetch) {
 /* 123 */,
 /* 124 */,
 /* 125 */,
-/* 126 */
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.on = on;
+exports.off = off;
+exports.setSetting = setSetting;
+exports.updateParams = updateParams;
+
+var _apiUtils = __webpack_require__(35);
+
+function on(id) {
+    (0, _apiUtils.putJson)(componentAddr(id) + "/on");
+}
+
+function off(id) {
+    (0, _apiUtils.putJson)(componentAddr(id) + "/off");
+}
+
+function setSetting(setting, id) {
+    var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var onSuccess = arguments[3];
+    var onFailure = arguments[4];
+
+    (0, _apiUtils.putJson)(componentAddr(id) + "/setting/" + setting, params, onSuccess, onFailure);
+}
+
+function updateParams(id, params, onSuccess, onFailure) {
+    (0, _apiUtils.putJson)(componentAddr(id) + "/params", params, onSuccess, onFailure);
+}
+
+function componentAddr(id) {
+    return "/component/" + id;
+}
+
+/***/ }),
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39982,11 +39923,11 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Neopixel = function () {
-    function Neopixel(state, setState) {
+var Component = function () {
+    function Component(state, setState) {
         var _this = this;
 
-        _classCallCheck(this, Neopixel);
+        _classCallCheck(this, Component);
 
         this.turnOn = function () {
             api.on(_this.state.id);
@@ -40012,7 +39953,7 @@ var Neopixel = function () {
         this.lastApiParamUpdate = new Date();
     }
 
-    _createClass(Neopixel, [{
+    _createClass(Component, [{
         key: 'setStateFromOutside',
         value: function setStateFromOutside(newState) {
             this.state = newState;
@@ -40058,14 +39999,13 @@ var Neopixel = function () {
         }
     }]);
 
-    return Neopixel;
+    return Component;
 }();
 
-exports.default = Neopixel;
+exports.default = Component;
 
 /***/ }),
-/* 127 */,
-/* 128 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40075,8 +40015,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _react = __webpack_require__(0);
@@ -40085,13 +40023,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _neopixelsHooks = __webpack_require__(54);
 
-var _reactBootstrapSlider = __webpack_require__(22);
-
-var _reactBootstrapSlider2 = _interopRequireDefault(_reactBootstrapSlider);
+var _elements = __webpack_require__(132);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var NeopixelBox = function NeopixelBox(_ref) {
+var Neopixel = function Neopixel(_ref) {
     var idx = _ref.idx;
 
     var neopixel = (0, _neopixelsHooks.useNeopixel)(idx);
@@ -40117,57 +40053,15 @@ var NeopixelBox = function NeopixelBox(_ref) {
         _react2.default.createElement(
             "div",
             { style: { display: "flex", justifyContent: "space-around", width: "100%" } },
-            _react2.default.createElement(OnOffToggle, { neopixel: neopixel }),
-            _react2.default.createElement(SettingsToggle, { neopixel: neopixel, settingsDisplayed: settingsDisplayed, toggleSettingsDisplayed: toggleSettingsDisplayed })
+            _react2.default.createElement(_elements.OnOffToggle, { component: neopixel }),
+            _react2.default.createElement(_elements.SettingsToggle, { settingsDisplayed: settingsDisplayed, toggleSettingsDisplayed: toggleSettingsDisplayed })
         ),
         settingsDisplayed ? _react2.default.createElement(SettingsBox, { neopixel: neopixel }) : _react2.default.createElement("div", null)
     );
 };
 
-var toggleButtonStyle = {
-    fontSize: 40,
-    padding: 15,
-    flexGrow: 1,
-    border: "none",
-    backgroundColor: "black",
-    cursor: "pointer",
-    textAlign: "center"
-};
-
-var OnOffToggle = function OnOffToggle(_ref2) {
+var SettingsBox = function SettingsBox(_ref2) {
     var neopixel = _ref2.neopixel;
-
-    function toggle() {
-        if (neopixel.on) {
-            neopixel.turnOff();
-        } else {
-            neopixel.turnOn();
-        }
-    }
-
-    return _react2.default.createElement(
-        "div",
-        { style: _extends({}, toggleButtonStyle, { color: neopixel.on ? "yellow" : "#888" }), onClick: toggle },
-        _react2.default.createElement("i", { className: "glyphicon glyphicon-certificate" })
-    );
-};
-
-var SettingsToggle = function SettingsToggle(_ref3) {
-    var settingsDisplayed = _ref3.settingsDisplayed,
-        toggleSettingsDisplayed = _ref3.toggleSettingsDisplayed;
-
-
-    return _react2.default.createElement(
-        "div",
-        { style: _extends({}, toggleButtonStyle, { color: settingsDisplayed ? "white" : "#888" }), onClick: function onClick(e) {
-                return toggleSettingsDisplayed(!settingsDisplayed);
-            } },
-        _react2.default.createElement("i", { className: "glyphicon glyphicon-cog" })
-    );
-};
-
-var SettingsBox = function SettingsBox(_ref4) {
-    var neopixel = _ref4.neopixel;
     return _react2.default.createElement(
         "div",
         { style: { width: "100%", padding: 10, marginBottom: 10 } },
@@ -40175,58 +40069,13 @@ var SettingsBox = function SettingsBox(_ref4) {
         _react2.default.createElement(
             "div",
             { style: { marginTop: 30, marginBottom: 10, display: "flex", justifyContent: "space-between" } },
-            _react2.default.createElement(SettingButton, { neopixel: neopixel, setting: "rgb", icon: "glyphicon glyphicon-menu-hamburger" }),
-            _react2.default.createElement(SettingButton, { neopixel: neopixel, setting: "rainbow", icon: "glyphicon glyphicon-heart" }),
-            _react2.default.createElement(SettingButton, { neopixel: neopixel, setting: "fire", icon: "glyphicon glyphicon-fire" }),
-            _react2.default.createElement(SettingButton, { neopixel: neopixel, setting: "effect", icon: "glyphicon glyphicon-wrench" })
+            _react2.default.createElement(_elements.SettingButton, { component: neopixel, setting: "rgb", icon: "glyphicon glyphicon-menu-hamburger" }),
+            _react2.default.createElement(_elements.SettingButton, { component: neopixel, setting: "rainbow", icon: "glyphicon glyphicon-heart" }),
+            _react2.default.createElement(_elements.SettingButton, { component: neopixel, setting: "fire", icon: "glyphicon glyphicon-fire" }),
+            _react2.default.createElement(_elements.SettingButton, { component: neopixel, setting: "effect", icon: "glyphicon glyphicon-wrench" })
         ),
         _react2.default.createElement(SettingParams, { neopixel: neopixel })
     );
-};
-
-var SettingButton = function SettingButton(_ref5) {
-    var icon = _ref5.icon,
-        neopixel = _ref5.neopixel,
-        setting = _ref5.setting;
-
-    var style = {
-        fontSize: 40,
-        flexGrow: 1,
-        color: "#888",
-        backgroundColor: "black",
-        cursor: "pointer",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center"
-    };
-
-    var iconStyle = {
-        padding: 10,
-        border: "3px solid black",
-        borderColor: "black",
-        borderRadius: 5
-    };
-
-    if (neopixel.setting === setting) {
-        iconStyle.borderColor = "white";
-        iconStyle.color = "white";
-    }
-
-    return _react2.default.createElement(
-        "div",
-        {
-            style: style,
-            onClick: function onClick() {
-                neopixel.setSetting(setting);
-            } },
-        _react2.default.createElement("i", { style: iconStyle, className: icon })
-    );
-};
-
-var sliderContainerStyle = {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: 5
 };
 
 var sliderCaptionStyle = {
@@ -40234,17 +40083,17 @@ var sliderCaptionStyle = {
     fontSize: 30
 };
 
-var BrightnessSlider = function BrightnessSlider(_ref6) {
-    var neopixel = _ref6.neopixel;
+var BrightnessSlider = function BrightnessSlider(_ref3) {
+    var neopixel = _ref3.neopixel;
     return _react2.default.createElement(
-        ParamSlider,
-        { neopixel: neopixel, param: "brightness" },
+        _elements.ParamSlider,
+        { component: neopixel, param: "brightness" },
         _react2.default.createElement("i", { className: "glyphicon glyphicon-asterisk", style: sliderCaptionStyle })
     );
 };
 
-var SettingParams = function SettingParams(_ref7) {
-    var neopixel = _ref7.neopixel;
+var SettingParams = function SettingParams(_ref4) {
+    var neopixel = _ref4.neopixel;
 
     switch (neopixel.setting) {
         case "effect":
@@ -40258,8 +40107,8 @@ var SettingParams = function SettingParams(_ref7) {
     }
 };
 
-var EffectParams = function EffectParams(_ref8) {
-    var neopixel = _ref8.neopixel;
+var EffectParams = function EffectParams(_ref5) {
+    var neopixel = _ref5.neopixel;
 
     var _useState3 = (0, _react.useState)("(0,0,0)"),
         _useState4 = _slicedToArray(_useState3, 2),
@@ -40304,8 +40153,8 @@ var EffectParams = function EffectParams(_ref8) {
     );
 };
 
-var RGBParams = function RGBParams(_ref9) {
-    var neopixel = _ref9.neopixel;
+var RGBParams = function RGBParams(_ref6) {
+    var neopixel = _ref6.neopixel;
     return _react2.default.createElement(
         "div",
         null,
@@ -40315,38 +40164,151 @@ var RGBParams = function RGBParams(_ref9) {
     );
 };
 
-var RGBSlider = function RGBSlider(_ref10) {
-    var neopixel = _ref10.neopixel,
-        color = _ref10.color,
-        param = _ref10.param;
+var RGBSlider = function RGBSlider(_ref7) {
+    var neopixel = _ref7.neopixel,
+        color = _ref7.color,
+        param = _ref7.param;
     return _react2.default.createElement(
-        ParamSlider,
-        { neopixel: neopixel, param: param, style: { marginBottom: 30 } },
+        _elements.ParamSlider,
+        { component: neopixel, param: param, style: { marginBottom: 30 } },
         _react2.default.createElement("div", { style: { width: 30, height: 30, borderRadius: 18, backgroundColor: color, marginRight: 10 } })
     );
 };
 
-var RainbowParams = function RainbowParams(_ref11) {
-    var neopixel = _ref11.neopixel;
+var RainbowParams = function RainbowParams(_ref8) {
+    var neopixel = _ref8.neopixel;
     return _react2.default.createElement(
         "div",
         null,
         _react2.default.createElement(
-            ParamSlider,
-            { neopixel: neopixel, param: 'speed', min: -1 },
+            _elements.ParamSlider,
+            { component: neopixel, param: 'speed', min: -1 },
             _react2.default.createElement("i", { className: "glyphicon glyphicon-flash", style: sliderCaptionStyle })
         )
     );
 };
 
-var ParamSlider = function ParamSlider(_ref12) {
-    var neopixel = _ref12.neopixel,
-        param = _ref12.param,
-        children = _ref12.children,
-        _ref12$min = _ref12.min,
-        min = _ref12$min === undefined ? 0 : _ref12$min,
-        _ref12$style = _ref12.style,
-        style = _ref12$style === undefined ? {} : _ref12$style;
+exports.default = Neopixel;
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ParamSlider = exports.SettingButton = exports.SettingsToggle = exports.OnOffToggle = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrapSlider = __webpack_require__(22);
+
+var _reactBootstrapSlider2 = _interopRequireDefault(_reactBootstrapSlider);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var toggleButtonStyle = {
+    fontSize: 40,
+    padding: 15,
+    flexGrow: 1,
+    border: "none",
+    backgroundColor: "black",
+    cursor: "pointer",
+    textAlign: "center"
+};
+
+var OnOffToggle = exports.OnOffToggle = function OnOffToggle(_ref) {
+    var component = _ref.component;
+
+    function toggle() {
+        if (component.on) {
+            component.turnOff();
+        } else {
+            component.turnOn();
+        }
+    }
+
+    return _react2.default.createElement(
+        "div",
+        { style: _extends({}, toggleButtonStyle, { color: component.on ? "yellow" : "#888" }), onClick: toggle },
+        _react2.default.createElement("i", { className: "glyphicon glyphicon-certificate" })
+    );
+};
+
+var SettingsToggle = exports.SettingsToggle = function SettingsToggle(_ref2) {
+    var settingsDisplayed = _ref2.settingsDisplayed,
+        toggleSettingsDisplayed = _ref2.toggleSettingsDisplayed;
+
+
+    return _react2.default.createElement(
+        "div",
+        { style: _extends({}, toggleButtonStyle, { color: settingsDisplayed ? "white" : "#888" }), onClick: function onClick(e) {
+                return toggleSettingsDisplayed(!settingsDisplayed);
+            } },
+        _react2.default.createElement("i", { className: "glyphicon glyphicon-cog" })
+    );
+};
+
+var SettingButton = exports.SettingButton = function SettingButton(_ref3) {
+    var icon = _ref3.icon,
+        component = _ref3.component,
+        setting = _ref3.setting;
+
+    var style = {
+        fontSize: 40,
+        flexGrow: 1,
+        color: "#888",
+        backgroundColor: "black",
+        cursor: "pointer",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+    };
+
+    var iconStyle = {
+        padding: 10,
+        border: "3px solid black",
+        borderColor: "black",
+        borderRadius: 5
+    };
+
+    if (component.setting === setting) {
+        iconStyle.borderColor = "white";
+        iconStyle.color = "white";
+    }
+
+    return _react2.default.createElement(
+        "div",
+        {
+            style: style,
+            onClick: function onClick() {
+                component.setSetting(setting);
+            } },
+        _react2.default.createElement("i", { style: iconStyle, className: icon })
+    );
+};
+
+var sliderContainerStyle = {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 5
+};
+
+var ParamSlider = exports.ParamSlider = function ParamSlider(_ref4) {
+    var component = _ref4.component,
+        param = _ref4.param,
+        children = _ref4.children,
+        _ref4$min = _ref4.min,
+        min = _ref4$min === undefined ? 0 : _ref4$min,
+        _ref4$style = _ref4.style,
+        style = _ref4$style === undefined ? {} : _ref4$style;
     return _react2.default.createElement(
         "div",
         { style: _extends({}, sliderContainerStyle, { marginBottom: 15, marginTop: 15 }, style) },
@@ -40355,12 +40317,12 @@ var ParamSlider = function ParamSlider(_ref12) {
             "div",
             { style: { flexGrow: 1 } },
             _react2.default.createElement(Slider, {
-                value: neopixel.params[param],
+                value: component.params[param],
                 onChange: function onChange(v) {
-                    neopixel.setParam(param, v);
+                    component.setParam(param, v);
                 },
                 onStop: function onStop(v) {
-                    neopixel.updateParam(param, v);
+                    component.updateParam(param, v);
                 },
                 on: true,
                 min: min
@@ -40369,12 +40331,12 @@ var ParamSlider = function ParamSlider(_ref12) {
     );
 };
 
-var Slider = function Slider(_ref13) {
-    var value = _ref13.value,
-        onChange = _ref13.onChange,
-        onStop = _ref13.onStop,
-        _ref13$min = _ref13.min,
-        min = _ref13$min === undefined ? 0 : _ref13$min;
+var Slider = function Slider(_ref5) {
+    var value = _ref5.value,
+        onChange = _ref5.onChange,
+        onStop = _ref5.onStop,
+        _ref5$min = _ref5.min,
+        min = _ref5$min === undefined ? 0 : _ref5$min;
     return _react2.default.createElement(_reactBootstrapSlider2.default, {
         value: value,
         change: function change(e) {
@@ -40388,49 +40350,6 @@ var Slider = function Slider(_ref13) {
         max: 1
     });
 };
-
-exports.default = NeopixelBox;
-
-/***/ }),
-/* 129 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.on = on;
-exports.off = off;
-exports.setSetting = setSetting;
-exports.updateParams = updateParams;
-
-var _apiUtils = __webpack_require__(35);
-
-function on(id) {
-    (0, _apiUtils.putJson)(componentAddr(id) + "/on");
-}
-
-function off(id) {
-    (0, _apiUtils.putJson)(componentAddr(id) + "/off");
-}
-
-function setSetting(setting, id) {
-    var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    var onSuccess = arguments[3];
-    var onFailure = arguments[4];
-
-    (0, _apiUtils.putJson)(componentAddr(id) + "/setting/" + setting, params, onSuccess, onFailure);
-}
-
-function updateParams(id, params, onSuccess, onFailure) {
-    (0, _apiUtils.putJson)(componentAddr(id) + "/params", params, onSuccess, onFailure);
-}
-
-function componentAddr(id) {
-    return "/component/" + id;
-}
 
 /***/ })
 /******/ ]);

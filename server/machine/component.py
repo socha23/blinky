@@ -21,9 +21,6 @@ class Component:
         self._on = False
         self._turn_off()
 
-    def _turn_off(self):
-        raise Exception("_turn_off not implemented")
-
     def update_params(self, params):
         self._setting_params.update(params)
         self._on = True
@@ -34,9 +31,6 @@ class Component:
         self._setting_params.update(params)
         self._on = True
         self._turn_on_current_setting()
-
-    def _turn_on_current_setting(self):
-        raise Exception("_turn_on_current_setting not implemented")
 
     def state(self):
         return {
@@ -50,3 +44,10 @@ class Component:
     def _param_generator(self, name):
         while True:
             yield self._setting_params[name] if name in self._setting_params else 0
+
+    def _turn_off(self):
+        raise Exception("_turn_off not implemented")
+
+    def _turn_on_current_setting(self):
+        raise Exception("_turn_on_current_setting not implemented")
+

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import * as MachineState from "../services/machineState";
-import Neopixel from "./neopixel";
+import Component from "./component";
 
 export const useNeopixels = () => {
     const [state, setState] = useState([]);
@@ -17,7 +17,7 @@ export const useNeopixel = (idx) => {
     const npxMachineState = MachineState.getNeopixelState(idx);
     const setNpxMachineState = (state) => {MachineState.setNeopixelState(idx, state)};
 
-    const [npx, setNpx] = useState(new Neopixel(npxMachineState, setNpxMachineState));
+    const [npx, setNpx] = useState(new Component(npxMachineState, setNpxMachineState));
 
     useEffect(() => {
         const sub = MachineState.subscribe(() => {

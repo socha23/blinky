@@ -1,38 +1,33 @@
+from machine.component import Component
 from machine.stub_aware import PWMLED
 
-class LED:
-    def __init__(self, pin, name):
-        self.pin = pin
-        self.name = name
-        self.led = PWMLED(pin)
-        self.value = 1
-        self.setting = 'off'
-        self.off()
 
-    def on(self):
-        self.led.value = self.value
-        self.setting = 'on'
+class LED(Component):
+    def __init__(self, id, pin, name):
+        Component.__init__(self, id, name)
+        self._setting = 'const'
+        self._setting_params = {"brightness": 0.5}
+        self._device = PWMLED(pin)
 
-    def off(self):
-        self.led.off()
-        self.setting = 'off'
+    def _turn_off(self):
+        self._device.off()
 
-    def blink(self):
-        self.led.blink()
-        self.setting = 'blink'
+    def _turn_on_current_setting(self):
+        if self.setting == "const":
+            self._const()
+        elif self.setting == "blink":
+            self._blink()
+        elif self.setting == "pulse":
+            self._pulse()
+        else:
+            raise Exception("Unknown setting: " + self.setting)
 
-    def pulse(self):
-        self.led.pulse()
-        self.setting = 'pulse'
+    def _const(self):
+        self._device.on()
 
-    def pwm(self, val):
-        self.value = val
-        self.led.value = val
+    def _blink(self):
+        self._device.blink()
 
-    def state(self):
-        return {
-            'pin': self.pin,
-            'name': self.name,
-            'setting': self.setting,
-            'value': self.value,
-        }
+    def _pulse(self):
+        self._device.pulse()
+

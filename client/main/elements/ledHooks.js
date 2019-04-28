@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import Led from "./led";
+import Component from "./component";
 import * as MachineState from "../services/machineState";
 
 export const useLeds = () => {
@@ -24,6 +24,6 @@ export const useLed = (idx) => {
     }, []);
 
     const newSetState = (state) => {MachineState.setLedState(idx, state)};
-    return Led(state, newSetState);
+    return Component(state, newSetState);
 };
 
