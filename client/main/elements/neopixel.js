@@ -5,6 +5,7 @@ class Neopixel {
     constructor(state, setState) {
         this.state = {...state};
         this.setState = setState;
+        this.lastApiParamUpdate = new Date()
     }
 
     setStateFromOutside(newState) {
@@ -26,11 +27,19 @@ class Neopixel {
         this.setState({...this.state, setting: name, params: {...this.state.params, ...params}, on: true});
     };
 
-    setParam(name, value) {
+    updateParam(name, value, onSuccess, onFailure) {
+        this.setParam(name, value);
+        api.updateParams(this.state.id, this.state.params, onSuccess, onFailure);
+    }
+
+    setParam(name, value, apiUpdateInterval = 200) {
         const params = {};
         params[name] = value;
-        api.updateParams(this.state.id, params);
         this.setState({...this.state, params: {...this.state.params, ...params}});
+        if (new Date() - this.lastApiParamUpdate > apiUpdateInterval) {
+            this.lastApiParamUpdate = new Date();
+            api.updateParams(this.state.id, this.state.params);
+        }
     }
 
     get name() {

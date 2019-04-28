@@ -147,7 +147,7 @@ const EffectParams = ({neopixel}) => {
         <button
             className={"btn btn-block btn-lg btn-success"}
             style={{marginTop: 10}}
-            onClick={e => neopixel.setParam("body", body, onSuccess, onFailure)}>Submit</button>
+            onClick={e => neopixel.updateParam("body", body, onSuccess, onFailure)}>Submit</button>
     </div>
 };
 
@@ -179,16 +179,23 @@ const ParamSlider = ({neopixel, param, children, min = 0, style = {}}) =>
                 onChange={v => {
                     neopixel.setParam(param, v)
                 }}
+                onStop={v => {
+                    neopixel.updateParam(param, v)
+                }}
+                on
                 min={min}
             />
         </div>
     </div>;
 
 
-const Slider = ({value, onChange, min = 0}) => <ReactBootstrapSlider
+const Slider = ({value, onChange, onStop, min = 0}) => <ReactBootstrapSlider
         value={value}
         change={e => {
             onChange(e.target.value)
+        }}
+        slideStop={e => {
+            onStop(e.target.value)
         }}
         step={0.01}
         min={min}
