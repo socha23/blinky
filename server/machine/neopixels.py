@@ -1,46 +1,24 @@
 from machine.stub_aware import SourceMixin
 from machine.effects.fire import fire_source
 from machine.effects.rainbow import rainbow_source
+from machine.component import Component
 
-#don't delete this, it's used by evaluated code
+# don't delete this, it's used by evaluated code
+from gpiozero_ps.generators import *
 
 
-class Neopixel:
+class Neopixel(Component):
     def __init__(self, id, pix_from, num_pixels, name, neopixel_strip):
-        self.id = id
-        self.name = name
+        Component.__init__(self, id, name)
         self._setting = 'rgb'
         self._setting_params = {"r": 0.5, "g": 0.5, "b": 0.5, "brightness": 5, "speed": 0.5, "intensity": 0.5, "body": ""}
         self._device = _NeopixelDevice(neopixel_strip, pix_from, num_pixels, self._param_generator("brightness"))
         self._effect_evaluator = Evaluator(num_pixels)
-        self._on = False
 
-    @property
-    def setting(self):
-        return self._setting
-
-    @setting.setter
-    def setting(self, val):
-        self._setting = val
-
-    def on(self):
-        self._turn_on_current_setting()
-
-    def off(self):
-        self._on = False
+    def _turn_off(self):
         self._device.set_sources([constant_source(0, 0, 0) for _ in range(self._device.num_pixels)])
 
-    def update_params(self, params):
-        self._setting_params.update(params)
-        self._turn_on_current_setting()
-
-    def set_setting_and_params(self, setting, params):
-        self.setting = setting
-        self._setting_params.update(params)
-        self._turn_on_current_setting()
-
     def _turn_on_current_setting(self):
-        self._on = True
         if self.setting == "fire":
             self._fire()
         elif self.setting == "rgb":
@@ -72,19 +50,6 @@ class Neopixel:
     def _effect(self):
         self._effect_evaluator.body = self._setting_params["body"]
         self._device.set_sources([self._effect_evaluator.get_source() for _ in range(self._device.num_pixels)])
-
-    def state(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'on': self._on,
-            'setting': self.setting,
-            'params': self._setting_params
-        }
-
-    def _param_generator(self, name):
-        while True:
-            yield self._setting_params[name] if name in self._setting_params else 0
 
 
 def set_defaults(params, defaults):
