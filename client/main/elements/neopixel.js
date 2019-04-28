@@ -23,22 +23,22 @@ class Neopixel {
     };
 
     fire = () => {
-        api.fire(this.state.id);
+        api.setting("fire", this.state.id);
         this.setState({...this.state, setting: "fire", on: true})
     };
 
     rgb = (params = {r: 0.5, g: 0.5, b: 0.5}) => {
-        api.rgb(this.state.id, params);
+        api.setting("rgb", this.state.id, params);
         this.setState({...this.state, setting: "rgb", params, on: true});
     };
 
     effect = (params = {body: 'constant(1),constant(1),constant(1)'}, onSuccess, onFailure) => {
-        api.effect(this.state.id, params, onSuccess, onFailure);
+        api.setting("effect", this.state.id, params, onSuccess, onFailure);
         this.setState({...this.state, setting: "effect", params, on: true});
     };
 
     rainbow = (params = {speed: 0.5}) => {
-        api.rainbow(this.state.id, params);
+        api.setting("rainbow", this.state.id, params);
         this.setState({...this.state, setting: "rainbow", params, on: true});
     };
 

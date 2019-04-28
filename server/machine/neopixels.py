@@ -17,15 +17,10 @@ class Neopixel(SourceMixin):
         self._value = [(0, 0, 0) for _ in range(num_pixels)]
         self._effect_evaluator = Evaluator(num_pixels)
         self.source = None
-
         self._brightness = 1
-
-        self._setting = ''
-        self._setting_params = {}
+        self._setting = 'rgb'
+        self._setting_params = {"r": 0.5, "g": 0.5, "b": 0.5}
         self._on = False
-
-        self.rgb()
-        self.off()
 
     @property
     def brightness(self):
@@ -58,46 +53,50 @@ class Neopixel(SourceMixin):
         self._setting = val
 
     def on(self):
-        self._on = True
-        self._apply_current_setting()
+        self._turn_on_current_setting()
 
     def off(self):
         self._on = False
         self._set_sources([constant_source(0, 0, 0) for _ in range(self.num_pixels)])
 
-    def _apply_current_setting(self):
+    def set_setting_and_params(self, setting, params):
+        self.setting = setting
+        self._setting_params = params
+        self._turn_on_current_setting()
+
+    def _turn_on_current_setting(self):
+        self._on = True
         if self.setting == "fire":
-            self.fire(self._setting_params)
+            self._fire()
         elif self.setting == "rgb":
-            self.rgb(self._setting_params)
+            self._rgb()
+        elif self.setting == "rainbow":
+            self._rainbow()
         elif self.setting == "effect":
-            self.effect(self._setting_params)
+            self._effect()
         else:
             raise Exception("Unknown setting: " + self.setting)
 
-    def fire(self, params={}):
-        self._set_setting('fire', [fire_source() for _ in range(self.num_pixels)], params)
+    def _fire(self):
+        self._set_sources([fire_source() for _ in range(self.num_pixels)])
 
-    def rgb(self, params={}):
-        set_defaults(params, {'r': 0.5, 'g': 0.5, 'b': 0.5})
-        self._set_setting("rgb", [constant_source(params["r"], params["g"], params["b"]) for _ in range(self.num_pixels)], params)
+    def _rgb(self):
+        set_defaults(self._setting_params, {'r': 0.5, 'g': 0.5, 'b': 0.5})
+        self._set_sources([constant_source(
+            self._setting_params["r"],
+            self._setting_params["g"],
+            self._setting_params["b"]
+        ) for _ in range(self.num_pixels)])
 
-    def rainbow(self, params={}):
-        self._setting_params = params
-        self._set_setting("rainbow", [rainbow_source(
+    def _rainbow(self):
+        self._set_sources([rainbow_source(
                 speed_generator=self._param_generator('speed'),
                 offset=float(i) * 256 / self.num_pixels
-            ) for i in range(self.num_pixels)], params)
+            ) for i in range(self.num_pixels)])
 
-    def effect(self, body):
-        self._effect_evaluator.body = body
-        self._set_setting("effect", [self._effect_evaluator.get_source() for _ in range(self.num_pixels)], {'body': body})
-
-    def _set_setting(self, setting_name, value_sources, setting_params):
-        self._on = True
-        self.setting = setting_name
-        self._set_sources(value_sources)
-        self._setting_params = setting_params
+    def effect(self):
+        self._effect_evaluator.body = self._setting_params["body"]
+        self._set_sources([self._effect_evaluator.get_source() for _ in range(self.num_pixels)])
 
     def state(self):
         return {

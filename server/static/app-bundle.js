@@ -39428,17 +39428,21 @@ var _ledApi = __webpack_require__(121);
 
 var api = _interopRequireWildcard(_ledApi);
 
+var _componentApi = __webpack_require__(129);
+
+var componentApi = _interopRequireWildcard(_componentApi);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function led(state, setState) {
 
     function on() {
-        api.on(state.pin);
+        componentApi.on(state.pin);
         setState(_extends({}, state, { setting: "on" }));
     }
 
     function off() {
-        api.off(state.pin);
+        componentApi.off(state.pin);
         setState(_extends({}, state, { setting: "off" }));
     }
 
@@ -39490,21 +39494,11 @@ exports.default = led;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.on = on;
-exports.off = off;
 exports.blink = blink;
 exports.pulse = pulse;
 exports.pwm = pwm;
 
 var _apiUtils = __webpack_require__(35);
-
-function on(pin) {
-    (0, _apiUtils.putJson)(ledAddr(pin) + "/on");
-}
-
-function off(pin) {
-    (0, _apiUtils.putJson)(ledAddr(pin) + "/off");
-}
 
 function blink(pin) {
     (0, _apiUtils.putJson)(ledAddr(pin) + "/blink");
@@ -40068,17 +40062,21 @@ var _fireApi = __webpack_require__(124);
 
 var api = _interopRequireWildcard(_fireApi);
 
+var _componentApi = __webpack_require__(129);
+
+var componentApi = _interopRequireWildcard(_componentApi);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function fire(state, setState) {
 
     function on() {
-        api.on(state.id);
+        componentApi.on(state.id);
         setState(_extends({}, state, { setting: "on" }));
     }
 
     function off() {
-        api.off(state.id);
+        componentApi.off(state.id);
         setState(_extends({}, state, { setting: "off" }));
     }
 
@@ -40115,19 +40113,9 @@ exports.default = fire;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.on = on;
-exports.off = off;
 exports.intensity = intensity;
 
 var _apiUtils = __webpack_require__(35);
-
-function on(id) {
-    (0, _apiUtils.putJson)(fireAddr(id) + "/on");
-}
-
-function off(id) {
-    (0, _apiUtils.putJson)(fireAddr(id) + "/off");
-}
 
 function intensity(id, intensity) {
     (0, _apiUtils.putJson)(fireAddr(id) + "/intensity/" + intensity);
@@ -40251,6 +40239,10 @@ var _neopixelApi = __webpack_require__(127);
 
 var api = _interopRequireWildcard(_neopixelApi);
 
+var _componentApi = __webpack_require__(129);
+
+var componentApi = _interopRequireWildcard(_componentApi);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40262,24 +40254,24 @@ var Neopixel = function () {
         _classCallCheck(this, Neopixel);
 
         this.turnOn = function () {
-            api.on(_this.state.id);
+            componentApi.on(_this.state.id);
             _this.setState(_extends({}, _this.state, { on: true }));
         };
 
         this.turnOff = function () {
-            api.off(_this.state.id);
+            componentApi.off(_this.state.id);
             _this.setState(_extends({}, _this.state, { on: false }));
         };
 
         this.fire = function () {
-            api.fire(_this.state.id);
+            api.setting("fire", _this.state.id);
             _this.setState(_extends({}, _this.state, { setting: "fire", on: true }));
         };
 
         this.rgb = function () {
             var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { r: 0.5, g: 0.5, b: 0.5 };
 
-            api.rgb(_this.state.id, params);
+            api.setting("rgb", _this.state.id, params);
             _this.setState(_extends({}, _this.state, { setting: "rgb", params: params, on: true }));
         };
 
@@ -40288,14 +40280,14 @@ var Neopixel = function () {
             var onSuccess = arguments[1];
             var onFailure = arguments[2];
 
-            api.effect(_this.state.id, params, onSuccess, onFailure);
+            api.setting("effect", _this.state.id, params, onSuccess, onFailure);
             _this.setState(_extends({}, _this.state, { setting: "effect", params: params, on: true }));
         };
 
         this.rainbow = function () {
             var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { speed: 0.5 };
 
-            api.rainbow(_this.state.id, params);
+            api.setting("rainbow", _this.state.id, params);
             _this.setState(_extends({}, _this.state, { setting: "rainbow", params: params, on: true }));
         };
 
@@ -40304,12 +40296,12 @@ var Neopixel = function () {
     }
 
     _createClass(Neopixel, [{
-        key: "setStateFromOutside",
+        key: 'setStateFromOutside',
         value: function setStateFromOutside(newState) {
             this.state = newState;
         }
     }, {
-        key: "setParam",
+        key: 'setParam',
         value: function setParam(name, value, onSuccess, onFailure) {
             var newParams = _extends({}, this.state.params);
             newParams[name] = value;
@@ -40327,17 +40319,17 @@ var Neopixel = function () {
             }
         }
     }, {
-        key: "name",
+        key: 'name',
         get: function get() {
             return this.state.name;
         }
     }, {
-        key: "setting",
+        key: 'setting',
         get: function get() {
             return this.state.setting;
         }
     }, {
-        key: "brightness",
+        key: 'brightness',
         get: function get() {
             return this.state.brightness;
         },
@@ -40346,12 +40338,12 @@ var Neopixel = function () {
             this.setState(_extends({}, this.state, { brightness: val }));
         }
     }, {
-        key: "params",
+        key: 'params',
         get: function get() {
             return this.state.params;
         }
     }, {
-        key: "on",
+        key: 'on',
         get: function get() {
             return this.state.on;
         }
@@ -40372,54 +40364,25 @@ exports.default = Neopixel;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.on = on;
-exports.off = off;
-exports.fire = fire;
-exports.rgb = rgb;
-exports.effect = effect;
-exports.rainbow = rainbow;
+exports.setting = setting;
 exports.brightness = brightness;
 
 var _apiUtils = __webpack_require__(35);
 
-function on(id) {
-    setting(id, "on");
-}
-
-function off(id) {
-    setting(id, "off");
-}
-
-function fire(id) {
-    setting(id, "fire");
-}
-
-function rgb(id, params) {
-    setting(id, "rgb", params);
-}
-
-function effect(id, params, onSuccess, onFailure) {
-    setting(id, "effect", params, onSuccess, onFailure);
-}
-
-function rainbow(id, params) {
-    setting(id, "rainbow", params);
-}
-
-function neopixelAddr(id) {
-    return "/neopixel/" + id;
-}
-
-function setting(id, setting) {
+function setting(setting, id) {
     var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     var onSuccess = arguments[3];
     var onFailure = arguments[4];
 
-    (0, _apiUtils.putJson)(neopixelAddr(id) + "/" + setting, params, onSuccess, onFailure);
+    (0, _apiUtils.putJson)(neopixelAddr(id) + "/setting/" + setting, params, onSuccess, onFailure);
 }
 
 function brightness(id, val) {
     (0, _apiUtils.putJson)(neopixelAddr(id) + "/brightness/" + val);
+}
+
+function neopixelAddr(id) {
+    return "/neopixel/" + id;
 }
 
 /***/ }),
@@ -40746,6 +40709,33 @@ var Slider = function Slider(_ref13) {
 };
 
 exports.default = NeopixelBox;
+
+/***/ }),
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.on = on;
+exports.off = off;
+
+var _apiUtils = __webpack_require__(35);
+
+function on(id) {
+    (0, _apiUtils.putJson)(componentAddr(id) + "/on");
+}
+
+function off(id) {
+    (0, _apiUtils.putJson)(componentAddr(id) + "/off");
+}
+
+function componentAddr(id) {
+    return "/component/" + id;
+}
 
 /***/ })
 /******/ ]);

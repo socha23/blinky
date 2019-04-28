@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, make_response
 from api.main_api import render_state
-from machine_service import neopixel_brightness, neopixel_effect, neopixel_fire, neopixel_rainbow, neopixel_rgb
+from machine_service import neopixel_setting, neopixel_brightness
 
 neopixels_api = Blueprint('neopixel api', __name__)
 
@@ -13,28 +13,10 @@ def brightness(id, brightness):
     return render_state()
 
 
-@neopixels_api.route('/neopixel/<id>/fire', methods=API_METHODS)
-def fire(id):
-    neopixel_fire(id)
-    return render_state()
-
-
-@neopixels_api.route('/neopixel/<id>/rgb', methods=API_METHODS)
-def rgb(id):
-    neopixel_rgb(id, request.get_json())
-    return render_state()
-
-
-@neopixels_api.route('/neopixel/<id>/effect', methods=API_METHODS)
-def effect(id):
+@neopixels_api.route('/neopixel/<neopixel_id>/setting/<setting_name>', methods=API_METHODS)
+def setting(neopixel_id, setting_name):
     try:
-        neopixel_effect(id, request.get_json())
+        neopixel_setting(neopixel_id, setting_name, request.get_json())
     except BaseException as e:
-        return make_response(jsonify(str(e)), 401)
-    return render_state()
-
-
-@neopixels_api.route('/neopixel/<id>/rainbow', methods=API_METHODS)
-def rainbow(id):
-    neopixel_rainbow(id, request.get_json())
+        return make_response(jsonify(str(e)), 400)
     return render_state()

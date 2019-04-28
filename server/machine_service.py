@@ -33,17 +33,5 @@ def neopixel_brightness(id, brightness):
     Machine.neopixel(id).brightness = brightness
 
 
-def neopixel_fire(id):
-    Machine.neopixel(id).fire()
-
-
-def neopixel_rgb(id, params):
-    Machine.neopixel(id).rgb(params)
-
-
-def neopixel_effect(id, params):
-    Machine.neopixel(id).effect(params)
-
-
-def neopixel_rainbow(id, params):
-    Machine.neopixel(id).rainbow(params)
+def neopixel_setting(id, setting, params):
+    Machine.neopixel(id).set_setting_and_params(setting, params)
