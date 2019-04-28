@@ -17,19 +17,9 @@ class Neopixel(SourceMixin):
         self._value = [(0, 0, 0) for _ in range(num_pixels)]
         self._effect_evaluator = Evaluator(num_pixels)
         self.source = None
-        self._brightness = 1
         self._setting = 'rgb'
-        self._setting_params = {"r": 0.5, "g": 0.5, "b": 0.5}
+        self._setting_params = {"r": 0.5, "g": 0.5, "b": 0.5, "brightness": 1}
         self._on = False
-
-    @property
-    def brightness(self):
-        return self._brightness
-
-    @brightness.setter
-    def brightness(self, brightness):
-        self._brightness = brightness
-        self._apply()
 
     @property
     def value(self):
@@ -43,6 +33,10 @@ class Neopixel(SourceMixin):
         else:
             self._value = [val for i in range(self.num_pixels)]
         self._apply()
+
+    @property
+    def brightness(self):
+        return self._setting_params['brightness']
 
     @property
     def setting(self):
@@ -59,9 +53,13 @@ class Neopixel(SourceMixin):
         self._on = False
         self._set_sources([constant_source(0, 0, 0) for _ in range(self.num_pixels)])
 
+    def set_param(self, param_name, value):
+        self._setting_params[param_name] = value
+        self._turn_on_current_setting()
+
     def set_setting_and_params(self, setting, params):
         self.setting = setting
-        self._setting_params = params
+        self._setting_params.update(params)
         self._turn_on_current_setting()
 
     def _turn_on_current_setting(self):

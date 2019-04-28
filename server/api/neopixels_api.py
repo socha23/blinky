@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, make_response
 from api.main_api import render_state
-from machine_service import neopixel_setting, neopixel_brightness
+from machine_service import neopixel_setting, neopixel_set_param
 
 neopixels_api = Blueprint('neopixel api', __name__)
 
@@ -9,7 +9,7 @@ API_METHODS = ['GET', 'PUT']
 
 @neopixels_api.route('/neopixel/<id>/brightness/<brightness>', methods=API_METHODS)
 def brightness(id, brightness):
-    neopixel_brightness(id, float(brightness))
+    neopixel_set_param(id, "brightness", float(brightness))
     return render_state()
 
 

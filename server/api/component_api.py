@@ -7,7 +7,7 @@ component_api = Blueprint('component api', __name__)
 API_METHODS = ['GET', 'PUT']
 
 
-@component_api.route('/component/<component_id>/off', methods=API_METHODS)
+@component_api.route('/component/<component_id>/on', methods=API_METHODS)
 def on(component_id):
     component_on(component_id)
     return render_state()
