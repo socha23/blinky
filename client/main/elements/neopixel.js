@@ -22,41 +22,16 @@ class Neopixel {
         this.setState({...this.state, on: false})
     };
 
-    fire = () => {
-        api.setting("fire", this.state.id);
-        this.setState({...this.state, setting: "fire", on: true})
+    setSetting = (name, params = {}, onSuccess, onFailure) => {
+        api.setSetting(name, this.state.id, params, onSuccess, onFailure);
+        this.setState({...this.state, setting: name, params: {...this.state.params, ...params}, on: true});
     };
 
-    rgb = (params = {r: 0.5, g: 0.5, b: 0.5}) => {
-        api.setting("rgb", this.state.id, params);
-        this.setState({...this.state, setting: "rgb", params, on: true});
-    };
-
-    effect = (params = {body: 'constant(1),constant(1),constant(1)'}, onSuccess, onFailure) => {
-        api.setting("effect", this.state.id, params, onSuccess, onFailure);
-        this.setState({...this.state, setting: "effect", params, on: true});
-    };
-
-    rainbow = (params = {speed: 0.5}) => {
-        api.setting("rainbow", this.state.id, params);
-        this.setState({...this.state, setting: "rainbow", params, on: true});
-    };
-
-    setParam(name, value, onSuccess, onFailure) {
-        const newParams = {...this.state.params};
-        newParams[name] = value;
-        switch(this.state.setting) {
-            case "rgb":
-                this.rgb(newParams);
-                break;
-            case "rainbow":
-                this.rainbow(newParams);
-                break;
-            case "effect":
-                this.effect(newParams, onSuccess, onFailure);
-                break;
-
-        }
+    setParam(name, value) {
+        const params = {};
+        params[name] = value;
+        api.updateParams(this.state.id, params);
+        this.setState({...this.state, params: {...this.state.params, ...params}});
     }
 
     get name() {
@@ -65,15 +40,6 @@ class Neopixel {
 
     get setting() {
         return this.state.setting
-    }
-
-    get brightness() {
-        return this.state.brightness
-    }
-
-    set brightness(val) {
-        api.brightness(this.state.id, val);
-        this.setState({...this.state, brightness: val})
     }
 
     get params() {

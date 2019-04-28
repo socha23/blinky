@@ -92,7 +92,7 @@ const SettingButton = ({icon, neopixel, setting}) => {
     return <div
         style={style}
         onClick={() => {
-            neopixel[setting]()
+            neopixel.setSetting(setting)
         }}>
         <i style={iconStyle} className={icon}/>
     </div>
@@ -110,17 +110,9 @@ const sliderCaptionStyle = {
     fontSize: 30
 };
 
-const BrightnessSlider = ({neopixel}) => <div style={sliderContainerStyle}>
+const BrightnessSlider = ({neopixel}) => <ParamSlider neopixel={neopixel} param={"brightness"}>
     <i className={"glyphicon glyphicon-asterisk"} style={sliderCaptionStyle}/>
-    <Slider
-        value={neopixel.brightness}
-        onChange={v => {
-            neopixel.brightness = v
-        }}
-    />
-    <hr/>
-</div>;
-
+</ParamSlider>;
 
 const SettingParams = ({neopixel}) => {
     switch (neopixel.setting) {
@@ -166,7 +158,7 @@ const RGBParams = ({neopixel}) => <div>
 </div>;
 
 
-const RGBSlider = ({neopixel, color, param}) => <ParamSlider neopixel={neopixel} param={param}>
+const RGBSlider = ({neopixel, color, param}) => <ParamSlider neopixel={neopixel} param={param} style={{marginBottom: 30}}>
     <div style={{width: 30, height: 30, borderRadius: 18, backgroundColor: color, marginRight: 10}}/>
 </ParamSlider>;
 
@@ -178,8 +170,8 @@ const RainbowParams = ({neopixel}) => <div>
 </div>;
 
 
-const ParamSlider = ({neopixel, param, children, min = 0}) =>
-    <div style={{...sliderContainerStyle, marginBottom: 15, marginTop: 30}}>
+const ParamSlider = ({neopixel, param, children, min = 0, style = {}}) =>
+    <div style={{...sliderContainerStyle, marginBottom: 15, marginTop: 15, ...style}}>
         {children}
         <div style={{flexGrow: 1}}>
             <Slider
@@ -193,8 +185,7 @@ const ParamSlider = ({neopixel, param, children, min = 0}) =>
     </div>;
 
 
-const Slider = ({value, onChange, min = 0}) => {
-    return <ReactBootstrapSlider
+const Slider = ({value, onChange, min = 0}) => <ReactBootstrapSlider
         value={value}
         change={e => {
             onChange(e.target.value)
@@ -202,7 +193,6 @@ const Slider = ({value, onChange, min = 0}) => {
         step={0.01}
         min={min}
         max={1}
-    />
-};
+    />;
 
 export default NeopixelBox

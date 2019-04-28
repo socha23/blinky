@@ -11,7 +11,7 @@ class Neopixel:
         self.id = id
         self.name = name
         self._setting = 'rgb'
-        self._setting_params = {"r": 0.5, "g": 0.5, "b": 0.5, "brightness": 1}
+        self._setting_params = {"r": 0.5, "g": 0.5, "b": 0.5, "brightness": 5, "speed": 0.5, "intensity": 0.5, "body": ""}
         self._device = _NeopixelDevice(neopixel_strip, pix_from, num_pixels, self._param_generator("brightness"))
         self._effect_evaluator = Evaluator(num_pixels)
         self._on = False
@@ -31,8 +31,8 @@ class Neopixel:
         self._on = False
         self._device.set_sources([constant_source(0, 0, 0) for _ in range(self._device.num_pixels)])
 
-    def set_param(self, param_name, value):
-        self._setting_params[param_name] = value
+    def update_params(self, params):
+        self._setting_params.update(params)
         self._turn_on_current_setting()
 
     def set_setting_and_params(self, setting, params):
@@ -80,8 +80,7 @@ class Neopixel:
             'name': self.name,
             'on': self._on,
             'setting': self.setting,
-            'params': self._setting_params,
-            'brightness': self._setting_params['brightness']
+            'params': self._setting_params
         }
 
     def _param_generator(self, name):

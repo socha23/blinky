@@ -40263,32 +40263,13 @@ var Neopixel = function () {
             _this.setState(_extends({}, _this.state, { on: false }));
         };
 
-        this.fire = function () {
-            api.setting("fire", _this.state.id);
-            _this.setState(_extends({}, _this.state, { setting: "fire", on: true }));
-        };
+        this.setSetting = function (name) {
+            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+            var onSuccess = arguments[2];
+            var onFailure = arguments[3];
 
-        this.rgb = function () {
-            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { r: 0.5, g: 0.5, b: 0.5 };
-
-            api.setting("rgb", _this.state.id, params);
-            _this.setState(_extends({}, _this.state, { setting: "rgb", params: params, on: true }));
-        };
-
-        this.effect = function () {
-            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { body: 'constant(1),constant(1),constant(1)' };
-            var onSuccess = arguments[1];
-            var onFailure = arguments[2];
-
-            api.setting("effect", _this.state.id, params, onSuccess, onFailure);
-            _this.setState(_extends({}, _this.state, { setting: "effect", params: params, on: true }));
-        };
-
-        this.rainbow = function () {
-            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { speed: 0.5 };
-
-            api.setting("rainbow", _this.state.id, params);
-            _this.setState(_extends({}, _this.state, { setting: "rainbow", params: params, on: true }));
+            api.setSetting(name, _this.state.id, params, onSuccess, onFailure);
+            _this.setState(_extends({}, _this.state, { setting: name, params: _extends({}, _this.state.params, params), on: true }));
         };
 
         this.state = _extends({}, state);
@@ -40302,21 +40283,11 @@ var Neopixel = function () {
         }
     }, {
         key: 'setParam',
-        value: function setParam(name, value, onSuccess, onFailure) {
-            var newParams = _extends({}, this.state.params);
-            newParams[name] = value;
-            switch (this.state.setting) {
-                case "rgb":
-                    this.rgb(newParams);
-                    break;
-                case "rainbow":
-                    this.rainbow(newParams);
-                    break;
-                case "effect":
-                    this.effect(newParams, onSuccess, onFailure);
-                    break;
-
-            }
+        value: function setParam(name, value) {
+            var params = {};
+            params[name] = value;
+            api.updateParams(this.state.id, params);
+            this.setState(_extends({}, this.state, { params: _extends({}, this.state.params, params) }));
         }
     }, {
         key: 'name',
@@ -40327,15 +40298,6 @@ var Neopixel = function () {
         key: 'setting',
         get: function get() {
             return this.state.setting;
-        }
-    }, {
-        key: 'brightness',
-        get: function get() {
-            return this.state.brightness;
-        },
-        set: function set(val) {
-            api.brightness(this.state.id, val);
-            this.setState(_extends({}, this.state, { brightness: val }));
         }
     }, {
         key: 'params',
@@ -40364,12 +40326,12 @@ exports.default = Neopixel;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.setting = setting;
-exports.brightness = brightness;
+exports.setSetting = setSetting;
+exports.updateParams = updateParams;
 
 var _apiUtils = __webpack_require__(35);
 
-function setting(setting, id) {
+function setSetting(setting, id) {
     var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     var onSuccess = arguments[3];
     var onFailure = arguments[4];
@@ -40377,8 +40339,8 @@ function setting(setting, id) {
     (0, _apiUtils.putJson)(neopixelAddr(id) + "/setting/" + setting, params, onSuccess, onFailure);
 }
 
-function brightness(id, val) {
-    (0, _apiUtils.putJson)(neopixelAddr(id) + "/brightness/" + val);
+function updateParams(id, params) {
+    (0, _apiUtils.putJson)(neopixelAddr(id) + "/params", params);
 }
 
 function neopixelAddr(id) {
@@ -40538,7 +40500,7 @@ var SettingButton = function SettingButton(_ref5) {
         {
             style: style,
             onClick: function onClick() {
-                neopixel[setting]();
+                neopixel.setSetting(setting);
             } },
         _react2.default.createElement("i", { style: iconStyle, className: icon })
     );
@@ -40558,16 +40520,9 @@ var sliderCaptionStyle = {
 var BrightnessSlider = function BrightnessSlider(_ref6) {
     var neopixel = _ref6.neopixel;
     return _react2.default.createElement(
-        "div",
-        { style: sliderContainerStyle },
-        _react2.default.createElement("i", { className: "glyphicon glyphicon-asterisk", style: sliderCaptionStyle }),
-        _react2.default.createElement(Slider, {
-            value: neopixel.brightness,
-            onChange: function onChange(v) {
-                neopixel.brightness = v;
-            }
-        }),
-        _react2.default.createElement("hr", null)
+        ParamSlider,
+        { neopixel: neopixel, param: "brightness" },
+        _react2.default.createElement("i", { className: "glyphicon glyphicon-asterisk", style: sliderCaptionStyle })
     );
 };
 
@@ -40649,7 +40604,7 @@ var RGBSlider = function RGBSlider(_ref10) {
         param = _ref10.param;
     return _react2.default.createElement(
         ParamSlider,
-        { neopixel: neopixel, param: param },
+        { neopixel: neopixel, param: param, style: { marginBottom: 30 } },
         _react2.default.createElement("div", { style: { width: 30, height: 30, borderRadius: 18, backgroundColor: color, marginRight: 10 } })
     );
 };
@@ -40672,10 +40627,12 @@ var ParamSlider = function ParamSlider(_ref12) {
         param = _ref12.param,
         children = _ref12.children,
         _ref12$min = _ref12.min,
-        min = _ref12$min === undefined ? 0 : _ref12$min;
+        min = _ref12$min === undefined ? 0 : _ref12$min,
+        _ref12$style = _ref12.style,
+        style = _ref12$style === undefined ? {} : _ref12$style;
     return _react2.default.createElement(
         "div",
-        { style: _extends({}, sliderContainerStyle, { marginBottom: 15, marginTop: 30 }) },
+        { style: _extends({}, sliderContainerStyle, { marginBottom: 15, marginTop: 15 }, style) },
         children,
         _react2.default.createElement(
             "div",
@@ -40696,7 +40653,6 @@ var Slider = function Slider(_ref13) {
         onChange = _ref13.onChange,
         _ref13$min = _ref13.min,
         min = _ref13$min === undefined ? 0 : _ref13$min;
-
     return _react2.default.createElement(_reactBootstrapSlider2.default, {
         value: value,
         change: function change(e) {

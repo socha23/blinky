@@ -1,11 +1,11 @@
 import {putJson} from "./apiUtils";
 
-export function setting(setting, id, params={}, onSuccess, onFailure) {
+export function setSetting(setting, id, params={}, onSuccess, onFailure) {
     putJson(neopixelAddr(id) + "/setting/" + setting, params, onSuccess, onFailure)
 }
 
-export function brightness(id, val) {
-    putJson(neopixelAddr(id) + "/brightness/" + val)
+export function updateParams(id, params) {
+    putJson(neopixelAddr(id) + "/params", params)
 }
 
 function neopixelAddr(id) {

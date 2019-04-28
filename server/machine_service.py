@@ -29,8 +29,8 @@ def led_pwm(pin, val):
     Machine.led(pin).pwm(val)
 
 
-def neopixel_set_param(id, param_name, param_value):
-    Machine.neopixel(id).set_param(param_name, param_value)
+def neopixel_update_params(id, params):
+    Machine.neopixel(id).update_params(params)
 
 
 def neopixel_setting(id, setting, params):

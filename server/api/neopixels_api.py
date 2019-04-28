@@ -1,15 +1,18 @@
 from flask import Blueprint, jsonify, request, make_response
 from api.main_api import render_state
-from machine_service import neopixel_setting, neopixel_set_param
+from machine_service import neopixel_setting, neopixel_update_params
 
 neopixels_api = Blueprint('neopixel api', __name__)
 
 API_METHODS = ['GET', 'PUT']
 
 
-@neopixels_api.route('/neopixel/<id>/brightness/<brightness>', methods=API_METHODS)
-def brightness(id, brightness):
-    neopixel_set_param(id, "brightness", float(brightness))
+@neopixels_api.route('/neopixel/<id>/params', methods=API_METHODS)
+def brightness(id):
+    try:
+        neopixel_update_params(id, request.get_json())
+    except BaseException as e:
+        return make_response(jsonify(str(e)), 400)
     return render_state()
 
 
