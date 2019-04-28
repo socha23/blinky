@@ -40009,6 +40009,7 @@ var Neopixel = function () {
 
         this.state = _extends({}, state);
         this.setState = setState;
+        this.lastApiParamUpdate = new Date();
     }
 
     _createClass(Neopixel, [{
@@ -40017,12 +40018,23 @@ var Neopixel = function () {
             this.state = newState;
         }
     }, {
+        key: 'updateParam',
+        value: function updateParam(name, value, onSuccess, onFailure) {
+            this.setParam(name, value);
+            api.updateParams(this.state.id, this.state.params, onSuccess, onFailure);
+        }
+    }, {
         key: 'setParam',
         value: function setParam(name, value) {
+            var apiUpdateInterval = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 200;
+
             var params = {};
             params[name] = value;
-            api.updateParams(this.state.id, params);
             this.setState(_extends({}, this.state, { params: _extends({}, this.state.params, params) }));
+            if (new Date() - this.lastApiParamUpdate > apiUpdateInterval) {
+                this.lastApiParamUpdate = new Date();
+                api.updateParams(this.state.id, this.state.params);
+            }
         }
     }, {
         key: 'name',
@@ -40285,7 +40297,7 @@ var EffectParams = function EffectParams(_ref8) {
                 className: "btn btn-block btn-lg btn-success",
                 style: { marginTop: 10 },
                 onClick: function onClick(e) {
-                    return neopixel.setParam("body", body, onSuccess, onFailure);
+                    return neopixel.updateParam("body", body, onSuccess, onFailure);
                 } },
             "Submit"
         )
@@ -40347,6 +40359,10 @@ var ParamSlider = function ParamSlider(_ref12) {
                 onChange: function onChange(v) {
                     neopixel.setParam(param, v);
                 },
+                onStop: function onStop(v) {
+                    neopixel.updateParam(param, v);
+                },
+                on: true,
                 min: min
             })
         )
@@ -40356,12 +40372,16 @@ var ParamSlider = function ParamSlider(_ref12) {
 var Slider = function Slider(_ref13) {
     var value = _ref13.value,
         onChange = _ref13.onChange,
+        onStop = _ref13.onStop,
         _ref13$min = _ref13.min,
         min = _ref13$min === undefined ? 0 : _ref13$min;
     return _react2.default.createElement(_reactBootstrapSlider2.default, {
         value: value,
         change: function change(e) {
             onChange(e.target.value);
+        },
+        slideStop: function slideStop(e) {
+            onStop(e.target.value);
         },
         step: 0.01,
         min: min,
@@ -40404,8 +40424,8 @@ function setSetting(setting, id) {
     (0, _apiUtils.putJson)(componentAddr(id) + "/setting/" + setting, params, onSuccess, onFailure);
 }
 
-function updateParams(id, params) {
-    (0, _apiUtils.putJson)(componentAddr(id) + "/params", params);
+function updateParams(id, params, onSuccess, onFailure) {
+    (0, _apiUtils.putJson)(componentAddr(id) + "/params", params, onSuccess, onFailure);
 }
 
 function componentAddr(id) {
