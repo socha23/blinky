@@ -32,6 +32,7 @@ def from_callback(method):
     while True:
         yield method()
 
+
 def triangular(ascent=100, descent=100, height=1, pause=0):
     value = 0
     while True:
@@ -49,4 +50,14 @@ def triangular(ascent=100, descent=100, height=1, pause=0):
         for _ in range(0, pause_val):
             yield 0
 
+
+def square(height=1, duration=100, pause=100):
+    while True:
+        height_val = max(0, float(_value(height)))
+        duration_val = max(0, int(_value(duration)))
+        pause_val = max(0, int(_value(pause)))
+        for _ in range(0, duration_val):
+            yield height_val
+        for _ in range(0, pause_val):
+            yield 0
 

@@ -14,24 +14,30 @@ const Debug = () => {
 };
 
 
+const DeviceName = ({children}) => <span style={{
+    fontSize: 30,
+}}>{children}</span>;
 
 const Led = ({name, value}) => <div style={{display: "flex", alignItems: 'center'}}>
     <RGBBulb r={value} g={value} b={value}/>
-    <h2>LED {name}</h2>
+    <DeviceName>{name}</DeviceName>
 </div>;
 
 const Neopixel = ({name}) => <div>
-    <h2>Neopixel {name}</h2>
+    <DeviceName>{name}</DeviceName>
 </div>;
 
 const RGBBulb = ({r, g, b}) => {
-    console.log(r, g, b);
     const color = valuesToHex(r, g, b);
+    const shadow = valuesToHex(r * 0.5, g * 0.5, b * 0.5);
+
     console.log(color);
     return <div style={{
+        margin: 10,
         width: 40,
         height: 40,
         backgroundColor: color,
+        background: "radial-gradient(circle at 10px 10px, " + color + ", " + shadow + ")",
         borderRadius: 20
     }}/>
 };
