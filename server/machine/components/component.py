@@ -16,7 +16,7 @@ class Component:
 
     def on(self):
         self._on = True
-        self._turn_on_current_setting()
+        self._turn_on()
 
     def off(self):
         self._on = False
@@ -25,13 +25,14 @@ class Component:
     def update_params(self, params):
         self._setting_params.update(params)
         self._on = True
-        self._turn_on_current_setting()
+        self._update_current_setting()
 
     def set_setting_and_params(self, setting, params):
         self.setting = setting
         self._setting_params.update(params)
         self._on = True
-        self._turn_on_current_setting()
+        self._update_current_setting()
+        self._turn_on()
 
     def state(self):
         return {
@@ -56,9 +57,12 @@ class Component:
     def _current_value(self):
         raise Exception("_current_value not implemented")
 
+    def _turn_on(self):
+        raise Exception("_turn_on not implemented")
+
     def _turn_off(self):
         raise Exception("_turn_off not implemented")
 
-    def _turn_on_current_setting(self):
+    def _update_current_setting(self):
         raise Exception("_turn_on_current_setting not implemented")
 

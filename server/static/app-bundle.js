@@ -43758,8 +43758,6 @@ var RGBBulb = function RGBBulb(_ref4) {
 
     var color = (0, _colorUtils.valuesToHex)(r, g, b);
     var shadow = (0, _colorUtils.valuesToHex)(r * 0.5, g * 0.5, b * 0.5);
-
-    console.log(color);
     return _react2.default.createElement("div", { style: {
             margin: 10,
             width: 40,
