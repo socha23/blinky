@@ -1,4 +1,6 @@
 from gpiozero_ps.generators import constant
+from itertools import tee
+
 
 BASE_SPEED = float(20)
 
@@ -28,3 +30,26 @@ def rainbow_source(speed_generator=constant(1), offset=0):
     while True:
         yield(color_wheel(pos))
         pos = (pos + BASE_SPEED * next(speed_generator)) % 255
+
+
+def rainbow_sources(speed_generator=constant(1), offset=0):
+    s1, s2, s3 = tee(speed_generator, 3)
+    return (
+        rainbow_source_color("r", s1, offset),
+        rainbow_source_color("g", s2, offset),
+        rainbow_source_color("b", s3, offset)
+    )
+
+
+def rainbow_source_color(color, speed_generator=constant(1), offset=0):
+    pos = offset
+    while True:
+        r, g, b = color_wheel(pos)
+        if color == "r":
+            yield  r
+        elif color == "g":
+            yield g
+        elif color == "b":
+            yield b
+        pos = (pos + BASE_SPEED * next(speed_generator)) % 255
+

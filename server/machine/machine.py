@@ -47,7 +47,7 @@ class _Machine:
             settings = self._store.get("component_settings", component_id)
             if settings is not None:
                 component.load(settings)
-                component.off()
+                component.off(effect=False)
 
     def add_led(self, name, pin):
         led = LED("led" + str(pin), pin, name)

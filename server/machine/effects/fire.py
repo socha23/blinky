@@ -25,11 +25,11 @@ def fire_sources(intensity_generator=constant(1)):
     (slow_r, slow_g) = tee(slow, 2)
     (fast_r, fast_g) = tee(fast, 2)
 
-    slow_r = scale_and_clamp(slow_r, intensity_r_s, 0.2, 0.8)
-    slow_g = scale_and_clamp(slow_g, intensity_g_s, -0.1, 0.3)
+    slow_r = scale_and_clamp(slow_r, intensity_r_s, 0.3, 1.5)
+    slow_g = scale_and_clamp(slow_g, intensity_g_s, 0, 0.2)
 
-    fast_r = scale_and_clamp(fast_r, intensity_r_f, 0, 1.4)
-    fast_g = scale_and_clamp(fast_g, intensity_g_f, -0.1, 0.5)
+    fast_r = scale_and_clamp(fast_r, intensity_r_f, 0, 1.5)
+    fast_g = scale_and_clamp(fast_g, intensity_g_f, 0, 0.6)
 
     source_r = maxed(slow_r, fast_r)
     source_g = maxed(slow_g, fast_g)
