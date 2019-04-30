@@ -2,7 +2,7 @@ from gpiozero_ps.generators import constant
 from itertools import tee
 
 
-BASE_SPEED = float(20)
+BASE_SPEED = float(3)
 
 
 def color_wheel(pos):

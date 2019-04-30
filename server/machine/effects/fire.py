@@ -21,15 +21,15 @@ def fire_sources(intensity_generator=constant(1)):
         triangular(gaussian(15, 4), gaussian(10, 3), gaussian(0.7, 0.1), gaussian(10, 3))
         , 0, 1))
 
-    (intensity_r_s, intensity_g_s, intensity_r_f, intensity_g_f, ) = tee(intensity_generator, 4)
+    (intensity_r_f, intensity_g_f, ) = tee(intensity_generator, 2)
     (slow_r, slow_g) = tee(slow, 2)
     (fast_r, fast_g) = tee(fast, 2)
 
-    slow_r = scale_and_clamp(slow_r, intensity_r_s, 0.3, 1.5)
-    slow_g = scale_and_clamp(slow_g, intensity_g_s, 0, 0.2)
+    slow_r = scale_and_clamp(slow_r, constant(1), 0.5, 0.9)
+    slow_g = scale_and_clamp(slow_g, constant(1), 0, 0.2)
 
-    fast_r = scale_and_clamp(fast_r, intensity_r_f, 0, 1.5)
-    fast_g = scale_and_clamp(fast_g, intensity_g_f, 0, 0.6)
+    fast_r = scale_and_clamp(fast_r, intensity_r_f, 0.5, 1.5)
+    fast_g = scale_and_clamp(fast_g, intensity_g_f, -0.2, 1.5)
 
     source_r = maxed(slow_r, fast_r)
     source_g = maxed(slow_g, fast_g)

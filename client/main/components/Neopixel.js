@@ -15,46 +15,21 @@ const SettingsBox = ({neopixel}) => <div style={{width: "100%", padding: 10, mar
         <SettingButton component={neopixel} setting='rgb' icon={"glyphicon glyphicon-menu-hamburger"}/>
         <SettingButton component={neopixel} setting='rainbow' icon={"glyphicon glyphicon-heart"}/>
         <SettingButton component={neopixel} setting='fire' icon={"glyphicon glyphicon-fire"}/>
-        <SettingButton component={neopixel} setting='effect' icon={"glyphicon glyphicon-wrench"}/>
     </div>
     <SettingParams neopixel={neopixel}/>
 </div>;
 
 const SettingParams = ({neopixel}) => {
     switch (neopixel.setting) {
-        case "effect":
-            return <EffectParams neopixel={neopixel}/>;
         case "rgb":
             return <RGBParams neopixel={neopixel}/>;
         case "rainbow":
             return <RainbowParams neopixel={neopixel}/>;
+        case "fire":
+            return <FireParams neopixel={neopixel}/>;
         default:
             return <div/>
     }
-};
-
-const EffectParams = ({neopixel}) => {
-    const [body, setBody] = useState("(0,0,0)");
-    const [error, setError] = useState(null);
-
-    const onSuccess = () => {
-        setError(null);
-    };
-
-    const onFailure = (msg) => {
-        setError(msg);
-        console.error(msg);
-    };
-
-    return <div>
-        {error ? <div className={"text-danger"}>{error}</div> : <div/>}
-        <textarea className={"form-control"} value={body} onChange={e => setBody(e.target.value)}/>
-        <button
-            className={"btn btn-block btn-lg btn-success"}
-            style={{marginTop: 10}}
-            onClick={e => neopixel.updateParam("body", body, onSuccess, onFailure)}>Submit
-        </button>
-    </div>
 };
 
 const RGBParams = ({neopixel}) => <div>
@@ -73,9 +48,17 @@ const RGBSlider = ({neopixel, color, param}) => <ParamSlider component={neopixel
 </ParamSlider>;
 
 const RainbowParams = ({neopixel}) => <div>
-    <ParamSlider component={neopixel} param={'speed'} min={-1}>
+    <ParamSlider component={neopixel} param={'speed'} min={0}>
         <i className={"glyphicon glyphicon-flash"} style={sliderCaptionStyle}/>
     </ParamSlider>
 </div>;
 
-export default Neopixel
+const FireParams = ({neopixel}) => <div>
+    <ParamSlider component={neopixel} param={'intensity'}>
+        <i className={"glyphicon glyphicon-fire"} style={sliderCaptionStyle}/>
+    </ParamSlider>
+</div>;
+
+
+
+    export default Neopixel
