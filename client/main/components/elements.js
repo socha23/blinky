@@ -100,21 +100,24 @@ export const BrightnessSlider = ({component}) => <ParamSlider component={compone
     <i className={"glyphicon glyphicon-asterisk"} style={sliderCaptionStyle}/>
 </ParamSlider>;
 
-export const ParamSlider = ({component, param, children, min = 0, style = {}}) =>
-    <div style={{...sliderContainerStyle, marginBottom: 15, marginTop: 15, ...style}}>
-        {children}
-        <div style={{flexGrow: 1}}>
-            <Slider
-                value={component.params[param]}
-                onChange={v => {
-                    component.setParam(param, v)
-                }}
-                onStop={v => {
-                    component.updateParam(param, v)
-                }}
-                on
-                min={min}
-            />
+export const ParamSlider = ({component, param, children, min = 0, style = {}, caption = null}) =>
+    <div>
+        {caption ? <div style={{fontSize: 20, marginBottom: -10, marginLeft: 5, color: "#ccc"}}>{caption}</div> : <div/>}
+        <div style={{...sliderContainerStyle, marginBottom: 15, marginTop: 15, ...style}}>
+            {children}
+            <div style={{flexGrow: 1}}>
+                <Slider
+                    value={component.params[param]}
+                    onChange={v => {
+                        component.setParam(param, v)
+                    }}
+                    onStop={v => {
+                        component.updateParam(param, v)
+                    }}
+                    on
+                    min={min}
+                />
+            </div>
         </div>
     </div>;
 

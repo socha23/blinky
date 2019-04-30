@@ -38,27 +38,16 @@ const RGBParams = ({neopixel}) => <div>
     <RGBSlider neopixel={neopixel} color='blue' param='b'/>
 </div>;
 
-const sliderCaptionStyle = {
-    marginRight: 10,
-    fontSize: 30
-};
-
 const RGBSlider = ({neopixel, color, param}) => <ParamSlider component={neopixel} param={param} style={{marginBottom: 30}}>
     <div style={{width: 30, height: 30, borderRadius: 18, backgroundColor: color, marginRight: 10}}/>
 </ParamSlider>;
 
 const RainbowParams = ({neopixel}) => <div>
-    <ParamSlider component={neopixel} param={'speed'} min={0}>
-        <i className={"glyphicon glyphicon-flash"} style={sliderCaptionStyle}/>
-    </ParamSlider>
+    <ParamSlider caption="Speed:" component={neopixel} param={'speed'}/>
 </div>;
 
 const FireParams = ({neopixel}) => <div>
-    <ParamSlider component={neopixel} param={'intensity'}>
-        <i className={"glyphicon glyphicon-fire"} style={sliderCaptionStyle}/>
-    </ParamSlider>
+    <ParamSlider caption="Intensity:" component={neopixel} param={'intensity'}/>
 </div>;
 
-
-
-    export default Neopixel
+export default Neopixel

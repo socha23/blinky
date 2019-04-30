@@ -16,13 +16,13 @@ class Neopixel(Component):
 
     def _turn_off(self, effect=True):
         if effect:
-            self._device.set_sources([(fade_out(r), fade_out(g), fade_out(b)) for (r, g, b) in self._sources])
+            self._device.set_sources([self._turn_off_effect(r, g, b) for (r, g, b) in self._sources])
         else:
             self._device.set_sources([(constant(0), constant(0), constant(0)) for _ in range(self._num_pixels)])
 
     def _turn_on(self):
         self._do_update_settings()
-        self._device.set_sources([(fade_in(r), fade_in(g), fade_in(b)) for (r, g, b) in self._sources])
+        self._device.set_sources([self._turn_on_effect(r, g, b) for (r, g, b) in self._sources])
 
     def _current_value(self):
         return self._device.value
@@ -51,9 +51,13 @@ class Neopixel(Component):
         ) for _ in range(self._device.num_pixels)])
 
     def _rainbow(self):
-        self._set_sources([rainbow_sources(
-                speed_generator=self._param_generator('speed')
-            ) for i in range(self._device.num_pixels)])
+        self._set_sources([rainbow_sources(speed_generator=self._param_generator('speed')) for _ in range(self._device.num_pixels)])
+
+    def _turn_off_effect(self, r, g, b):
+        return fade_out(r), fade_out(g), fade_out(b)
+
+    def _turn_on_effect(self, r, g, b):
+        return fade_in(r), fade_in(g), fade_in(b)
 
     def _set_sources(self, sources):
         self._sources = sources
