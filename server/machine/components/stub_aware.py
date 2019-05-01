@@ -18,7 +18,7 @@ def tick():
 if not STUBS:
     from gpiozero import PWMLED as RealPWMLED
     from gpiozero.mixins import SourceMixin as RealSourceMixin
-    from my_machine.neopixel_strip import NeopixelStrip as RealNeopixelStrip
+    from machine.components.neopixel_strip import NeopixelStrip as RealNeopixelStrip
 else:
     thread = threading.Thread(target=tick, daemon=True)
     thread.start()

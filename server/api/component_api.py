@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from api.main_api import render_state
-from machine.machine import Machine
+from machine import Machine
 
 component_api = Blueprint('component api', __name__)
 

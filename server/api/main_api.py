@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify
-from machine.machine import Machine
+from machine import Machine
 from time import time
 
 main_api = Blueprint('main api', __name__)
