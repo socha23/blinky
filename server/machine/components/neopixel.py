@@ -1,8 +1,8 @@
 from gpiozero_ps.generators import constant
-from machine.components.stub_aware import SourceMixin
 from machine.effects.fire import fire_sources
 from machine.effects.rainbow import rainbow_sources
 from machine.components.component import Component
+from machine.components.tick_aware import SourceConsumer
 
 
 class Neopixel(Component):
@@ -42,16 +42,16 @@ class Neopixel(Component):
             raise Exception("Unknown setting: " + self.setting)
 
     def _fire(self):
-        self._set_sources([fire_sources(self._param_generator("intensity")) for _ in range(self._device.num_pixels)])
+        self._set_sources([fire_sources(self._param_generator("intensity")) for _ in range(self._num_pixels)])
 
     def _rgb(self):
         set_defaults(self._setting_params, {'r': 0.5, 'g': 0.5, 'b': 0.5})
         self._set_sources([(
             self._param_generator("r"), self._param_generator("g"), self._param_generator("b")
-        ) for _ in range(self._device.num_pixels)])
+        ) for _ in range(self._num_pixels)])
 
     def _rainbow(self):
-        self._set_sources([rainbow_sources(speed_generator=self._param_generator('speed')) for _ in range(self._device.num_pixels)])
+        self._set_sources([rainbow_sources(speed_generator=self._param_generator('speed')) for _ in range(self._num_pixels)])
 
     def _turn_off_effect(self, r, g, b):
         return fade_out(r), fade_out(g), fade_out(b)
@@ -83,9 +83,9 @@ def fade_out(source, duration=50):
         yield 0
 
 
-class _NeopixelDevice(SourceMixin):
+class _NeopixelDevice(SourceConsumer):
     def __init__(self, neopixel_strip, pix_from, num_pixels, brightness_generator):
-        SourceMixin.__init__(self)
+        SourceConsumer.__init__(self)
         self._strip = neopixel_strip
         self.pix_from = pix_from
         self._num_pixels = num_pixels
@@ -101,21 +101,13 @@ class _NeopixelDevice(SourceMixin):
     @value.setter
     def value(self, val):
         brightness = next(self._brightness_generator)
-        self._value = [(r * brightness, g * brightness, b * brightness) for (r, g, b) in val]
-        self._apply()
-
-    @property
-    def num_pixels(self):
-        return self._num_pixels
+        for i in range(self._num_pixels):
+            r, g, b = val[i]
+            self._value[i] = (r * brightness, g * brightness, b * brightness)
+            self._strip.set_pixel(self.pix_from + i, self._value[i])
 
     def set_sources(self, sources):
         def generator():
             while True:
                 yield [(next(r), next(g), next(b)) for (r, g, b) in sources]
         self.source = generator()
-        self.value = next(self.source)
-        self._apply()
-
-    def _apply(self):
-        for i in range(self.num_pixels):
-            self._strip.set_pixel(self.pix_from + i, self._value[i])

@@ -61,3 +61,9 @@ def square(height=1, duration=100, pause=100):
         for _ in range(0, pause_val):
             yield 0
 
+
+def dense(generator, factor=2):
+    while True:
+        val = next(generator)
+        for _ in range(factor):
+            yield val

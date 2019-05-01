@@ -1,13 +1,27 @@
-import board
-import neopixel
+import os
 from machine.components.tick_aware import SourceConsumer
 
 
-class NeopixelStrip(SourceConsumer):
+class PWMLEDMock:
+    def __init__(self, _):
+        self._value = 0
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, val):
+        self._value = val
+
+
+PWMLED = PWMLEDMock
+
+
+class NeopixelStripMock(SourceConsumer):
+
     def __init__(self, num_pixels):
         SourceConsumer.__init__(self)
-        self.num_pixels = num_pixels
-        self._pixel = neopixel.NeoPixel(board.D18, num_pixels, brightness=1, auto_write=False, pixel_order=neopixel.GRB)
         self._value = [(0, 0, 0) for _ in range(num_pixels)]
         self._last_shown = None
 
@@ -27,11 +41,17 @@ class NeopixelStrip(SourceConsumer):
             return
         self._last_shown = val[:]
 
-        for i in range(self.num_pixels):
-            (r, g, b) = val[i]
-            self._pixel[i] = (int(r * 255), int(g * 255), int(b * 255))
-        print("calling show()")
-        self._pixel.show()
-
     def set_pixel(self, idx, val):
         self._value[idx] = val
+
+
+NeopixelStrip = NeopixelStripMock
+
+
+if "MOCK_BLINKY" not in os.environ:
+    from gpiozero import PWMLED as RealPWMLED
+    PWMLED = RealPWMLED
+    from machine.components.neopixel_strip import NeopixelStrip as RealNeopixelStrip
+    NeopixelStrip = RealNeopixelStrip
+
+

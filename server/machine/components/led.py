@@ -1,11 +1,13 @@
 from machine.components.component import Component
-from machine.components.stub_aware import PWMLED
+from machine.components.mocks import PWMLED
 from gpiozero_ps.generators import constant, triangular, square
+from machine.components.tick_aware import SourceConsumer
 
 
-class LED(Component):
+class LED(Component, SourceConsumer):
     def __init__(self, id, pin, name):
         Component.__init__(self, id, name)
+        SourceConsumer.__init__(self)
         self._setting = 'const'
         self._setting_params = {"brightness": 0.5}
         self._device = PWMLED(pin)
@@ -13,8 +15,16 @@ class LED(Component):
     def _turn_on(self):
         self._update_current_setting()
 
-    def _turn_off(self):
-        self._device.source = constant(0)
+    def _turn_off(self, effect=True):
+        self.source = constant(0)
+
+    @property
+    def value(self):
+        return self._current_value()
+
+    @value.setter
+    def value(self, val):
+        self._device.value = min(max(0, val), 1)
 
     def _current_value(self):
         return self._device.value
@@ -30,11 +40,11 @@ class LED(Component):
             raise Exception("Unknown setting: " + self.setting)
 
     def _const(self):
-        self._device.source = self._param_generator("brightness")
+        self.source = self._param_generator("brightness")
 
     def _blink(self):
-        self._device.source = square(height=self._param_generator("brightness"))
+        self.source = square(height=self._param_generator("brightness"))
 
     def _pulse(self):
-        self._device.source = triangular(height=self._param_generator("brightness"))
+        self.source = triangular(height=self._param_generator("brightness"))
 

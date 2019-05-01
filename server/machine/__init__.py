@@ -1,6 +1,6 @@
 from machine.components.led import LED
 from machine.components.neopixel import Neopixel
-from machine.components.stub_aware import NeopixelStrip
+from machine.components.mocks import NeopixelStrip
 
 
 class _Machine:
