@@ -63,4 +63,3 @@ class Component:
 
     def _update_current_setting(self):
         raise Exception("_turn_on_current_setting not implemented")
-

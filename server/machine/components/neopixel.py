@@ -1,17 +1,23 @@
 from gpiozero_ps.generators import constant
 from effects.fire import fire_sources
 from effects.rainbow import rainbow_sources
-from machine.components.component import Component
-from machine.components.tick_aware import SourceConsumer
-from effects.on_off import turn_on_effect, turn_off_effect
+from machine.components import Component, TurnOnAndOffEffectMixin, SourceConsumerMixin
 
 
-class Neopixel(Component):
+class Neopixel(Component, TurnOnAndOffEffectMixin):
     def __init__(self, device_id, pix_from, num_pixels, name, neopixel_strip):
         Component.__init__(self, device_id, name)
+        TurnOnAndOffEffectMixin.__init__(self)
         self._setting = 'rgb'
         self._sources = [(constant(0), constant(0), constant(0)) for _ in range(num_pixels)]
-        self._setting_params = {"r": 0.5, "g": 0.5, "b": 0.5, "brightness": 0.5, "speed": 0.5, "intensity": 0.5, "body": ""}
+        self._setting_params.update({
+            "r": 0.5,
+            "g": 0.5,
+            "b": 0.5,
+            "brightness": 0.5,
+            "speed": 0.5,
+            "intensity": 0.5,
+        })
         self._device = _NeopixelDevice(neopixel_strip, pix_from, num_pixels, self._param_generator("brightness"))
         self._num_pixels = num_pixels
 
@@ -19,9 +25,9 @@ class Neopixel(Component):
         self._do_update_settings()
         if effect:
             self._device.set_sources([(
-                turn_on_effect(r, self._setting_params),
-                turn_on_effect(g, self._setting_params),
-                turn_on_effect(b, self._setting_params)
+                self._wrap_source_in_turn_on_effect(r),
+                self._wrap_source_in_turn_on_effect(g),
+                self._wrap_source_in_turn_on_effect(b)
             ) for (r, g, b) in self._sources])
         else:
             self._device.set_sources(self._sources)
@@ -29,9 +35,9 @@ class Neopixel(Component):
     def _turn_off(self, effect=True):
         if effect:
             self._device.set_sources([(
-                turn_off_effect(r, self._setting_params),
-                turn_off_effect(g, self._setting_params),
-                turn_off_effect(b, self._setting_params)
+                self._wrap_source_in_turn_off_effect(r),
+                self._wrap_source_in_turn_off_effect(g),
+                self._wrap_source_in_turn_off_effect(b)
             ) for (r, g, b) in self._sources])
         else:
             self._device.set_sources([(constant(0), constant(0), constant(0)) for _ in range(self._num_pixels)])
@@ -75,9 +81,9 @@ def set_defaults(params, defaults):
             params[name] = val
 
 
-class _NeopixelDevice(SourceConsumer):
+class _NeopixelDevice(SourceConsumerMixin):
     def __init__(self, neopixel_strip, pix_from, num_pixels, brightness_generator):
-        SourceConsumer.__init__(self)
+        SourceConsumerMixin.__init__(self)
         self._strip = neopixel_strip
         self.pix_from = pix_from
         self._num_pixels = num_pixels

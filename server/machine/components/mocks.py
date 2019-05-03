@@ -1,5 +1,5 @@
 import os
-from machine.components.tick_aware import SourceConsumer
+from machine.components.tick_aware import SourceConsumerMixin
 
 
 class PWMLEDMock:
@@ -18,10 +18,10 @@ class PWMLEDMock:
 PWMLED = PWMLEDMock
 
 
-class NeopixelStripMock(SourceConsumer):
+class NeopixelStripMock(SourceConsumerMixin):
 
     def __init__(self, num_pixels):
-        SourceConsumer.__init__(self)
+        SourceConsumerMixin.__init__(self)
         self._value = [(0, 0, 0) for _ in range(num_pixels)]
         self._last_shown = None
 

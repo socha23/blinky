@@ -1,11 +1,11 @@
 import board
 import neopixel
-from machine.components.tick_aware import SourceConsumer
+from machine.components.tick_aware import SourceConsumerMixin
 
 
-class NeopixelStrip(SourceConsumer):
+class NeopixelStrip(SourceConsumerMixin):
     def __init__(self, num_pixels):
-        SourceConsumer.__init__(self)
+        SourceConsumerMixin.__init__(self)
         self.num_pixels = num_pixels
         self._pixel = neopixel.NeoPixel(board.D18, num_pixels, brightness=1, auto_write=False, pixel_order=neopixel.GRB)
         self._value = [(0, 0, 0) for _ in range(num_pixels)]

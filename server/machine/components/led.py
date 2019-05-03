@@ -1,29 +1,28 @@
-from effects.on_off import turn_on_effect, turn_off_effect
-from machine.components.component import Component
+from machine.components import Component, TurnOnAndOffEffectMixin, SourceConsumerMixin
 from machine.components.mocks import PWMLED
 from gpiozero_ps.generators import constant, triangular, square
-from machine.components.tick_aware import SourceConsumer
 
 
-class LED(Component, SourceConsumer):
+class LED(Component, SourceConsumerMixin, TurnOnAndOffEffectMixin):
     def __init__(self, device_id, pin, name):
         Component.__init__(self, device_id, name)
-        SourceConsumer.__init__(self)
+        SourceConsumerMixin.__init__(self)
+        TurnOnAndOffEffectMixin.__init__(self)
         self._setting = 'const'
-        self._setting_params = {"brightness": 0.5}
+        self._setting_params.update({"brightness": 0.5})
         self._device = PWMLED(pin)
         self._source = constant(0)
 
     def _turn_on(self, effect=True):
         self._do_update_settings()
         if effect:
-            self.source = turn_on_effect(self._source, self._setting_params)
+            self.source = self._wrap_source_in_turn_on_effect(self._source)
         else:
             self.source = self._source
 
     def _turn_off(self, effect=True):
         if effect:
-            self.source = turn_off_effect(self._source, self._setting_params)
+            self.source = self._wrap_source_in_turn_off_effect(self._source)
         else:
             self.source = constant(0)
 

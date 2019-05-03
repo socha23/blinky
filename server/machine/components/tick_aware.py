@@ -23,7 +23,7 @@ class TickAware:
         pass
 
 
-class SourceConsumer(TickAware):
+class SourceConsumerMixin(TickAware):
     def __init__(self):
         TickAware.__init__(self)
         self._source = None
