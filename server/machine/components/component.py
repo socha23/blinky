@@ -14,9 +14,9 @@ class Component:
     def setting(self, val):
         self._setting = val
 
-    def on(self):
+    def on(self, effect=True):
         self._on = True
-        self._turn_on()
+        self._turn_on(effect)
 
     def off(self, effect=True):
         self._on = False
@@ -55,7 +55,7 @@ class Component:
     def _current_value(self):
         raise Exception("_current_value not implemented")
 
-    def _turn_on(self):
+    def _turn_on(self, effect=True):
         raise Exception("_turn_on not implemented")
 
     def _turn_off(self, effect=True):

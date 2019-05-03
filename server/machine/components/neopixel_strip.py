@@ -30,7 +30,6 @@ class NeopixelStrip(SourceConsumer):
         for i in range(self.num_pixels):
             (r, g, b) = val[i]
             self._pixel[i] = (int(r * 255), int(g * 255), int(b * 255))
-        print("calling show()")
         self._pixel.show()
 
     def set_pixel(self, idx, val):

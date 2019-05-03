@@ -1,8 +1,9 @@
 from gpiozero_ps.generators import constant
-from machine.effects.fire import fire_sources
-from machine.effects.rainbow import rainbow_sources
+from effects.fire import fire_sources
+from effects.rainbow import rainbow_sources
 from machine.components.component import Component
 from machine.components.tick_aware import SourceConsumer
+from effects.on_off import turn_on_effect, turn_off_effect
 
 
 class Neopixel(Component):
@@ -14,15 +15,26 @@ class Neopixel(Component):
         self._device = _NeopixelDevice(neopixel_strip, pix_from, num_pixels, self._param_generator("brightness"))
         self._num_pixels = num_pixels
 
+    def _turn_on(self, effect=True):
+        self._do_update_settings()
+        if effect:
+            self._device.set_sources([(
+                turn_on_effect(r, self._setting_params),
+                turn_on_effect(g, self._setting_params),
+                turn_on_effect(b, self._setting_params)
+            ) for (r, g, b) in self._sources])
+        else:
+            self._device.set_sources(self._sources)
+
     def _turn_off(self, effect=True):
         if effect:
-            self._device.set_sources([self._turn_off_effect(r, g, b) for (r, g, b) in self._sources])
+            self._device.set_sources([(
+                turn_off_effect(r, self._setting_params),
+                turn_off_effect(g, self._setting_params),
+                turn_off_effect(b, self._setting_params)
+            ) for (r, g, b) in self._sources])
         else:
             self._device.set_sources([(constant(0), constant(0), constant(0)) for _ in range(self._num_pixels)])
-
-    def _turn_on(self):
-        self._do_update_settings()
-        self._device.set_sources([self._turn_on_effect(r, g, b) for (r, g, b) in self._sources])
 
     def _current_value(self):
         return self._device.value
@@ -53,12 +65,6 @@ class Neopixel(Component):
     def _rainbow(self):
         self._set_sources([rainbow_sources(speed_generator=self._param_generator('speed')) for _ in range(self._num_pixels)])
 
-    def _turn_off_effect(self, r, g, b):
-        return fade_out(r), fade_out(g), fade_out(b)
-
-    def _turn_on_effect(self, r, g, b):
-        return fade_in(r), fade_in(g), fade_in(b)
-
     def _set_sources(self, sources):
         self._sources = sources
 
@@ -67,20 +73,6 @@ def set_defaults(params, defaults):
     for name, val in defaults.items():
         if name not in params:
             params[name] = val
-
-
-def fade_in(source, duration=50):
-    for i in range(duration):
-        yield next(source) * i / duration
-    while True:
-        yield next(source)
-
-
-def fade_out(source, duration=50):
-    for i in range(duration):
-        yield next(source) * (1 - i / duration)
-    while True:
-        yield 0
 
 
 class _NeopixelDevice(SourceConsumer):
