@@ -42,6 +42,10 @@ class Component {
         }
     }
 
+    get id() {
+        return this.state.id
+    }
+
     get name() {
         return this.state.name
     }

@@ -1,13 +1,9 @@
 import React from 'react'
 import {BrightnessSlider, ComponentBox, SettingButton} from "./elements";
-import {useLed} from "../elements/ledHooks";
 
-const Led = ({idx}) => {
-    const led = useLed(idx);
-    return <ComponentBox component={led}>
-        <SettingsBox led={led}/>
-    </ComponentBox>
-};
+const Led = ({component}) => <ComponentBox component={component}>
+    <SettingsBox led={component}/>
+</ComponentBox>;
 
 const SettingsBox = ({led}) => <div style={{width: "100%", padding: 10, marginBottom: 10}}>
     <BrightnessSlider component={led}/>

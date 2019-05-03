@@ -1,13 +1,9 @@
-import React, {useState} from 'react'
-import {useNeopixel} from "../elements/neopixelsHooks";
+import React from 'react'
 import {BrightnessSlider, ComponentBox, ParamSlider, SettingButton} from "./elements";
 
-const Neopixel = ({idx}) => {
-    const neopixel = useNeopixel(idx);
-    return <ComponentBox component={neopixel}>
-        <SettingsBox neopixel={neopixel}/>
-    </ComponentBox>
-};
+const Neopixel = ({component}) => <ComponentBox component={component}>
+    <SettingsBox neopixel={component}/>
+</ComponentBox>;
 
 const SettingsBox = ({neopixel}) => <div style={{width: "100%", padding: 10, marginBottom: 10}}>
     <BrightnessSlider component={neopixel}/>
