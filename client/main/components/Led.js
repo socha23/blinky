@@ -1,7 +1,7 @@
 import React from 'react'
 import {BrightnessSlider, ComponentBox, SettingButton} from "./elements";
 
-const Led = ({component}) => <ComponentBox component={component}>
+const Led = ({component, renderSettingsLink}) => <ComponentBox component={component} renderSettingsLink={renderSettingsLink}>
     <SettingsBox led={component}/>
 </ComponentBox>;
 

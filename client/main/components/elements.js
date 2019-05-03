@@ -1,9 +1,7 @@
-import React, {useState} from 'react'
+import React from 'react'
 import ReactBootstrapSlider from "react-bootstrap-slider";
 
-export const ComponentBox = ({component, children}) => {
-    const [settingsDisplayed, toggleSettingsDisplayed] = useState(false);
-
+export const ComponentBox = ({component, renderSettingsLink}) => {
     return <div style={{
         display: 'flex',
         flexDirection: 'column',
@@ -13,9 +11,12 @@ export const ComponentBox = ({component, children}) => {
         <h2 style={{margin: 10, marginTop: 20, color: "#ccc"}}>{component.name}</h2>
         <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
             <OnOffToggle component={component}/>
-            <SettingsToggle settingsDisplayed={settingsDisplayed} toggleSettingsDisplayed={toggleSettingsDisplayed}/>
+            {
+                renderSettingsLink(<div style={{...toggleButtonStyle, color: "#888"}}>
+                    <i className={"glyphicon glyphicon-cog"}/>
+                </div>)
+            }
         </div>
-        {settingsDisplayed ? children : <div/>}
     </div>
 };
 
@@ -40,13 +41,6 @@ export const OnOffToggle = ({component}) => {
 
     return <div style={{...toggleButtonStyle, color: component.on ? "yellow" : "#888"}} onClick={toggle}>
         <i className={"glyphicon glyphicon-certificate"}/>
-    </div>
-};
-
-export const SettingsToggle = ({settingsDisplayed, toggleSettingsDisplayed}) => {
-
-    return <div style={{...toggleButtonStyle, color: settingsDisplayed ? "white" : "#888"}} onClick={e => toggleSettingsDisplayed(!settingsDisplayed)}>
-        <i className={"glyphicon glyphicon-cog"}/>
     </div>
 };
 

@@ -30,7 +30,7 @@ function updateStateFromServer(setState) {
 }
 
 function makeModel(state, setState) {
-    const model = {leds: [], neopixels: [], devicesById: {}, deviceTypes: {}};
+    const model = {leds: [], neopixels: [], componentsById: {}, componentTypes: {}};
     fillModelDeviceType(model, state, setState, "leds", "led");
     fillModelDeviceType(model, state, setState, "neopixels", "neopixel");
     return model;
@@ -45,8 +45,8 @@ function fillModelDeviceType(model, state, setState, deviceCollection, deviceTyp
         };
         const component = new Component(deviceState, stateSetter);
         model[deviceCollection].push(component);
-        model.devicesById[component.id] = component;
-        model.deviceTypes[component.id] = deviceType;
+        model.componentsById[component.id] = component;
+        model.componentTypes[component.id] = deviceType;
     })
 }
 

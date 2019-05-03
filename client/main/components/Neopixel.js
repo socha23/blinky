@@ -1,7 +1,7 @@
 import React from 'react'
 import {BrightnessSlider, ComponentBox, ParamSlider, SettingButton} from "./elements";
 
-const Neopixel = ({component}) => <ComponentBox component={component}>
+const Neopixel = ({component, renderSettingsLink}) => <ComponentBox component={component} renderSettingsLink={renderSettingsLink}>
     <SettingsBox neopixel={component}/>
 </ComponentBox>;
 
