@@ -59,3 +59,6 @@ class LED(Component, SourceConsumerMixin, TurnOnAndOffEffectMixin):
 
     def _pulse(self):
         self._source = triangular(height=self._param_generator("brightness"))
+
+    def _type(self):
+        return 'led'

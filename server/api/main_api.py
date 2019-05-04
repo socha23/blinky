@@ -29,6 +29,11 @@ def debug():
     return render_template('index.html', cachebuster=time())
 
 
+@main_api.route('/settings/<id>')
+def setttings(id):
+    return render_template('index.html', cachebuster=time())
+
+
 @main_api.route('/state')
 def state():
     return render_state()

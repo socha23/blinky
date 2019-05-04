@@ -1,18 +1,20 @@
 import React from 'react'
-import {BrightnessSlider, ComponentBox, ParamSlider, SettingButton} from "./elements";
+import {BrightnessSlider, ComponentBox, ParamSlider, SettingButton, SettingsSection} from "./elements";
 
-const Neopixel = ({component, renderSettingsLink}) => <ComponentBox component={component} renderSettingsLink={renderSettingsLink}>
-    <SettingsBox neopixel={component}/>
-</ComponentBox>;
+export const Neopixel = ({component, renderSettingsLink}) => <ComponentBox component={component} renderSettingsLink={renderSettingsLink}/>
 
-const SettingsBox = ({neopixel}) => <div style={{width: "100%", padding: 10, marginBottom: 10}}>
-    <BrightnessSlider component={neopixel}/>
-    <div style={{marginTop: 30, marginBottom: 10, display: "flex", justifyContent: "space-between"}}>
-        <SettingButton component={neopixel} setting='rgb' icon={"glyphicon glyphicon-menu-hamburger"}/>
-        <SettingButton component={neopixel} setting='rainbow' icon={"glyphicon glyphicon-heart"}/>
-        <SettingButton component={neopixel} setting='fire' icon={"glyphicon glyphicon-fire"}/>
-    </div>
-    <SettingParams neopixel={neopixel}/>
+export const NeopixelSettings = ({neopixel}) => <div>
+    <SettingsSection caption={'Brightness:'}>
+        <BrightnessSlider component={neopixel}/>
+    </SettingsSection>
+    <SettingsSection caption={'Setting:'}>
+        <div style={{marginTop: 10, marginBottom: 10, display: "flex", justifyContent: "space-between"}}>
+            <SettingButton component={neopixel} setting='rgb' icon={"glyphicon glyphicon-menu-hamburger"}/>
+            <SettingButton component={neopixel} setting='rainbow' icon={"glyphicon glyphicon-heart"}/>
+            <SettingButton component={neopixel} setting='fire' icon={"glyphicon glyphicon-fire"}/>
+        </div>
+        <SettingParams neopixel={neopixel}/>
+    </SettingsSection>
 </div>;
 
 const SettingParams = ({neopixel}) => {
@@ -45,5 +47,3 @@ const RainbowParams = ({neopixel}) => <div>
 const FireParams = ({neopixel}) => <div>
     <ParamSlider caption="Intensity:" component={neopixel} param={'intensity'}/>
 </div>;
-
-export default Neopixel

@@ -74,6 +74,9 @@ class Neopixel(Component, TurnOnAndOffEffectMixin):
     def _set_sources(self, sources):
         self._sources = sources
 
+    def _type(self):
+        return 'neopixel'
+
 
 def set_defaults(params, defaults):
     for name, val in defaults.items():

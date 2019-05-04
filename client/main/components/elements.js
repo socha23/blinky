@@ -12,9 +12,9 @@ export const ComponentBox = ({component, renderSettingsLink}) => {
         <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
             <OnOffToggle component={component}/>
             {
-                renderSettingsLink(<div style={{...toggleButtonStyle, color: "#888"}}>
+                renderSettingsLink(<div>
                     <i className={"glyphicon glyphicon-cog"}/>
-                </div>)
+                </div>, {...toggleButtonStyle, color: "#888"})
             }
         </div>
     </div>
@@ -43,6 +43,11 @@ export const OnOffToggle = ({component}) => {
         <i className={"glyphicon glyphicon-certificate"}/>
     </div>
 };
+
+export const SettingsSection = ({caption="", children}) => <div style={{borderBottom: "1px solid #888", margin: 10}}>
+    <div style={{fontSize: 20, color: "#ccc"}}>{caption}</div>
+    <div>{children}</div>
+</div>;
 
 export const SettingButton = ({icon, component, setting}) => {
     const style = {
@@ -94,26 +99,31 @@ export const BrightnessSlider = ({component}) => <ParamSlider component={compone
     <i className={"glyphicon glyphicon-asterisk"} style={sliderCaptionStyle}/>
 </ParamSlider>;
 
-export const ParamSlider = ({component, param, children, min = 0, style = {}, caption = null}) =>
-    <div>
+export const ParamSlider = ({component, param, children, min = 0, style = {}, caption = null}) => {
+    console.log("Recreating param slider for: ", component.params);
+    return <div>
         {caption ? <div style={{fontSize: 20, marginBottom: -10, marginLeft: 5, color: "#ccc"}}>{caption}</div> : <div/>}
         <div style={{...sliderContainerStyle, marginBottom: 15, marginTop: 15, ...style}}>
             {children}
             <div style={{flexGrow: 1}}>
                 <Slider
+                    params={component.params}
                     value={component.params[param]}
+                    /*
                     onChange={v => {
                         component.setParam(param, v)
                     }}
+                    */
+
                     onStop={v => {
                         component.updateParam(param, v)
                     }}
-                    on
                     min={min}
                 />
             </div>
         </div>
-    </div>;
+    </div>};
+
 
 
 const Slider = ({value, onChange, onStop, min = 0}) => <ReactBootstrapSlider
@@ -128,3 +138,28 @@ const Slider = ({value, onChange, onStop, min = 0}) => <ReactBootstrapSlider
     min={min}
     max={1}
 />;
+
+export const EnumParamRadioRow = ({children}) => <div style={{
+    display: 'flex',
+    justifyContent: 'flex-start',
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 5,
+}}>{children}</div>;
+
+export const EnumParamRadio = ({component, param, value, children}) => {
+    const checked = component.params[param] == value;
+    return <div
+        style={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: 20,
+            color: checked ? 'white' : '#888',
+            marginRight: 20,
+        }}
+        onClick={_ => {console.log(param, value); component.updateParam(param, value)}}
+    >
+        <i style={{marginRight: 5}} className={'glyphicon ' + (checked ? 'glyphicon-check' : 'glyphicon-unchecked')}/>
+        {children}
+    </div>
+};

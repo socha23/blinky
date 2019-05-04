@@ -40,6 +40,7 @@ class Component:
             'setting': self.setting,
             'params': self._setting_params,
             'value': self._current_value(),
+            'type': self._type(),
         }
 
     def _param_generator(self, name):
@@ -63,3 +64,6 @@ class Component:
 
     def _update_current_setting(self):
         raise Exception("_turn_on_current_setting not implemented")
+
+    def _type(self):
+        raise Exception("_type not implemented")

@@ -5,11 +5,10 @@ import Component from "./component";
 const REFRESH_RATE_MS = 10000;
 
 const INITIAL_STATE = {
-    leds: [],
-    neopixels: [],
+    components: [],
 };
 
-const useMachineModel = () => {
+export const useMachineModel = () => {
     const [state, setState] = useState(INITIAL_STATE);
     useEffect(() => {
         const handler = setInterval(() => {
@@ -26,30 +25,30 @@ const useMachineModel = () => {
 function updateStateFromServer(setState) {
     fetch("/state")
         .then(r => r.json())
-        .then(state => {setState(state)});
+        .then(state => {setState({components: state.leds.concat(state.neopixels)})});
 }
 
 function makeModel(state, setState) {
-    const model = {leds: [], neopixels: [], componentsById: {}, componentTypes: {}};
-    fillModelDeviceType(model, state, setState, "leds", "led");
-    fillModelDeviceType(model, state, setState, "neopixels", "neopixel");
+    const model = {
+        components: [],
+        componentsById: {}
+    };
+    const mergeState = (compId) => {
+        return (newCompState) => {
+            const newComponents = state.components.map(oldCompState => {
+                if (oldCompState.id == compId) {
+                    return {...oldCompState, ...newCompState}
+                } else {
+                    return oldCompState
+                }
+            });
+            setState({...state, components: newComponents});
+        }
+    };
+    state.components.forEach(compState => {
+        const component = new Component(compState, mergeState(compState.id));
+        model.components.push(component);
+        model.componentsById[component.id] = component;
+    });
     return model;
 }
-
-function fillModelDeviceType(model, state, setState, deviceCollection, deviceType) {
-    state[deviceCollection].forEach(deviceState => {
-        const stateSetter = (newDeviceState) => {
-            const newState = {...state};
-            newState[deviceCollection] = state[deviceCollection].map(s => s.id == newDeviceState.id ? newDeviceState : s);
-            setState(newState);
-        };
-        const component = new Component(deviceState, stateSetter);
-        model[deviceCollection].push(component);
-        model.componentsById[component.id] = component;
-        model.componentTypes[component.id] = deviceType;
-    })
-}
-
-export default useMachineModel
-
-
