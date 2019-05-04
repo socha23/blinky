@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import fetch from "isomorphic-fetch";
 
 export const useDebug = () => {
-    const [state, setState] = useState({leds: [], neopixels: []});
+    const [state, setState] = useState({components: []});
     useEffect(() => {
         const handler = setInterval(() => {
             fetch("/state")

@@ -6,8 +6,7 @@ from machine.components.mocks import NeopixelStrip
 class _Machine:
     def __init__(self):
         self._store = None
-        self._leds = []
-        self._neopixels = []
+        self._components = []
         self._neopixel_strip = None
         self._componentsById = {}
 
@@ -20,8 +19,7 @@ class _Machine:
 
     def state(self):
         return {
-            'leds': [led.state() for led in self._leds],
-            'neopixels': [pixels.state() for pixels in self._neopixels],
+            'components': [c.state() for c in self._components],
         }
 
     def component_on(self, component_id):
@@ -51,7 +49,7 @@ class _Machine:
 
     def add_led(self, name, pin):
         led = LED("led" + str(pin), pin, name)
-        self._leds.append(led)
+        self._components.append(led)
         self._componentsById[led.id] = led
         return self
 
@@ -59,8 +57,8 @@ class _Machine:
         self._neopixel_strip = NeopixelStrip(num_pixels)
 
     def add_neopixel(self, name, pix_from, num_pixels):
-        pixels = Neopixel("neopixel" + str(len(self._neopixels)), pix_from, num_pixels, name, self._neopixel_strip)
-        self._neopixels.append(pixels)
+        pixels = Neopixel("neopixel" + str(len(self._components)), pix_from, num_pixels, name, self._neopixel_strip)
+        self._components.append(pixels)
         self._componentsById[pixels.id] = pixels
         return self
 

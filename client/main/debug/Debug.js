@@ -5,11 +5,18 @@ import {valuesToHex} from "../services/colorUtils";
 const Debug = () => {
     const state = useDebug();
     return <div>
-        {state.leds.map((s, idx) =>
-            <Led key={idx} {...s}/>)}
-        {state.neopixels.map((s, idx) =>
-            <Neopixel key={idx} {...s}/>)}
+        {state.components.map((s, idx) =>
+            <DebugComponent key={idx} component={s}/>)}
     </div>
+};
+
+const DebugComponent = ({component}) => {
+    switch (component.type) {
+        case 'led':
+            return <Led {...component}/>
+        case 'neopixel':
+            return <Neopixel {...component}/>
+    }
 };
 
 const DeviceName = ({children}) => <span style={{

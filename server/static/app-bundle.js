@@ -28620,7 +28620,7 @@ function updateStateFromServer(setState) {
     (0, _isomorphicFetch2.default)("/state").then(function (r) {
         return r.json();
     }).then(function (state) {
-        setState({ components: state.leds.concat(state.neopixels) });
+        setState(state);
     });
 }
 
@@ -41884,8 +41884,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
@@ -41901,17 +41899,25 @@ var Debug = function Debug() {
     return _react2.default.createElement(
         "div",
         null,
-        state.leds.map(function (s, idx) {
-            return _react2.default.createElement(Led, _extends({ key: idx }, s));
-        }),
-        state.neopixels.map(function (s, idx) {
-            return _react2.default.createElement(Neopixel, _extends({ key: idx }, s));
+        state.components.map(function (s, idx) {
+            return _react2.default.createElement(DebugComponent, { key: idx, component: s });
         })
     );
 };
 
-var DeviceName = function DeviceName(_ref) {
-    var children = _ref.children;
+var DebugComponent = function DebugComponent(_ref) {
+    var component = _ref.component;
+
+    switch (component.type) {
+        case 'led':
+            return _react2.default.createElement(Led, component);
+        case 'neopixel':
+            return _react2.default.createElement(Neopixel, component);
+    }
+};
+
+var DeviceName = function DeviceName(_ref2) {
+    var children = _ref2.children;
     return _react2.default.createElement(
         "span",
         { style: {
@@ -41921,9 +41927,9 @@ var DeviceName = function DeviceName(_ref) {
     );
 };
 
-var Led = function Led(_ref2) {
-    var name = _ref2.name,
-        value = _ref2.value;
+var Led = function Led(_ref3) {
+    var name = _ref3.name,
+        value = _ref3.value;
     return _react2.default.createElement(
         "div",
         { style: { display: "flex", alignItems: 'center' } },
@@ -41936,9 +41942,9 @@ var Led = function Led(_ref2) {
     );
 };
 
-var Neopixel = function Neopixel(_ref3) {
-    var name = _ref3.name,
-        value = _ref3.value;
+var Neopixel = function Neopixel(_ref4) {
+    var name = _ref4.name,
+        value = _ref4.value;
     return _react2.default.createElement(
         "div",
         { style: { display: "flex", alignItems: 'center' } },
@@ -41953,10 +41959,10 @@ var Neopixel = function Neopixel(_ref3) {
     );
 };
 
-var RGBBulb = function RGBBulb(_ref4) {
-    var r = _ref4.r,
-        g = _ref4.g,
-        b = _ref4.b;
+var RGBBulb = function RGBBulb(_ref5) {
+    var r = _ref5.r,
+        g = _ref5.g,
+        b = _ref5.b;
 
     var color = (0, _colorUtils.valuesToHex)(r, g, b);
     var shadow = (0, _colorUtils.valuesToHex)(r * 0.5, g * 0.5, b * 0.5);
@@ -41997,7 +42003,7 @@ var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var useDebug = exports.useDebug = function useDebug() {
-    var _useState = (0, _react.useState)({ leds: [], neopixels: [] }),
+    var _useState = (0, _react.useState)({ components: [] }),
         _useState2 = _slicedToArray(_useState, 2),
         state = _useState2[0],
         setState = _useState2[1];

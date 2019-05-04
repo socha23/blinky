@@ -25,7 +25,7 @@ export const useMachineModel = () => {
 function updateStateFromServer(setState) {
     fetch("/state")
         .then(r => r.json())
-        .then(state => {setState({components: state.leds.concat(state.neopixels)})});
+        .then(state => {setState(state)});
 }
 
 function makeModel(state, setState) {
