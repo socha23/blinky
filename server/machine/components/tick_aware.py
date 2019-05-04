@@ -26,17 +26,17 @@ class TickAware:
 class SourceConsumerMixin(TickAware):
     def __init__(self):
         TickAware.__init__(self)
-        self._source = None
+        self.__source = None
 
     @property
     def source(self):
-        return self._source
+        return self.__source
 
     @source.setter
     def source(self, val):
-        self._source = val
+        self.__source = val
 
     def tick(self):
-        if self._source is not None:
-            self.value = next(self._source)
+        if self.__source is not None:
+            self.value = next(self.__source)
 

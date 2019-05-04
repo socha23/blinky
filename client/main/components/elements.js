@@ -95,8 +95,10 @@ const sliderCaptionStyle = {
     fontSize: 30
 };
 
+export const SliderIcon = ({className}) => <i className={className} style={sliderCaptionStyle}/>;
+
 export const BrightnessSlider = ({component}) => <ParamSlider component={component} param={"brightness"}>
-    <i className={"glyphicon glyphicon-asterisk"} style={sliderCaptionStyle}/>
+    <SliderIcon className={"glyphicon glyphicon-asterisk"}/>
 </ParamSlider>;
 
 export const ParamSlider = ({component, param, children, min = 0, style = {}, caption = null}) => {

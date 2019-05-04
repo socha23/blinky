@@ -1,5 +1,6 @@
 import React from 'react'
-import {BrightnessSlider, ComponentBox, EnumParamRadio, EnumParamRadioRow, SettingButton, SettingsSection} from "./elements";
+import {BrightnessSlider, ComponentBox, SettingButton, SettingsSection} from "./elements";
+import {TurnOffEffectSection, TurnOnEffectSection} from "./TurnOnOff";
 
 export const Led = ({component, renderSettingsLink}) => <ComponentBox component={component} renderSettingsLink={renderSettingsLink}/>
 
@@ -14,15 +15,7 @@ export const LedSettings = ({led}) => <div>
             <SettingButton component={led} setting='pulse' icon={"glyphicon glyphicon-glass"}/>
         </div>
     </SettingsSection>
-    <SettingsSection caption={'Turn on effect:'}>
-        <EnumParamRadioRow>
-            <EnumParamRadio param={'turn_on_effect'} value={'none'} component={led}>
-                None
-            </EnumParamRadio>
-            <EnumParamRadio param={'turn_on_effect'} value={'fade_in'} component={led}>
-                Fade in
-            </EnumParamRadio>
-        </EnumParamRadioRow>
-    </SettingsSection>
+    <TurnOnEffectSection component={led}/>
+    <TurnOffEffectSection component={led}/>
 </div>;
 

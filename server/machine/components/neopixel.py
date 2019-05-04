@@ -47,7 +47,8 @@ class Neopixel(Component, TurnOnAndOffEffectMixin):
 
     def _update_current_setting(self):
         self._do_update_settings()
-        self._device.set_sources(self._sources)
+        if self._on:
+            self._device.set_sources(self._sources)
 
     def _do_update_settings(self):
         if self.setting == "fire":

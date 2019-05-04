@@ -39,7 +39,8 @@ class LED(Component, SourceConsumerMixin, TurnOnAndOffEffectMixin):
 
     def _update_current_setting(self):
         self._do_update_settings()
-        self.source = self._source
+        if self._on:
+            self.source = self._source
 
     def _do_update_settings(self):
         if self.setting == "const":
