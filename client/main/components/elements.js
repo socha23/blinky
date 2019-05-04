@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactBootstrapSlider from "react-bootstrap-slider";
+import ReactBootstrapSlider from './FixedBootstrapSlider'
 
 export const ComponentBox = ({component, renderSettingsLink}) => {
     return <div style={{
@@ -100,7 +100,6 @@ export const BrightnessSlider = ({component}) => <ParamSlider component={compone
 </ParamSlider>;
 
 export const ParamSlider = ({component, param, children, min = 0, style = {}, caption = null}) => {
-    console.log("Recreating param slider for: ", component.params);
     return <div>
         {caption ? <div style={{fontSize: 20, marginBottom: -10, marginLeft: 5, color: "#ccc"}}>{caption}</div> : <div/>}
         <div style={{...sliderContainerStyle, marginBottom: 15, marginTop: 15, ...style}}>
@@ -109,12 +108,9 @@ export const ParamSlider = ({component, param, children, min = 0, style = {}, ca
                 <Slider
                     params={component.params}
                     value={component.params[param]}
-                    /*
                     onChange={v => {
                         component.setParam(param, v)
                     }}
-                    */
-
                     onStop={v => {
                         component.updateParam(param, v)
                     }}
