@@ -2,7 +2,8 @@ import React from 'react'
 import {useMachineModel} from "../elements/componentHooks"
 import {Neopixel, NeopixelSettings} from "./Neopixel";
 import {Led, LedSettings} from "./Led";
-import {Link, Route, Switch} from "react-router-dom";
+import {Link, Route, Switch, withRouter} from "react-router-dom";
+import {OnOffToggle} from "./elements";
 
 const Routing = () => {
     const model = useMachineModel();
@@ -52,20 +53,24 @@ const ComponentSettings = ({component}) => {
     </div>;
 };
 
-const SettingsHeader = ({component}) => <Link to={'/'}>
-        <div style={{
-            backgroundColor: "rgb(58, 63, 68)",
-            fontSize: 30,
-            display: "flex",
-            alignItems: "center",
-            color: "#ccc",
-            cursor: "pointer",
-            height: 60,
-
-        }}>
+const SettingsHeader = withRouter(({component, history}) =>
+    <div style={{
+        backgroundColor: "rgb(58, 63, 68)",
+        fontSize: 30,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        color: "#ccc",
+        cursor: "pointer",
+        height: 60,
+        paddingRight: 10,
+    }}>
+        <div style={{display: "flex", alignItems: "center"}} onClick={() => {history.push("/")}}>
             <i style={{marginLeft: 10, marginRight: 5}} className={"glyphicon glyphicon-chevron-left"}/>
             <h2 style={{margin: 10}}>{component.name}</h2>
         </div>
-</Link>;
+        <OnOffToggle component={component}/>
+    </div>);
+
 
 export default Routing

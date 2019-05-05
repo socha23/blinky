@@ -9,6 +9,9 @@ export const TurnOnEffectSection = ({component}) => <SettingsSection caption={'T
         <EnumParamRadio param={'turn_on_effect'} value={'fade_in'} component={component}>
             Fade in
         </EnumParamRadio>
+        <EnumParamRadio param={'turn_on_effect'} value={'neon_flicker'} component={component}>
+            Neon flicker
+        </EnumParamRadio>
     </EnumParamRadioRow>
     <TurnOnParams component={component}/>
 </SettingsSection>;
@@ -19,6 +22,12 @@ const TurnOnParams = ({component}) => {
         case "fade_in":
             return <div>
                 <ParamSlider component={component} param={"fade_in_duration"}>
+                    <SliderIcon className={'glyphicon glyphicon-time'}/>
+                </ParamSlider>
+            </div>;
+        case "neon_flicker":
+            return <div>
+                <ParamSlider component={component} param={"neon_flicker_turn_on_speed"}>
                     <SliderIcon className={'glyphicon glyphicon-time'}/>
                 </ParamSlider>
             </div>;

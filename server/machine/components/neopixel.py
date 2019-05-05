@@ -24,21 +24,13 @@ class Neopixel(Component, TurnOnAndOffEffectMixin):
     def _turn_on(self, effect=True):
         self._do_update_settings()
         if effect:
-            self._device.set_sources([(
-                self._wrap_source_in_turn_on_effect(r),
-                self._wrap_source_in_turn_on_effect(g),
-                self._wrap_source_in_turn_on_effect(b)
-            ) for (r, g, b) in self._sources])
+            self._device.set_sources([self._wrap_source_in_turn_on_effect(s) for s in self._sources])
         else:
             self._device.set_sources(self._sources)
 
     def _turn_off(self, effect=True):
         if effect:
-            self._device.set_sources([(
-                self._wrap_source_in_turn_off_effect(r),
-                self._wrap_source_in_turn_off_effect(g),
-                self._wrap_source_in_turn_off_effect(b)
-            ) for (r, g, b) in self._sources])
+            self._device.set_sources([self._wrap_source_in_turn_off_effect(s) for s in self._sources])
         else:
             self._device.set_sources([(constant(0), constant(0), constant(0)) for _ in range(self._num_pixels)])
 

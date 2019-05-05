@@ -9,7 +9,7 @@ export const ComponentBox = ({component, renderSettingsLink}) => {
         borderBottom: "1px solid #888",
     }}>
         <h2 style={{margin: 10, marginTop: 20, color: "#ccc"}}>{component.name}</h2>
-        <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
+        <div style={{display: "flex", justifyContent: "space-around", width: "100%", paddingBottom: 20, paddingTop: 10}}>
             <OnOffToggle component={component}/>
             {
                 renderSettingsLink(<div>
@@ -22,10 +22,7 @@ export const ComponentBox = ({component, renderSettingsLink}) => {
 
 const toggleButtonStyle = {
     fontSize: 40,
-    padding: 15,
-    flexGrow: 1,
     border: "none",
-    backgroundColor: "black",
     cursor: "pointer",
     textAlign: "center"
 };
@@ -39,7 +36,8 @@ export const OnOffToggle = ({component}) => {
         }
     }
 
-    return <div style={{...toggleButtonStyle, color: component.on ? "yellow" : "#888"}} onClick={toggle}>
+    return <div style={{...toggleButtonStyle, color: component.on ? "yellow" : "#888", display: "flex", alignItems: "center"}}
+                onClick={toggle}>
         <i className={"glyphicon glyphicon-certificate"}/>
     </div>
 };

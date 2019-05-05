@@ -2730,7 +2730,7 @@ var ComponentBox = exports.ComponentBox = function ComponentBox(_ref) {
         ),
         _react2.default.createElement(
             'div',
-            { style: { display: "flex", justifyContent: "space-around", width: "100%" } },
+            { style: { display: "flex", justifyContent: "space-around", width: "100%", paddingBottom: 20, paddingTop: 10 } },
             _react2.default.createElement(OnOffToggle, { component: component }),
             renderSettingsLink(_react2.default.createElement(
                 'div',
@@ -2743,10 +2743,7 @@ var ComponentBox = exports.ComponentBox = function ComponentBox(_ref) {
 
 var toggleButtonStyle = {
     fontSize: 40,
-    padding: 15,
-    flexGrow: 1,
     border: "none",
-    backgroundColor: "black",
     cursor: "pointer",
     textAlign: "center"
 };
@@ -2764,7 +2761,8 @@ var OnOffToggle = exports.OnOffToggle = function OnOffToggle(_ref2) {
 
     return _react2.default.createElement(
         'div',
-        { style: _extends({}, toggleButtonStyle, { color: component.on ? "yellow" : "#888" }), onClick: toggle },
+        { style: _extends({}, toggleButtonStyle, { color: component.on ? "yellow" : "#888", display: "flex", alignItems: "center" }),
+            onClick: toggle },
         _react2.default.createElement('i', { className: "glyphicon glyphicon-certificate" })
     );
 };
@@ -3003,12 +3001,16 @@ var _Debug2 = _interopRequireDefault(_Debug);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
-        return _react2.default.createElement(
-                _reactRouterDom.BrowserRouter,
-                null,
-                _react2.default.createElement(_reactRouterDom.Route, { path: "/debug", component: _Debug2.default }),
-                _react2.default.createElement(_reactRouterDom.Route, { path: "/", component: _Main2.default })
-        );
+    return _react2.default.createElement(
+        _reactRouterDom.BrowserRouter,
+        null,
+        _react2.default.createElement(
+            _reactRouterDom.Switch,
+            null,
+            _react2.default.createElement(_reactRouterDom.Route, { path: "/debug", component: _Debug2.default }),
+            _react2.default.createElement(_reactRouterDom.Route, { path: "/", component: _Main2.default })
+        )
+    );
 };
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
@@ -28457,6 +28459,8 @@ var _Led = __webpack_require__(141);
 
 var _reactRouterDom = __webpack_require__(41);
 
+var _elements = __webpack_require__(47);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Routing = function Routing() {
@@ -28533,22 +28537,26 @@ var ComponentSettings = function ComponentSettings(_ref4) {
     );
 };
 
-var SettingsHeader = function SettingsHeader(_ref5) {
-    var component = _ref5.component;
+var SettingsHeader = (0, _reactRouterDom.withRouter)(function (_ref5) {
+    var component = _ref5.component,
+        history = _ref5.history;
     return _react2.default.createElement(
-        _reactRouterDom.Link,
-        { to: '/' },
+        "div",
+        { style: {
+                backgroundColor: "rgb(58, 63, 68)",
+                fontSize: 30,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                color: "#ccc",
+                cursor: "pointer",
+                height: 60,
+                paddingRight: 10
+            } },
         _react2.default.createElement(
             "div",
-            { style: {
-                    backgroundColor: "rgb(58, 63, 68)",
-                    fontSize: 30,
-                    display: "flex",
-                    alignItems: "center",
-                    color: "#ccc",
-                    cursor: "pointer",
-                    height: 60
-
+            { style: { display: "flex", alignItems: "center" }, onClick: function onClick() {
+                    history.push("/");
                 } },
             _react2.default.createElement("i", { style: { marginLeft: 10, marginRight: 5 }, className: "glyphicon glyphicon-chevron-left" }),
             _react2.default.createElement(
@@ -28556,9 +28564,10 @@ var SettingsHeader = function SettingsHeader(_ref5) {
                 { style: { margin: 10 } },
                 component.name
             )
-        )
+        ),
+        _react2.default.createElement(_elements.OnOffToggle, { component: component })
     );
-};
+});
 
 exports.default = Routing;
 
@@ -42285,6 +42294,11 @@ var TurnOnEffectSection = exports.TurnOnEffectSection = function TurnOnEffectSec
                 _elements.EnumParamRadio,
                 { param: 'turn_on_effect', value: 'fade_in', component: component },
                 'Fade in'
+            ),
+            _react2.default.createElement(
+                _elements.EnumParamRadio,
+                { param: 'turn_on_effect', value: 'neon_flicker', component: component },
+                'Neon flicker'
             )
         ),
         _react2.default.createElement(TurnOnParams, { component: component })
@@ -42302,6 +42316,16 @@ var TurnOnParams = function TurnOnParams(_ref2) {
                 _react2.default.createElement(
                     _elements.ParamSlider,
                     { component: component, param: "fade_in_duration" },
+                    _react2.default.createElement(_elements.SliderIcon, { className: 'glyphicon glyphicon-time' })
+                )
+            );
+        case "neon_flicker":
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    _elements.ParamSlider,
+                    { component: component, param: "neon_flicker_turn_on_speed" },
                     _react2.default.createElement(_elements.SliderIcon, { className: 'glyphicon glyphicon-time' })
                 )
             );
