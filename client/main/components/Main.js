@@ -47,9 +47,11 @@ const ComponentSettings = ({component}) => {
             settings = <NeopixelSettings neopixel={component}/>;
             break;
     }
-    return <div>
+    return <div style={{position: "relative"}}>
         <SettingsHeader component={component}/>
-        {settings}
+        <div style={{marginTop: 65, zIndex: 1}}>
+            {settings}
+        </div>
     </div>;
 };
 
@@ -64,6 +66,11 @@ const SettingsHeader = withRouter(({component, history}) =>
         cursor: "pointer",
         height: 60,
         paddingRight: 10,
+        position: 'fixed',
+        top: 0,
+        width: "100%",
+        zIndex: 2,
+        borderBottom: "1px solid #555"
     }}>
         <div style={{display: "flex", alignItems: "center"}} onClick={() => {history.push("/")}}>
             <i style={{marginLeft: 10, marginRight: 5}} className={"glyphicon glyphicon-chevron-left"}/>
