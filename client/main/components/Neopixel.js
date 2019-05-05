@@ -1,6 +1,6 @@
 import React from 'react'
 import {BrightnessSlider, ComponentBox, ParamSlider, SettingButton, SettingsSection} from "./elements";
-import {TurnOffEffectSection, TurnOnEffectSection} from "./TurnOnOff";
+import {EffectSections, TurnOffEffectSection, TurnOnEffectSection} from "./LightSource";
 
 export const Neopixel = ({component, renderSettingsLink}) => <ComponentBox component={component} renderSettingsLink={renderSettingsLink}/>
 
@@ -16,8 +16,7 @@ export const NeopixelSettings = ({neopixel}) => <div>
         </div>
         <SettingParams neopixel={neopixel}/>
     </SettingsSection>
-    <TurnOnEffectSection component={neopixel}/>
-    <TurnOffEffectSection component={neopixel}/>
+    <EffectSections component={neopixel}/>
 </div>;
 
 const SettingParams = ({neopixel}) => {

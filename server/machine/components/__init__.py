@@ -1,3 +1,3 @@
 from .component import Component
-from .on_off import TurnOnAndOffEffectMixin
+from .light_source import LightSourceMixin
 from .tick_aware import SourceConsumerMixin

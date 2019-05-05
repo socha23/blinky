@@ -61,3 +61,47 @@ const TurnOffParams = ({component}) => {
             return <div/>
     }
 };
+
+export const AdditionalEffectSection = ({component}) => <SettingsSection caption={'Additional effect:'}>
+    <EnumParamRadioRow>
+        <EnumParamRadio param={'additional_effect'} value={'none'} component={component}>
+            None
+        </EnumParamRadio>
+        <EnumParamRadio param={'additional_effect'} value={'neon_flicker'} component={component}>
+            Neon flicker
+        </EnumParamRadio>
+        <EnumParamRadio param={'additional_effect'} value={'pulse'} component={component}>
+            Pulse
+        </EnumParamRadio>
+    </EnumParamRadioRow>
+    <AdditionalEffectParams component={component}/>
+</SettingsSection>;
+
+
+const AdditionalEffectParams = ({component}) => {
+    switch (component.params.additional_effect) {
+        case "neon_flicker":
+            return <div>
+                <ParamSlider component={component} param={"neon_flicker_intensity"}>
+                    <SliderIcon className={'glyphicon glyphicon-flash'}/>
+                </ParamSlider>
+            </div>;
+        case "pulse":
+            return <div>
+                <ParamSlider component={component} param={"pulse_duration"}>
+                    <SliderIcon className={'glyphicon glyphicon-time'}/>
+                </ParamSlider>
+                <ParamSlider component={component} param={"pulse_intensity"}>
+                    <SliderIcon className={'glyphicon glyphicon-flash'}/>
+                </ParamSlider>
+            </div>;
+        default:
+            return <div/>
+    }
+};
+
+export const EffectSections = ({component}) => [
+    <TurnOnEffectSection key={"on"} component={component}/>,
+    <TurnOffEffectSection key={"off"} component={component}/>,
+    <AdditionalEffectSection key={"additional"} component={component}/>
+];

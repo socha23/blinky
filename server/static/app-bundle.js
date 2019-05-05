@@ -28531,9 +28531,13 @@ var ComponentSettings = function ComponentSettings(_ref4) {
     }
     return _react2.default.createElement(
         "div",
-        null,
+        { style: { position: "relative" } },
         _react2.default.createElement(SettingsHeader, { component: component }),
-        settings
+        _react2.default.createElement(
+            "div",
+            { style: { marginTop: 65, zIndex: 1 } },
+            settings
+        )
     );
 };
 
@@ -28551,7 +28555,12 @@ var SettingsHeader = (0, _reactRouterDom.withRouter)(function (_ref5) {
                 color: "#ccc",
                 cursor: "pointer",
                 height: 60,
-                paddingRight: 10
+                paddingRight: 10,
+                position: 'fixed',
+                top: 0,
+                width: "100%",
+                zIndex: 2,
+                borderBottom: "1px solid #555"
             } },
         _react2.default.createElement(
             "div",
@@ -29404,7 +29413,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _elements = __webpack_require__(47);
 
-var _TurnOnOff = __webpack_require__(146);
+var _LightSource = __webpack_require__(147);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29436,8 +29445,7 @@ var NeopixelSettings = exports.NeopixelSettings = function NeopixelSettings(_ref
             ),
             _react2.default.createElement(SettingParams, { neopixel: neopixel })
         ),
-        _react2.default.createElement(_TurnOnOff.TurnOnEffectSection, { component: neopixel }),
-        _react2.default.createElement(_TurnOnOff.TurnOffEffectSection, { component: neopixel })
+        _react2.default.createElement(_LightSource.EffectSections, { component: neopixel })
     );
 };
 
@@ -41846,7 +41854,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _elements = __webpack_require__(47);
 
-var _TurnOnOff = __webpack_require__(146);
+var _LightSource = __webpack_require__(147);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41872,13 +41880,11 @@ var LedSettings = exports.LedSettings = function LedSettings(_ref2) {
             _react2.default.createElement(
                 "div",
                 { style: { marginTop: 10, marginBottom: 20, display: "flex", justifyContent: "space-between" } },
-                _react2.default.createElement(_elements.SettingButton, { component: led, setting: "const", icon: "glyphicon glyphicon-star" }),
-                _react2.default.createElement(_elements.SettingButton, { component: led, setting: "blink", icon: "glyphicon glyphicon-adjust" }),
-                _react2.default.createElement(_elements.SettingButton, { component: led, setting: "pulse", icon: "glyphicon glyphicon-glass" })
+                _react2.default.createElement(_elements.SettingButton, { component: led, setting: "const", icon: "glyphicon glyphicon-certificate" }),
+                _react2.default.createElement(_elements.SettingButton, { component: led, setting: "blink", icon: "glyphicon glyphicon-adjust" })
             )
         ),
-        _react2.default.createElement(_TurnOnOff.TurnOnEffectSection, { component: led }),
-        _react2.default.createElement(_TurnOnOff.TurnOffEffectSection, { component: led })
+        _react2.default.createElement(_LightSource.EffectSections, { component: led })
     );
 };
 
@@ -42258,7 +42264,8 @@ ReactBootstrapSlider.propTypes = {
 exports.default = ReactBootstrapSlider;
 
 /***/ }),
-/* 146 */
+/* 146 */,
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42267,7 +42274,7 @@ exports.default = ReactBootstrapSlider;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.TurnOffEffectSection = exports.TurnOnEffectSection = undefined;
+exports.EffectSections = exports.AdditionalEffectSection = exports.TurnOffEffectSection = exports.TurnOnEffectSection = undefined;
 
 var _react = __webpack_require__(1);
 
@@ -42374,6 +42381,73 @@ var TurnOffParams = function TurnOffParams(_ref4) {
         default:
             return _react2.default.createElement('div', null);
     }
+};
+
+var AdditionalEffectSection = exports.AdditionalEffectSection = function AdditionalEffectSection(_ref5) {
+    var component = _ref5.component;
+    return _react2.default.createElement(
+        _elements.SettingsSection,
+        { caption: 'Additional effect:' },
+        _react2.default.createElement(
+            _elements.EnumParamRadioRow,
+            null,
+            _react2.default.createElement(
+                _elements.EnumParamRadio,
+                { param: 'additional_effect', value: 'none', component: component },
+                'None'
+            ),
+            _react2.default.createElement(
+                _elements.EnumParamRadio,
+                { param: 'additional_effect', value: 'neon_flicker', component: component },
+                'Neon flicker'
+            ),
+            _react2.default.createElement(
+                _elements.EnumParamRadio,
+                { param: 'additional_effect', value: 'pulse', component: component },
+                'Pulse'
+            )
+        ),
+        _react2.default.createElement(AdditionalEffectParams, { component: component })
+    );
+};
+
+var AdditionalEffectParams = function AdditionalEffectParams(_ref6) {
+    var component = _ref6.component;
+
+    switch (component.params.additional_effect) {
+        case "neon_flicker":
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    _elements.ParamSlider,
+                    { component: component, param: "neon_flicker_intensity" },
+                    _react2.default.createElement(_elements.SliderIcon, { className: 'glyphicon glyphicon-flash' })
+                )
+            );
+        case "pulse":
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    _elements.ParamSlider,
+                    { component: component, param: "pulse_duration" },
+                    _react2.default.createElement(_elements.SliderIcon, { className: 'glyphicon glyphicon-time' })
+                ),
+                _react2.default.createElement(
+                    _elements.ParamSlider,
+                    { component: component, param: "pulse_intensity" },
+                    _react2.default.createElement(_elements.SliderIcon, { className: 'glyphicon glyphicon-flash' })
+                )
+            );
+        default:
+            return _react2.default.createElement('div', null);
+    }
+};
+
+var EffectSections = exports.EffectSections = function EffectSections(_ref7) {
+    var component = _ref7.component;
+    return [_react2.default.createElement(TurnOnEffectSection, { key: "on", component: component }), _react2.default.createElement(TurnOffEffectSection, { key: "off", component: component }), _react2.default.createElement(AdditionalEffectSection, { key: "additional", component: component })];
 };
 
 /***/ })

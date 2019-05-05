@@ -1,13 +1,13 @@
 from gpiozero_ps.generators import constant
 from effects.fire import fire_sources
 from effects.rainbow import rainbow_sources
-from machine.components import Component, TurnOnAndOffEffectMixin, SourceConsumerMixin
+from machine.components import Component, LightSourceMixin, SourceConsumerMixin
 
 
-class Neopixel(Component, TurnOnAndOffEffectMixin):
+class Neopixel(Component, LightSourceMixin):
     def __init__(self, device_id, pix_from, num_pixels, name, neopixel_strip):
         Component.__init__(self, device_id, name)
-        TurnOnAndOffEffectMixin.__init__(self)
+        LightSourceMixin.__init__(self)
         self._setting = 'rgb'
         self._sources = [(constant(0), constant(0), constant(0)) for _ in range(num_pixels)]
         self._setting_params.update({
@@ -24,13 +24,13 @@ class Neopixel(Component, TurnOnAndOffEffectMixin):
     def _turn_on(self, effect=True):
         self._do_update_settings()
         if effect:
-            self._device.set_sources([self._wrap_source_in_turn_on_effect(s) for s in self._sources])
+            self._device.set_sources([self._wrap_source_in_turn_on_effect(self._wrap_source_in_additional_effect(s)) for s in self._sources])
         else:
-            self._device.set_sources(self._sources)
+            self._device.set_sources([self._wrap_source_in_additional_effect(s) for s in self._sources])
 
     def _turn_off(self, effect=True):
         if effect:
-            self._device.set_sources([self._wrap_source_in_turn_off_effect(s) for s in self._sources])
+            self._device.set_sources([self._wrap_source_in_turn_off_effect(self._wrap_source_in_additional_effect(s)) for s in self._sources])
         else:
             self._device.set_sources([(constant(0), constant(0), constant(0)) for _ in range(self._num_pixels)])
 
@@ -40,7 +40,7 @@ class Neopixel(Component, TurnOnAndOffEffectMixin):
     def _update_current_setting(self):
         self._do_update_settings()
         if self._on:
-            self._device.set_sources(self._sources)
+            self._device.set_sources([self._wrap_source_in_additional_effect(s) for s in self._sources])
 
     def _do_update_settings(self):
         if self.setting == "fire":
