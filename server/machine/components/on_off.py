@@ -67,9 +67,9 @@ def neon_startup_flicker(source, intensity_generator):
 def neon_startup_flicker_intensity(speed):
     blink_time = 5
     pause_between_blinks = 3
-    pause_between_series = 70
-    pause_between_series_min = 40
-    pause_between_series_decay = scale(speed, 0.5, 0.95)
+    pause_between_series = 80
+    pause_between_series_min = 35
+    pause_between_series_decay = scale(speed, 0.4, 0.9)
 
     while pause_between_series >= pause_between_series_min:
         for _ in range(one_two_maybe_three()):
@@ -77,9 +77,10 @@ def neon_startup_flicker_intensity(speed):
                 yield 1
             for _ in range(int(random.gauss(pause_between_blinks, pause_between_blinks / 3))):
                 yield 0
-        for _ in range(int(random.gauss(pause_between_series, pause_between_series / 3))):
+        next_pause = int(random.gauss(pause_between_series, pause_between_series / 3))
+        for _ in range(next_pause):
             yield 0
-        pause_between_series = int(pause_between_series * pause_between_series_decay)
+        pause_between_series = int(next_pause * pause_between_series_decay)
     while True:
         yield 1
 
