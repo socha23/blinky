@@ -140,7 +140,6 @@ export const EnumParamRadioRow = ({children}) => <div style={{
     justifyContent: 'flex-start',
     marginTop: 10,
     marginBottom: 10,
-    marginLeft: 5,
 }}>{children}</div>;
 
 export const EnumParamRadio = ({component, param, value, children}) => {
@@ -151,7 +150,7 @@ export const EnumParamRadio = ({component, param, value, children}) => {
             alignItems: 'center',
             fontSize: 20,
             color: checked ? 'white' : '#888',
-            marginRight: 20,
+            marginRight: 17,
         }}
         onClick={_ => {console.log(param, value); component.updateParam(param, value)}}
     >
