@@ -22,6 +22,7 @@ const Routing = () => {
 
 const ComponentList = ({model}) =>
     <div>
+        <MachineHeader machine={model.machine}/>
         {
             model.components.map(c => <ComponentListElem key={c.id} component={c}/>)
         }
@@ -36,6 +37,7 @@ const ComponentListElem = ({component}) => {
             return <Neopixel component={component} renderSettingsLink={renderSettingsLink}/>
     }
 };
+
 
 const ComponentSettings = ({component}) => {
     let settings = <div/>;
@@ -55,29 +57,43 @@ const ComponentSettings = ({component}) => {
     </div>;
 };
 
+const headerStyle = {
+    backgroundColor: "rgb(58, 63, 68)",
+    fontSize: 30,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    color: "#ccc",
+    cursor: "pointer",
+    height: 60,
+    paddingRight: 10,
+    width: "100%",
+    borderBottom: "1px solid #555"
+};
+
 const SettingsHeader = withRouter(({component, history}) =>
     <div style={{
-        backgroundColor: "rgb(58, 63, 68)",
-        fontSize: 30,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        color: "#ccc",
-        cursor: "pointer",
-        height: 60,
-        paddingRight: 10,
+        ...headerStyle,
         position: 'fixed',
         top: 0,
-        width: "100%",
         zIndex: 2,
-        borderBottom: "1px solid #555"
     }}>
-        <div style={{display: "flex", alignItems: "center"}} onClick={() => {history.push("/")}}>
+        <div style={{display: "flex", alignItems: "center"}} onClick={() => {
+            history.push("/")
+        }}>
             <i style={{marginLeft: 10, marginRight: 5}} className={"glyphicon glyphicon-chevron-left"}/>
             <h2 style={{margin: 10}}>{component.name}</h2>
         </div>
         <OnOffToggle component={component}/>
     </div>);
+
+const MachineHeader = ({machine}) =>
+    <div style={headerStyle}>
+        <div style={{display: "flex", alignItems: "center"}}>
+            <h2 style={{margin: 10}}>{machine.name}</h2>
+        </div>
+        <OnOffToggle component={machine}/>
+    </div>;
 
 
 export default Routing

@@ -24,13 +24,13 @@ def index():
     return render_template('index.html', cachebuster=time())
 
 
-@main_api.route('/on')
+@main_api.route('/on', methods=API_METHODS)
 def on():
     Machine.on = True
     return render_state()
 
 
-@main_api.route('/off')
+@main_api.route('/off', methods=API_METHODS)
 def off():
     Machine.on = False
     return render_state()

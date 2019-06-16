@@ -1,4 +1,6 @@
 def setup(machine):
+    machine.name = "Kamienica"
+
     machine.add_led("Latarnia", 25)
     machine.add_led("Lampa L", 7)
     machine.add_led("Lampa P", 8)

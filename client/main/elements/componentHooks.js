@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import fetch from "isomorphic-fetch";
 import Component from "./component";
+import Machine from "./machine";
 
 const REFRESH_RATE_MS = 10000;
 
@@ -33,7 +34,7 @@ function makeModel(state, setState) {
         components: [],
         componentsById: {}
     };
-    const mergeState = (compId) => {
+    const mergeComponentState = (compId) => {
         return (newCompState) => {
             const newComponents = state.components.map(oldCompState => {
                 if (oldCompState.id == compId) {
@@ -46,9 +47,13 @@ function makeModel(state, setState) {
         }
     };
     state.components.forEach(compState => {
-        const component = new Component(compState, mergeState(compState.id));
+        const component = new Component(compState, mergeComponentState(compState.id));
         model.components.push(component);
         model.componentsById[component.id] = component;
     });
+    model.machine = new Machine(state.machine, (newMachineState) => {
+        const newState = {...state, machine: {...state.machine, ...newMachineState}};
+        setState(newState)
+    }, setState);
     return model;
 }

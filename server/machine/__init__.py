@@ -4,7 +4,8 @@ from machine.components.mocks import NeopixelStrip
 
 
 class _Machine:
-    def __init__(self):
+    def __init__(self, name="Machine"):
+        self._name = name
         self._store = None
         self._components = []
         self._neopixel_strip = None
@@ -20,7 +21,10 @@ class _Machine:
     def state(self):
         return {
             'components': [c.state() for c in self._components],
-            'on': self.on
+            'machine': {
+                'on': self.on,
+                'name': self._name,
+            }
         }
 
     def component_on(self, component_id):
@@ -28,6 +32,14 @@ class _Machine:
 
     def component_off(self, component_id):
         self.component(component_id).off()
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, val):
+        self._name = val
 
     @property
     def on(self):
@@ -42,7 +54,7 @@ class _Machine:
             if val:
                 c.on()
             else:
-                c.off()
+                c.off(False)
 
     def update_component_params(self, component_id, params):
         self.component(component_id).update_params(params)
