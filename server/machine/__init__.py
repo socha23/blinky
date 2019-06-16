@@ -20,6 +20,7 @@ class _Machine:
     def state(self):
         return {
             'components': [c.state() for c in self._components],
+            'on': self.on
         }
 
     def component_on(self, component_id):
@@ -27,6 +28,21 @@ class _Machine:
 
     def component_off(self, component_id):
         self.component(component_id).off()
+
+    @property
+    def on(self):
+        for c in self._components:
+            if c.is_on:
+                return True
+        return False
+
+    @on.setter
+    def on(self, val):
+        for c in self._components:
+            if val:
+                c.on()
+            else:
+                c.off()
 
     def update_component_params(self, component_id, params):
         self.component(component_id).update_params(params)

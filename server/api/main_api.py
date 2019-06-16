@@ -24,6 +24,18 @@ def index():
     return render_template('index.html', cachebuster=time())
 
 
+@main_api.route('/on')
+def on():
+    Machine.on = True
+    return render_state()
+
+
+@main_api.route('/off')
+def off():
+    Machine.on = False
+    return render_state()
+
+
 @main_api.route('/debug')
 def debug():
     return render_template('index.html', cachebuster=time())

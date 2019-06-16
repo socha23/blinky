@@ -18,6 +18,10 @@ class Component:
         self._on = True
         self._turn_on(effect)
 
+    @property
+    def is_on(self):
+        return self._on
+
     def off(self, effect=True):
         self._on = False
         self._turn_off(effect=effect)
