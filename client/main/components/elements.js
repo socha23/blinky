@@ -104,7 +104,7 @@ export const ParamSlider = ({component, param, children, min = 0, style = {}, ca
         {caption ? <div style={{fontSize: 20, marginBottom: -10, marginLeft: 5, color: "#ccc"}}>{caption}</div> : <div/>}
         <div style={{...sliderContainerStyle, marginBottom: 15, marginTop: 15, ...style}}>
             {children}
-            <div style={{flexGrow: 1}}>
+            <div style={{flexGrow: 1, paddingRight: 15}}>
                 <Slider
                     params={component.params}
                     value={component.params[param]}
