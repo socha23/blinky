@@ -109,5 +109,7 @@ venv.bak/
 *.iml
 
 
+out/
 node_modules/
 server/static/bundle.js
+server/static/app-bundle.js
